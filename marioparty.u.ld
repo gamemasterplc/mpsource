@@ -20,10 +20,16 @@ SECTIONS
    {
       build/asm/main.o(.text);
    }
-   .overlay 0x800F65E0 : AT(0x00CDA50)
+   .ov000 0x800F65E0 : AT(0x00CDA50)
    {
       build/asm/ov000.o(.text);
-	  build/asm/ov001.o(.text);
+   }
+   .ov001 0x800F65E0 : AT(0x00D51E0)
+   {
+      build/asm/ov001.o(.text);
+   }
+   .ovbin 0x800F65E0 : AT(0x00E02F0)
+   {
       build/asm/overlays.o(.text);
    }
    .assets 0x31BFE0 : AT(0x031BFE0)
