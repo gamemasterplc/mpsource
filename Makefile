@@ -6,8 +6,8 @@
 BUILD_DIR = build
 
 # Directories containing source files
-SRC_DIRS := src
-ASM_DIRS := asm
+SRC_DIRS := src src/overlays
+ASM_DIRS := asm asm/overlays
 
 # If COMPARE is 1, check the output sha1sum when building 'all'
 COMPARE = 1

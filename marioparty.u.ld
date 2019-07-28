@@ -6,37 +6,681 @@ OUTPUT_ARCH (mips)
 
 SECTIONS
 {
-   /* header and boot */
-   .header 0x0 : AT(0x0) {
-      * (.header);
-      * (.boot);
-   }
+   rom_pos = 0;
    
-   .header 0x0 : AT(0x0) {
-	  build/asm/header.o(.text);
+   .boot 0 : AT(rom_pos)
+   {
+      build/asm/header.o(.text);
       build/asm/boot.o(.text);
    }
-   .text80000400 0x80000400 : AT(0x0001000)
+   rom_pos += SIZEOF(.boot);
+   
+   .main 0x80000400 : AT(rom_pos)
    {
       build/asm/main.o(.text);
    }
-   .ov000 0x800F65E0 : AT(0x00CDA50)
+   rom_pos += SIZEOF(.main);
+   
+   .ov000 0x800F65E0 : AT(rom_pos)
    {
-      build/asm/ov000.o(.text);
+      build/asm/overlays/ov000.o(.text);
    }
-   .ov001 0x800F65E0 : AT(0x00D51E0)
+   rom_pos += SIZEOF(.ov000);
+   .ov001 0x800F65E0 : AT(rom_pos)
    {
-      build/asm/ov001.o(.text);
+      build/asm/overlays/ov001.o(.text);
    }
-   .ovbin 0x800F65E0 : AT(0x00E02F0)
+   rom_pos += SIZEOF(.ov001);
+   .ov002 0x800F65E0 : AT(rom_pos)
    {
-      build/asm/overlays.o(.text);
+      build/asm/overlays/ov002.o(.text);
    }
-   .assets 0x31BFE0 : AT(0x031BFE0)
+   rom_pos += SIZEOF(.ov002);
+   .ov003 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov003.o(.text);
+   }
+   rom_pos += SIZEOF(.ov003);
+   .ov004 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov004.o(.text);
+   }
+   rom_pos += SIZEOF(.ov004);
+   .ov005 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov005.o(.text);
+   }
+   rom_pos += SIZEOF(.ov005);
+   .ov006 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov006.o(.text);
+   }
+   rom_pos += SIZEOF(.ov006);
+   .ov007 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov007.o(.text);
+   }
+   rom_pos += SIZEOF(.ov007);
+   .ov008 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov008.o(.text);
+   }
+   rom_pos += SIZEOF(.ov008);
+   .ov009 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov009.o(.text);
+   }
+   rom_pos += SIZEOF(.ov009);
+   .ov010 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov010.o(.text);
+   }
+   rom_pos += SIZEOF(.ov010);
+   .ov011 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov011.o(.text);
+   }
+   rom_pos += SIZEOF(.ov011);
+   .ov012 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov012.o(.text);
+   }
+   rom_pos += SIZEOF(.ov012);
+   .ov013 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov013.o(.text);
+   }
+   rom_pos += SIZEOF(.ov013);
+   .ov014 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov014.o(.text);
+   }
+   rom_pos += SIZEOF(.ov014);
+   .ov015 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov015.o(.text);
+   }
+   rom_pos += SIZEOF(.ov015);
+   .ov016 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov016.o(.text);
+   }
+   rom_pos += SIZEOF(.ov016);
+   .ov017 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov017.o(.text);
+   }
+   rom_pos += SIZEOF(.ov017);
+   .ov018 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov018.o(.text);
+   }
+   rom_pos += SIZEOF(.ov018);
+   .ov019 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov019.o(.text);
+   }
+   rom_pos += SIZEOF(.ov019);
+   .ov020 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov020.o(.text);
+   }
+   rom_pos += SIZEOF(.ov020);
+   .ov021 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov021.o(.text);
+   }
+   rom_pos += SIZEOF(.ov021);
+   .ov022 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov022.o(.text);
+   }
+   rom_pos += SIZEOF(.ov022);
+   .ov023 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov023.o(.text);
+   }
+   rom_pos += SIZEOF(.ov023);
+   .ov024 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov024.o(.text);
+   }
+   rom_pos += SIZEOF(.ov024);
+   .ov025 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov025.o(.text);
+   }
+   rom_pos += SIZEOF(.ov025);
+   .ov026 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov026.o(.text);
+   }
+   rom_pos += SIZEOF(.ov026);
+   .ov027 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov027.o(.text);
+   }
+   rom_pos += SIZEOF(.ov027);
+   .ov028 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov028.o(.text);
+   }
+   rom_pos += SIZEOF(.ov028);
+   .ov029 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov029.o(.text);
+   }
+   rom_pos += SIZEOF(.ov029);
+   .ov030 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov030.o(.text);
+   }
+   rom_pos += SIZEOF(.ov030);
+   .ov031 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov031.o(.text);
+   }
+   rom_pos += SIZEOF(.ov031);
+   .ov032 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov032.o(.text);
+   }
+   rom_pos += SIZEOF(.ov032);
+   .ov033 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov033.o(.text);
+   }
+   rom_pos += SIZEOF(.ov033);
+   .ov034 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov034.o(.text);
+   }
+   rom_pos += SIZEOF(.ov034);
+   .ov035 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov035.o(.text);
+   }
+   rom_pos += SIZEOF(.ov035);
+   .ov036 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov036.o(.text);
+   }
+   rom_pos += SIZEOF(.ov036);
+   .ov037 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov037.o(.text);
+   }
+   rom_pos += SIZEOF(.ov037);
+   .ov038 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov038.o(.text);
+   }
+   rom_pos += SIZEOF(.ov038);
+   .ov039 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov039.o(.text);
+   }
+   rom_pos += SIZEOF(.ov039);
+   .ov040 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov040.o(.text);
+   }
+   rom_pos += SIZEOF(.ov040);
+   .ov041 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov041.o(.text);
+   }
+   rom_pos += SIZEOF(.ov041);
+   .ov042 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov042.o(.text);
+   }
+   rom_pos += SIZEOF(.ov042);
+   .ov043 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov043.o(.text);
+   }
+   rom_pos += SIZEOF(.ov043);
+   .ov044 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov044.o(.text);
+   }
+   rom_pos += SIZEOF(.ov044);
+   .ov045 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov045.o(.text);
+   }
+   rom_pos += SIZEOF(.ov045);
+   .ov046 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov046.o(.text);
+   }
+   rom_pos += SIZEOF(.ov046);
+   .ov047 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov047.o(.text);
+   }
+   rom_pos += SIZEOF(.ov047);
+   .ov048 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov048.o(.text);
+   }
+   rom_pos += SIZEOF(.ov048);
+   .ov049 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov049.o(.text);
+   }
+   rom_pos += SIZEOF(.ov049);
+   .ov050 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov050.o(.text);
+   }
+   rom_pos += SIZEOF(.ov050);
+   .ov051 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov051.o(.text);
+   }
+   rom_pos += SIZEOF(.ov051);
+   .ov052 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov052.o(.text);
+   }
+   rom_pos += SIZEOF(.ov052);
+   .ov053 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov053.o(.text);
+   }
+   rom_pos += SIZEOF(.ov053);
+   .ov054 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov054.o(.text);
+   }
+   rom_pos += SIZEOF(.ov054);
+   .ov055 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov055.o(.text);
+   }
+   rom_pos += SIZEOF(.ov055);
+   .ov056 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov056.o(.text);
+   }
+   rom_pos += SIZEOF(.ov056);
+   .ov057 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov057.o(.text);
+   }
+   rom_pos += SIZEOF(.ov057);
+   .ov058 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov058.o(.text);
+   }
+   rom_pos += SIZEOF(.ov058);
+   .ov059 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov059.o(.text);
+   }
+   rom_pos += SIZEOF(.ov059);
+   .ov060 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov060.o(.text);
+   }
+   rom_pos += SIZEOF(.ov060);
+   .ov061 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov061.o(.text);
+   }
+   rom_pos += SIZEOF(.ov061);
+   .ov062 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov062.o(.text);
+   }
+   rom_pos += SIZEOF(.ov062);
+   .ov063 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov063.o(.text);
+   }
+   rom_pos += SIZEOF(.ov063);
+   .ov064 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov064.o(.text);
+   }
+   rom_pos += SIZEOF(.ov064);
+   .ov065 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov065.o(.text);
+   }
+   rom_pos += SIZEOF(.ov065);
+   .ov066 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov066.o(.text);
+   }
+   rom_pos += SIZEOF(.ov066);
+   .ov067 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov067.o(.text);
+   }
+   rom_pos += SIZEOF(.ov067);
+   .ov068 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov068.o(.text);
+   }
+   rom_pos += SIZEOF(.ov068);
+   .ov069 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov069.o(.text);
+   }
+   rom_pos += SIZEOF(.ov069);
+   .ov070 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov070.o(.text);
+   }
+   rom_pos += SIZEOF(.ov070);
+   .ov071 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov071.o(.text);
+   }
+   rom_pos += SIZEOF(.ov071);
+   .ov072 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov072.o(.text);
+   }
+   rom_pos += SIZEOF(.ov072);
+   .ov073 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov073.o(.text);
+   }
+   rom_pos += SIZEOF(.ov073);
+   .ov074 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov074.o(.text);
+   }
+   rom_pos += SIZEOF(.ov074);
+   .ov075 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov075.o(.text);
+   }
+   rom_pos += SIZEOF(.ov075);
+   .ov076 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov076.o(.text);
+   }
+   rom_pos += SIZEOF(.ov076);
+   .ov077 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov077.o(.text);
+   }
+   rom_pos += SIZEOF(.ov077);
+   .ov078 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov078.o(.text);
+   }
+   rom_pos += SIZEOF(.ov078);
+   .ov079 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov079.o(.text);
+   }
+   rom_pos += SIZEOF(.ov079);
+   .ov080 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov080.o(.text);
+   }
+   rom_pos += SIZEOF(.ov080);
+   .ov081 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov081.o(.text);
+   }
+   rom_pos += SIZEOF(.ov081);
+   .ov082 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov082.o(.text);
+   }
+   rom_pos += SIZEOF(.ov082);
+   .ov083 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov083.o(.text);
+   }
+   rom_pos += SIZEOF(.ov083);
+   .ov084 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov084.o(.text);
+   }
+   rom_pos += SIZEOF(.ov084);
+   .ov085 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov085.o(.text);
+   }
+   rom_pos += SIZEOF(.ov085);
+   .ov086 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov086.o(.text);
+   }
+   rom_pos += SIZEOF(.ov086);
+   .ov087 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov087.o(.text);
+   }
+   rom_pos += SIZEOF(.ov087);
+   .ov089 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov089.o(.text);
+   }
+   rom_pos += SIZEOF(.ov089);
+   .ov090 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov090.o(.text);
+   }
+   rom_pos += SIZEOF(.ov090);
+   .ov091 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov091.o(.text);
+   }
+   rom_pos += SIZEOF(.ov091);
+   .ov092 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov092.o(.text);
+   }
+   rom_pos += SIZEOF(.ov092);
+   .ov093 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov093.o(.text);
+   }
+   rom_pos += SIZEOF(.ov093);
+   .ov094 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov094.o(.text);
+   }
+   rom_pos += SIZEOF(.ov094);
+   .ov095 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov095.o(.text);
+   }
+   rom_pos += SIZEOF(.ov095);
+   .ov096 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov096.o(.text);
+   }
+   rom_pos += SIZEOF(.ov096);
+   .ov097 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov097.o(.text);
+   }
+   rom_pos += SIZEOF(.ov097);
+   .ov098 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov098.o(.text);
+   }
+   rom_pos += SIZEOF(.ov098);
+   .ov099 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov099.o(.text);
+   }
+   rom_pos += SIZEOF(.ov099);
+   .ov100 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov100.o(.text);
+   }
+   rom_pos += SIZEOF(.ov100);
+   .ov101 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov101.o(.text);
+   }
+   rom_pos += SIZEOF(.ov101);
+   .ov102 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov102.o(.text);
+   }
+   rom_pos += SIZEOF(.ov102);
+   .ov103 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov103.o(.text);
+   }
+   rom_pos += SIZEOF(.ov103);
+   .ov104 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov104.o(.text);
+   }
+   rom_pos += SIZEOF(.ov104);
+   .ov105 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov105.o(.text);
+   }
+   rom_pos += SIZEOF(.ov105);
+   .ov106 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov106.o(.text);
+   }
+   rom_pos += SIZEOF(.ov106);
+   .ov107 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov107.o(.text);
+   }
+   rom_pos += SIZEOF(.ov107);
+   .ov108 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov108.o(.text);
+   }
+   rom_pos += SIZEOF(.ov108);
+   .ov109 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov109.o(.text);
+   }
+   rom_pos += SIZEOF(.ov109);
+   .ov110 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov110.o(.text);
+   }
+   rom_pos += SIZEOF(.ov110);
+   .ov111 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov111.o(.text);
+   }
+   rom_pos += SIZEOF(.ov111);
+   .ov112 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov112.o(.text);
+   }
+   rom_pos += SIZEOF(.ov112);
+   .ov113 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov113.o(.text);
+   }
+   rom_pos += SIZEOF(.ov113);
+   .ov114 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov114.o(.text);
+   }
+   rom_pos += SIZEOF(.ov114);
+   .ov115 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov115.o(.text);
+   }
+   rom_pos += SIZEOF(.ov115);
+   .ov116 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov116.o(.text);
+   }
+   rom_pos += SIZEOF(.ov116);
+   .ov117 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov117.o(.text);
+   }
+   rom_pos += SIZEOF(.ov117);
+   .ov118 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov118.o(.text);
+   }
+   rom_pos += SIZEOF(.ov118);
+   .ov119 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov119.o(.text);
+   }
+   rom_pos += SIZEOF(.ov119);
+   .ov120 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov120.o(.text);
+   }
+   rom_pos += SIZEOF(.ov120);
+   .ov121 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov121.o(.text);
+   }
+   rom_pos += SIZEOF(.ov121);
+   .ov122 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov122.o(.text);
+   }
+   rom_pos += SIZEOF(.ov122);
+   .ov123 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov123.o(.text);
+   }
+   rom_pos += SIZEOF(.ov123);
+   .ov124 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov124.o(.text);
+   }
+   rom_pos += SIZEOF(.ov124);
+   .ov125 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov125.o(.text);
+   }
+   rom_pos += SIZEOF(.ov125);
+   .ov126 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov126.o(.text);
+   }
+   rom_pos += SIZEOF(.ov126);
+   .ov127 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov127.o(.text);
+   }
+   rom_pos += SIZEOF(.ov127);
+   .ov128 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov128.o(.text);
+   }
+   rom_pos += SIZEOF(.ov128);
+   .ov129 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov129.o(.text);
+   }
+   rom_pos += SIZEOF(.ov129);
+   .ov130 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov130.o(.text);
+   }
+   rom_pos += SIZEOF(.ov130);
+   .ov131 0x800F65E0 : AT(rom_pos)
+   {
+      build/asm/overlays/ov131.o(.text);
+   }
+   rom_pos += SIZEOF(.ov131);
+   .romdata 0x0 : AT(rom_pos)
    {
       build/asm/data.o(.text);
    }
-   
+   rom_pos += SIZEOF(.romdata);
    /* Discard everything not specifically mentioned above. */
    /DISCARD/ :
    {
