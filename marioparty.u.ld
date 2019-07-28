@@ -11,12 +11,24 @@ SECTIONS
       * (.header);
       * (.boot);
    }
-
-
+   
+   .header 0x0 : AT(0x0) {
+	  build/asm/header.o(.text);
+      build/asm/boot.o(.text);
+   }
    .text80000400 0x80000400 : AT(0x0001000)
    {
-      * (.text80000400);
+      build/asm/main.o(.text);
    }
+   .overlay 0xCDA50 : AT(0x00CDA50)
+   {
+      build/asm/overlays.o(.text);
+   }
+   .assets 0x31BFE0 : AT(0x031BFE0)
+   {
+      build/asm/data.o(.text);
+   }
+   
    /* Discard everything not specifically mentioned above. */
    /DISCARD/ :
    {
