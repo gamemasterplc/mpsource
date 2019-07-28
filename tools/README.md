@@ -11,7 +11,7 @@ __extension__                                \
    (void) 0; })
 ```
 
-and:
+...to replace the macro, and:
 
 ```
 #ifdef __GNUC__
@@ -22,5 +22,6 @@ is_reserved_word (str, len)
      register char *str;
      register unsigned int len;
 ```
+...to fix the static definition.
 
 Both the macro and definition in obstack.h and c-gperf.h will need to be updated respectively. WSL will produce the included binary.
