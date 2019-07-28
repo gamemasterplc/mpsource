@@ -1,15 +1,3 @@
-overlay0_main:
-.incbin "bin/marioparty.u.0CDA50.overlay0_main.bin"
-overlay0_main_end:
-overlay0_rodata:
-.incbin "bin/marioparty.u.0D4C50.overlay0_rodata.bin"
-overlay0_rodata_end:
-overlay1_main:
-.incbin "bin/marioparty.u.0D51E0.overlay1_main.bin"
-overlay1_main_end:
-overlay1_rodata:
-.incbin "bin/marioparty.u.0DFDF0.overlay1_rodata.bin"
-overlay1_rodata_end:
 overlay2_main:
 .incbin "bin/marioparty.u.0E02F0.overlay2_main.bin"
 overlay2_main_end:

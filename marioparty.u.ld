@@ -20,8 +20,10 @@ SECTIONS
    {
       build/asm/main.o(.text);
    }
-   .overlay 0xCDA50 : AT(0x00CDA50)
+   .overlay 0x800F65E0 : AT(0x00CDA50)
    {
+      build/asm/ov000.o(.text);
+	  build/asm/ov001.o(.text);
       build/asm/overlays.o(.text);
    }
    .assets 0x31BFE0 : AT(0x031BFE0)

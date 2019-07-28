@@ -28,8 +28,8 @@ LD = $(CROSS)ld
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-ASFLAGS = -march=vr4300 -I include
-CFLAGS  = -O2 -march=vr4300 -G 0 -c
+ASFLAGS = -mips3 -march=vr4300 -I include
+CFLAGS  = -O2 -mips3 -march=vr4300 -G 0 -c
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
 
