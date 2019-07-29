@@ -17,7 +17,10 @@ SECTIONS
    
    .main 0x80000400 : AT(rom_pos)
    {
+      build/asm/entry.o(.text);
       build/asm/main.o(.text);
+      build/asm/code_80000530.o(.text);
+      build/asm/libultra.o(.text);
    }
    rom_pos += SIZEOF(.main);
    
