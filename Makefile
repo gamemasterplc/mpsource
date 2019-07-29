@@ -1,4 +1,4 @@
-# Makefile to rebuild SM64 split image
+# Makefile to rebuild Mario Party (US) split image
 
 ################ Target Executable and Sources ###############
 
@@ -30,9 +30,9 @@ OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
 ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include
-CFLAGS  := -O1 -G 0 $(MIPSISET)
+CFLAGS  := -O1 -G 0 -quiet $(MIPSISET)
 
-LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
+LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
 ####################### Other Tools #########################
 
