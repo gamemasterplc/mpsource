@@ -51,7 +51,7 @@ SHA1SUM = sha1sum
 
 ######################## Targets #############################
 
-build/libultra.o: MIPSISET := -mips3
+build/asm/libultra.o: MIPSISET := -mips3
 
 default: all
 
