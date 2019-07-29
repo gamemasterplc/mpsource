@@ -28,4 +28,4 @@ Both the macro and definition in obstack.h and c-gperf.h will need to be updated
 
 # Binutils
 
-The provided assembler was compiled from https://ftp.gnu.org/gnu/binutils/binutils-2.10.tar.gz .
+The provided assembler was compiled from https://ftp.gnu.org/gnu/binutils/binutils-2.18.tar.bz2.
