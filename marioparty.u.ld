@@ -15,12 +15,13 @@ SECTIONS
    }
    rom_pos += SIZEOF(.boot);
    
-   .main 0x80000400 : AT(rom_pos)
+   .main 0x80000400 : AT(rom_pos) SUBALIGN(16)
    {
       build/asm/entry.o(.text);
-      build/asm/main.o(.text);
+      build/src/main.o(.text);
       build/asm/code_80000530.o(.text);
-      build/asm/libultra.o(.text);
+      build/asm/libs.o(.text);
+	  build/asm/mainrodata.o(.text);
    }
    rom_pos += SIZEOF(.main);
    

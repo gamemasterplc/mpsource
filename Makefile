@@ -20,18 +20,17 @@ S_FILES := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES := $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file:.c=.o)) \
            $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file:.s=.o))
 
-MIPSISET := -mips2 -32
+MIPSISET := -mips2
 
 ##################### Compiler Options #######################
 CROSS = mips-linux-gnu-
-AS = $(CROSS)as
 CC = $(CROSS)gcc
 LD = $(CROSS)ld
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-ASFLAGS := -march=vr4300 -mabi=32 -I include
-CFLAGS  := -O2 -G 0 $(MIPSISET) -c
+ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include
+CFLAGS  := -O1 -G 0 $(MIPSISET)
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
 
@@ -39,6 +38,8 @@ LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
 
 # N64 tools
 TOOLS_DIR = tools
+AS = $(TOOLS_DIR)/mips-linux-gnu-as
+CC1 = $(TOOLS_DIR)/mips-cc1
 MIO0TOOL = $(TOOLS_DIR)/mio0
 N64CKSUM = $(TOOLS_DIR)/n64cksum
 N64GRAPHICS = $(TOOLS_DIR)/n64graphics
@@ -51,7 +52,7 @@ SHA1SUM = sha1sum
 
 ######################## Targets #############################
 
-build/asm/libultra.o: MIPSISET := -mips3
+build/asm/libs.o: MIPSISET := -mips3
 
 default: all
 
@@ -76,6 +77,9 @@ $(BUILD_DIR):
 $(BUILD_DIR)/%.o: %.s $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $@ $<
 
+$(BUILD_DIR)/%.s: %.c $(BUILD_DIR)
+	$(CC1) $(CFLAGS) -o $@ $<
+	
 $(BUILD_DIR)/$(TARGET).elf: $(O_FILES) $(LD_SCRIPT)
 	$(LD) $(LDFLAGS) -o $@ $(O_FILES) $(LIBS)
 
