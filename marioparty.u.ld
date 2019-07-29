@@ -20,6 +20,27 @@ SECTIONS
       build/asm/entry.o(.text);
       build/src/main.o(.text);
       build/asm/code_80000530.o(.text);
+      build/asm/code_80008DE0.o(.text);
+      build/asm/code_8000AD80.o(.text);
+      build/asm/code_80012CF0.o(.text);
+      build/asm/code_80013770.o(.text);
+      build/asm/code_80014220.o(.text);
+      build/asm/code_80014AF0.o(.text);
+      build/asm/code_80017150.o(.text);
+      build/asm/code_800174C0.o(.text);
+      build/asm/code_80018870.o(.text);
+      build/asm/code_800196A0.o(.text);
+      build/asm/code_8001A0F0.o(.text);
+      build/asm/code_8001A600.o(.text);
+      build/asm/code_8001D240.o(.text);
+      build/asm/code_8001DE70.o(.text);
+      build/asm/code_80022390.o(.text);
+      build/asm/code_80023040.o(.text);
+      build/asm/code_800235F0.o(.text);
+      build/asm/code_80023B40.o(.text);
+      build/asm/code_80029090.o(.text);
+      build/asm/code_8002B4C0.o(.text);
+      build/asm/code_80034180.o(.text);
       build/asm/libs.o(.text);
 	  build/asm/mainrodata.o(.text);
    }
