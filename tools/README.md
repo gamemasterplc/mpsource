@@ -25,3 +25,7 @@ is_reserved_word (str, len)
 ...to fix the static definition.
 
 Both the macro and definition in obstack.h and c-gperf.h will need to be updated respectively. WSL will produce the included binary.
+
+# Binutils
+
+The provided assembler was compiled from https://ftp.gnu.org/gnu/binutils/binutils-2.10.tar.gz .
