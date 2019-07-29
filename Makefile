@@ -20,6 +20,8 @@ S_FILES := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES := $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file:.c=.o)) \
            $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file:.s=.o))
 
+MIPSISET := -mips2 -32
+
 ##################### Compiler Options #######################
 CROSS = mips-linux-gnu-
 AS = $(CROSS)as
@@ -28,8 +30,8 @@ LD = $(CROSS)ld
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-ASFLAGS = -mips3 -march=vr4300 -I include
-CFLAGS  = -O2 -mips3 -march=vr4300 -G 0 -c
+ASFLAGS := -march=vr4300 -mabi=32 -I include
+CFLAGS  := -O2 -G 0 -c
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
 
@@ -48,6 +50,8 @@ LOADER_FLAGS = -vwf
 SHA1SUM = sha1sum
 
 ######################## Targets #############################
+
+build/libultra.o: MIPSISET := -mips3
 
 default: all
 
