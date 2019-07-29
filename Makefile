@@ -31,7 +31,7 @@ OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
 ASFLAGS := -march=vr4300 -mabi=32 -I include
-CFLAGS  := -O2 -G 0 -c
+CFLAGS  := -O2 -G 0 $(MIPSISET) -c
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/sm64.map
 
