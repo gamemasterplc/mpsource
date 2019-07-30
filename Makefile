@@ -26,6 +26,7 @@ MIPSISET := -mips2
 CROSS = mips-linux-gnu-
 CC = $(CROSS)gcc
 LD = $(CROSS)ld
+CPP       := cpp -P
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
@@ -74,11 +75,14 @@ $(MIO0_DIR)/%.mio0: $(MIO0_DIR)/%.bin
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,$(SRC_DIRS) $(ASM_DIRS))
 
+$(BUILD_DIR)/%.i: %.c
+	$(CPP) $< -o $@
+
+$(BUILD_DIR)/%.s: $(BUILD_DIR)/%.i $(BUILD_DIR)
+	$(CC1) $(CFLAGS) -o $@ $<
+
 $(BUILD_DIR)/%.o: %.s $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $@ $<
-
-$(BUILD_DIR)/%.s: %.c $(BUILD_DIR)
-	$(CC1) $(CFLAGS) -o $@ $<
 	
 $(BUILD_DIR)/$(TARGET).elf: $(O_FILES) $(LD_SCRIPT)
 	$(LD) $(LDFLAGS) -o $@ $(O_FILES) $(LIBS)
