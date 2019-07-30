@@ -30,7 +30,7 @@ OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
 ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include
-CFLAGS  := -O1 -G 0 -quiet $(MIPSISET)
+CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 $(MIPSISET)
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
