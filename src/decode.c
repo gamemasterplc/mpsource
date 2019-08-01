@@ -1,10 +1,10 @@
 struct decode_struct
 {
-	unsigned short chunk_len;
-	short pad;
-	char *src;
-	char *dest;
-	unsigned int len;
+    unsigned short chunk_len;
+    short pad;
+    char *src;
+    char *dest;
+    unsigned int len;
 };
 
 extern unsigned char *D_800D1320;
@@ -17,100 +17,100 @@ void func_80061FE8(void *src, void *dest, int len); // ExecRomCopy
 
 void DecodeNone(struct decode_struct *decode)
 {
-	if(decode->len)
-	{
-		{
-			int copy_len;
-			while(decode->len)
-			{
-				if(decode->len < 1024)
-				{
-					copy_len = (decode->len+1) & 0xFFFFFFFE;
-					decode->len = 0;
-				}
-				else
-				{
-					copy_len = 1024;
-					decode->len -= 1024;
-				}
-				func_80061FE8(decode->src, decode->dest, copy_len);
-				decode->src += copy_len;
-				decode->dest += copy_len;
-			}
-		}
-	}
+    if(decode->len)
+    {
+        {
+            int copy_len;
+            while(decode->len)
+            {
+                if(decode->len < 1024)
+                {
+                    copy_len = (decode->len+1) & 0xFFFFFFFE;
+                    decode->len = 0;
+                }
+                else
+                {
+                    copy_len = 1024;
+                    decode->len -= 1024;
+                }
+                func_80061FE8(decode->src, decode->dest, copy_len);
+                decode->src += copy_len;
+                decode->dest += copy_len;
+            }
+        }
+    }
 }
 
 #ifdef NONMATCHING
 void DecodeLZ(struct decode_struct *decode)
 {
-	unsigned short flag = 0;
-	int window_pos = 958;
+    unsigned short flag = 0;
+    int window_pos = 958;
 
-	bzero(&D_800D1720, 1024);
-	while(decode->len)
-	{
-		if(!((flag = (((flag & 0xFFFF) >> 1)) & 0x100))
-		{
-			if(decode->chunk_len >= 1024)
-			{
-				func_80061FE8(decode->src, &D_800D1320, 1024);
-				decode->src += 1024;
-				decode->chunk_len = 0;
-			}
-			flag = 0xFF00|D_800D1320[decode->chunk_len++];
-		}
-		if((flag & 0x1))
-		{
-			if(decode->chunk_len >= 1024)
-			{
-				func_80061FE8(decode->src, &D_800D1320, 1024);
-				decode->src += 1024;
-				decode->chunk_len = 0;
-			}
-			{
-				unsigned char temp = D_800D1320[decode->chunk_len++];
-				*(decode->dest++) = temp;
-				D_800D1720[window_pos++] = temp;
-				window_pos &= 0x3FF;
-				decode->len--;
-			}
-		}
-		else
-		{
-			if(decode->chunk_len >= 1024)
-			{
-				func_80061FE8(decode->src, &D_800D1320, 1024);
-				decode->src += 1024;
-				decode->chunk_len = 0;
-			}
-			{
-				int byte_1 = D_800D1320[decode->chunk_len++];
-				int byte_2;
-				int copy_pos;
-				int len;
-				int i;
-				if(decode->chunk_len >= 1024)
-				{
-					func_80061FE8(decode->src, &D_800D1320, 1024);
-					decode->src += 1024;
-					decode->chunk_len = 0;
-				}
-				byte_2 = D_800D1320[decode->chunk_len++];
-				copy_pos = ((byte_2 & 0xC0) << 2)|byte_1;
-				len = byte_2 & 0x3F;
-				if(len)
-				{
-					for(i=0; i<len; i++)
-					{
-						*(decode->dest++) = D_800D1720[copy_pos+i];
-						D_800D1720[copy_pos+i] = D_800D1720[copy_pos+i];
-					}
-				}
-				decode->len -= len;
-			}
-		}
-	}
+    bzero(&D_800D1720, 1024);
+    while(decode->len)
+    {
+        if(!((flag = (((flag & 0xFFFF) >> 1)) & 0x100))
+        {
+            if(decode->chunk_len >= 1024)
+            {
+                func_80061FE8(decode->src, &D_800D1320, 1024);
+                decode->src += 1024;
+                decode->chunk_len = 0;
+            }
+            flag = 0xFF00|D_800D1320[decode->chunk_len++];
+        }
+        if((flag & 0x1))
+        {
+            if(decode->chunk_len >= 1024)
+            {
+                func_80061FE8(decode->src, &D_800D1320, 1024);
+                decode->src += 1024;
+                decode->chunk_len = 0;
+            }
+            {
+                unsigned char temp = D_800D1320[decode->chunk_len++];
+                *(decode->dest++) = temp;
+                D_800D1720[window_pos++] = temp;
+                window_pos &= 0x3FF;
+                decode->len--;
+            }
+        }
+        else
+        {
+            if(decode->chunk_len >= 1024)
+            {
+                func_80061FE8(decode->src, &D_800D1320, 1024);
+                decode->src += 1024;
+                decode->chunk_len = 0;
+            }
+            {
+                int byte_1 = D_800D1320[decode->chunk_len++];
+                int byte_2;
+                int copy_pos;
+                int len;
+                int i;
+                if(decode->chunk_len >= 1024)
+                {
+                    func_80061FE8(decode->src, &D_800D1320, 1024);
+                    decode->src += 1024;
+                    decode->chunk_len = 0;
+                }
+                byte_2 = D_800D1320[decode->chunk_len++];
+                copy_pos = ((byte_2 & 0xC0) << 2)|byte_1;
+                len = byte_2 & 0x3F;
+                if(len)
+                {
+                    for(i=0; i<len; i++)
+                    {
+                        *(decode->dest++) = D_800D1720[copy_pos+i];
+                        D_800D1720[copy_pos+i] = D_800D1720[copy_pos+i];
+                    }
+                }
+                decode->len -= len;
+            }
+        }
+    }
 }
 #else
 void __attribute__ ((naked)) DecodeLZ(struct decode_struct *decode)
@@ -291,23 +291,23 @@ asm(".set noat\n\
 
 void DecodeFile(void *src, void *dest, int len, int decode_type)
 {
-	struct decode_struct decode_struct;
-	struct decode_struct *decode_ptr = &decode_struct;
-	decode_struct.src = (char *)src;
-	decode_struct.dest = (char *)dest;
-	decode_struct.len = len;
-	decode_struct.chunk_len = 1024;
-	switch(decode_type)
-	{
-		case 0:
-			DecodeNone(decode_ptr);
-			break;
-		
-		case 1:
-			DecodeLZ(decode_ptr);
-			break;
-		
-		default:
-			break;
-	}
+    struct decode_struct decode_struct;
+    struct decode_struct *decode_ptr = &decode_struct;
+    decode_struct.src = (char *)src;
+    decode_struct.dest = (char *)dest;
+    decode_struct.len = len;
+    decode_struct.chunk_len = 1024;
+    switch(decode_type)
+    {
+        case 0:
+            DecodeNone(decode_ptr);
+            break;
+        
+        case 1:
+            DecodeLZ(decode_ptr);
+            break;
+        
+        default:
+            break;
+    }
 }
