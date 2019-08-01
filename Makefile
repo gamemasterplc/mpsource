@@ -30,7 +30,7 @@ CPP       := cpp -P
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include
+ASFLAGS := -mabi=32 -G 0 -I include $(MIPSISET)
 CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 $(MIPSISET)
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
@@ -53,7 +53,9 @@ SHA1SUM = sha1sum
 
 ######################## Targets #############################
 
-build/asm/libs.o: MIPSISET := -mips3
+build/asm/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
+build/asm/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
+build/src/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 
 default: all
 
