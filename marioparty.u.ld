@@ -26,7 +26,7 @@ SECTIONS
       build/asm/code_80013770.o(.text);
       build/asm/code_80014220.o(.text);
       build/asm/code_80014AF0.o(.text);
-      build/asm/code_80017150.o(.text);
+      build/src/decode.o(.text);
       build/asm/code_800174C0.o(.text);
       build/asm/code_80018870.o(.text);
       build/asm/code_800196A0.o(.text);
