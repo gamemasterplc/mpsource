@@ -1,10 +1,8 @@
+#include <ultra64.h>
+
 void func_80000460();
 void func_800004B8(void *arg);
 void func_80093240();
-void osCreateThread(void *thread, int id, void (*entry)(void *), void *arg, void *sp, int pri);
-void osStartThread(void *thread);
-void osSetIntMask(int mask);
-void osSetThreadPri(void *thread, int pri);
 void func_8003B330(void *arg);
 
 extern unsigned char D_800CCE50[];

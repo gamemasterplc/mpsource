@@ -1,3 +1,5 @@
+#include <ultra64.h>
+
 struct decode_struct
 {
     unsigned short chunk_len;
@@ -17,27 +19,22 @@ void func_80061FE8(void *src, void *dest, int len); // ExecRomCopy
 
 void DecodeNone(struct decode_struct *decode)
 {
-    if(decode->len)
+    int copy_len;
+    while(decode->len)
     {
+        if(decode->len < 1024)
         {
-            int copy_len;
-            while(decode->len)
-            {
-                if(decode->len < 1024)
-                {
-                    copy_len = (decode->len+1) & 0xFFFFFFFE;
-                    decode->len = 0;
-                }
-                else
-                {
-                    copy_len = 1024;
-                    decode->len -= 1024;
-                }
-                func_80061FE8(decode->src, decode->dest, copy_len);
-                decode->src += copy_len;
-                decode->dest += copy_len;
-            }
+            copy_len = (decode->len+1) & 0xFFFFFFFE;
+            decode->len = 0;
         }
+        else
+        {
+            copy_len = 1024;
+            decode->len -= 1024;
+        }
+        func_80061FE8(decode->src, decode->dest, copy_len);
+        decode->src += copy_len;
+        decode->dest += copy_len;
     }
 }
 

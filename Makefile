@@ -78,7 +78,7 @@ $(BUILD_DIR):
 	mkdir $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,$(SRC_DIRS) $(ASM_DIRS))
 
 $(BUILD_DIR)/%.i: %.c
-	$(CPP) $< -o $@
+	$(CPP) -MMD -MP -MT $@ -MF $@.d -D_LANGUAGE_C -I include/ -o $@ $<
 
 $(BUILD_DIR)/%.s: $(BUILD_DIR)/%.i $(BUILD_DIR)
 	$(CC1) $(CFLAGS) -o $@ $<
