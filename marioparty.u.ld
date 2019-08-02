@@ -75,6 +75,7 @@ SECTIONS
       build/asm/code_8005C1B0.o(.text);
       build/asm/code_80060F70.o(.text);
       build/asm/code_80061540.o(.text);
+	  build/asm/code_80061F60.o(.text);
 	  build/asm/code_80062140.o(.text);
 	  build/asm/code_80063060.o(.text);
       build/asm/code_800637C0.o(.text);
