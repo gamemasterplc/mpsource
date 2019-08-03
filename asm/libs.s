@@ -26257,7 +26257,7 @@ D_80093188:
 /* 093E38 80093238 03E00008 */  jr    $ra
 /* 093E3C 8009323C 00801021 */   addu  $v0, $a0, $zero
 
-glabel func_80093240
+glabel osInitialize
 /* 093E40 80093240 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 093E44 80093244 24020001 */  li    $v0, 1
 /* 093E48 80093248 AFBF0018 */  sw    $ra, 0x18($sp)

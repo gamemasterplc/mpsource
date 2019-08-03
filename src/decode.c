@@ -2,24 +2,24 @@
 
 struct decode_struct
 {
-    unsigned short chunk_len;
-    short pad;
-    char *src;
-    char *dest;
-    unsigned int len;
+    u16 chunk_len;
+    s16 pad;
+    s8 *src;
+    s8 *dest;
+    u32 len;
 };
 
-extern unsigned char *D_800D1320;
-extern unsigned char *D_800D1720;
+extern u8 *D_800D1320;
+extern u8 *D_800D1720;
 
 void DecodeNone(struct decode_struct *decode);
 void DecodeLZ(struct decode_struct *decode);
-void DecodeFile(void *src, void *dest, int len, int decode_type);
-void func_80061FE8(void *src, void *dest, int len); // ExecRomCopy
+void DecodeFile(void *src, void *dest, s32 len, s32 decode_type);
+void func_80061FE8(void *src, void *dest, s32 len); // ExecRomCopy
 
 void DecodeNone(struct decode_struct *decode)
 {
-    int copy_len;
+    s32 copy_len;
     while(decode->len)
     {
         if(decode->len < 1024)
@@ -41,8 +41,8 @@ void DecodeNone(struct decode_struct *decode)
 #ifdef NONMATCHING
 void DecodeLZ(struct decode_struct *decode)
 {
-    unsigned short flag = 0;
-    int window_pos = 958;
+    u16 flag = 0;
+    s32 window_pos = 958;
 
     bzero(&D_800D1720, 1024);
     while(decode->len)
@@ -66,7 +66,7 @@ void DecodeLZ(struct decode_struct *decode)
                 decode->chunk_len = 0;
             }
             {
-                unsigned char temp = D_800D1320[decode->chunk_len++];
+                u8 temp = D_800D1320[decode->chunk_len++];
                 *(decode->dest++) = temp;
                 D_800D1720[window_pos++] = temp;
                 window_pos &= 0x3FF;
@@ -82,11 +82,11 @@ void DecodeLZ(struct decode_struct *decode)
                 decode->chunk_len = 0;
             }
             {
-                int byte_1 = D_800D1320[decode->chunk_len++];
-                int byte_2;
-                int copy_pos;
-                int len;
-                int i;
+                s32 byte_1 = D_800D1320[decode->chunk_len++];
+                s32 byte_2;
+                s32 copy_pos;
+                s32 len;
+                s32 i;
                 if(decode->chunk_len >= 1024)
                 {
                     func_80061FE8(decode->src, &D_800D1320, 1024);
@@ -286,7 +286,7 @@ asm(".set noat\n\
 }
 #endif
 
-void DecodeFile(void *src, void *dest, int len, int decode_type)
+void DecodeFile(void *src, void *dest, s32 len, s32 decode_type)
 {
     struct decode_struct decode_struct;
     struct decode_struct *decode_ptr = &decode_struct;
