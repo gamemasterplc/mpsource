@@ -1,3 +1,11 @@
+# assembler directives
+.set noat      # allow manual use of $at
+.set noreorder # don't insert nops after branches
+.set gp=64
+
+.include "globals.inc"
+.include "macros.inc"
+
 glabel func_80061F60
 /* 062B60 80061F60 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 062B64 80061F64 AFBF0010 */  sw    $ra, 0x10($sp)
