@@ -1,0 +1,7 @@
+# General project-specific ignores
+build/*
+*.dump
+*.z64
+
+# Tools
+tools/n64cksum
