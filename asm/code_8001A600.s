@@ -213,8 +213,8 @@ glabel func_8001A838
 /* 01B4F4 8001A8F4 AC22D3A4 */  sw    $v0, %lo(D_800ED3A4)($at)
 /* 01B4F8 8001A8F8 8C820008 */  lw    $v0, 8($a0)
 /* 01B4FC 8001A8FC AE620044 */  sw    $v0, 0x44($s3)
-/* 01B500 8001A900 3C02800F */  lui   $v0, %hi(D_800F2A70) # $v0, 0x800f
-/* 01B504 8001A904 8C422A70 */  lw    $v0, %lo(D_800F2A70)($v0)
+/* 01B500 8001A900 3C02800F */  lui   $v0, %hi(gThread3Stack) # $v0, 0x800f
+/* 01B504 8001A904 8C422A70 */  lw    $v0, %lo(gThread3Stack)($v0)
 /* 01B508 8001A908 AE420020 */  sw    $v0, 0x20($s2)
 /* 01B50C 8001A90C 3C02800F */  lui   $v0, %hi(D_800F2CBC) # $v0, 0x800f
 /* 01B510 8001A910 8C422CBC */  lw    $v0, %lo(D_800F2CBC)($v0)
@@ -404,8 +404,8 @@ glabel func_8001AB84
 
 glabel func_8001ABAC
 /* 01B7AC 8001ABAC 8C820000 */  lw    $v0, ($a0)
-/* 01B7B0 8001ABB0 3C01800F */  lui   $at, %hi(D_800F2A70) # $at, 0x800f
-/* 01B7B4 8001ABB4 AC222A70 */  sw    $v0, %lo(D_800F2A70)($at)
+/* 01B7B0 8001ABB0 3C01800F */  lui   $at, %hi(gThread3Stack) # $at, 0x800f
+/* 01B7B4 8001ABB4 AC222A70 */  sw    $v0, %lo(gThread3Stack)($at)
 /* 01B7B8 8001ABB8 24840004 */  addiu $a0, $a0, 4
 /* 01B7BC 8001ABBC 8C820000 */  lw    $v0, ($a0)
 /* 01B7C0 8001ABC0 3C01800F */  lui   $at, %hi(D_800F2CBC) # $at, 0x800f

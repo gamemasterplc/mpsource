@@ -1,26 +1,31 @@
 #include <ultra64.h>
 
-void func_80000460();
-void func_800004B8(void *arg);
-void func_80093240();
-void func_8003B330(void *arg);
+extern void osInitialize(void);
+extern void thread3_main(void *arg);
 
-extern unsigned char D_800CCE50[];
-extern unsigned char D_800CD650[];
-extern unsigned char D_800CD800[];
-extern unsigned char D_800F2A70[];
-void func_80000460()
+extern u8 gInitThread[];
+extern u8 gThread1Stack[];
+extern u8 gMainThread[];
+extern u8 gThread3Stack[];
+
+void ultraMain(void);
+void thread1_idle(void *arg);
+
+void ultraMain(void)
 {
-    func_80093240();
-    osCreateThread(&D_800CD650, 1, func_800004B8, (void *)0, (void *)((unsigned char *)&D_800CCE50 + 2048), 10);
-    osStartThread(&D_800CD650);
+    osInitialize();
+    osCreateThread(&gInitThread, 1, thread1_idle, NULL, gThread1Stack + 0x800, 10);
+    osStartThread(&gInitThread);
 }
 
-void func_800004B8(void *arg)
+void thread1_idle(void *arg)
 {
-    osCreateThread(&D_800CD800, 3, func_8003B330, arg, (void *)&D_800F2A70, 2);
-    osStartThread(&D_800CD800);
+    osCreateThread(&gMainThread, 3, thread3_main, arg, gThread3Stack, 2);
+    osStartThread(&gMainThread);
     osSetIntMask(0x3FFF01);
-    osSetThreadPri((void *)0, 0);
-    while(1);
+    osSetThreadPri(NULL, 0);
+
+    // idle forever
+    while(1)
+        ;
 }

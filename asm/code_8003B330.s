@@ -9,7 +9,7 @@
 .include "globals.inc"
 .include "macros.inc"
 
-glabel func_8003B330
+glabel thread3_main
 /* 03BF30 8003B330 27BDFAB0 */  addiu $sp, $sp, -0x550
 /* 03BF34 8003B334 AFBF0548 */  sw    $ra, 0x548($sp)
 /* 03BF38 8003B338 AFB50544 */  sw    $s5, 0x544($sp)
