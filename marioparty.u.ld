@@ -45,8 +45,8 @@ SECTIONS
       build/asm/code_80037CE0.o(.text);
       build/asm/code_8003A060.o(.text);
       build/asm/code_8003B330.o(.text);
-      build/asm/code_8003B680.o(.text);
-	  build/asm/code_8003B820.o(.text);
+      build/src/heap_wrapper_apis.o(.text);
+      build/asm/code_8003B820.o(.text);
       build/asm/code_8003C2D0.o(.text);
       build/asm/code_8003D2B0.o(.text);
       build/asm/code_8003D960.o(.text);
