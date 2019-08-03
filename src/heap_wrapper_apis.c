@@ -54,17 +54,25 @@ unsigned int func_8003B730()
     return func_80059AD8(D_800D6030);
 }
 
-
+/*
+ * Creates the "temporary" heap that occasionally is purged.
+ */
 void* MakeTempHeap(void *ptr, unsigned int size)
 {
     D_800D6040 = MakeHeap(ptr, size);
 }
 
+/*
+ * Allocates memory in the temporary heap.
+ */
 void* MallocTemp(unsigned int size)
 {
     Malloc(D_800D6040, size);
 }
 
+/*
+ * Frees a memory pointer in the temporary heap.
+ */
 void FreeTemp(void *ptr)
 {
     Free(ptr);
