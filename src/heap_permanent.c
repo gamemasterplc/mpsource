@@ -4,28 +4,21 @@
  * Primary heap. Never reset during gameplay.
  */
 
-extern void *perm_heap_addr; // 800D6030
-
-void* MakeHeap(void *ptr, u32 size);
-void Malloc(void **out, u32 size);
-void Free(void *ptr);
-u32 func_800599DC(void *ptr, u32 unk1, u32 unk2);
-u32 func_80059AA4(void **ptr);
-u32 func_80059AD8(void **ptr);
+extern struct heap_node *perm_heap_addr; // 800D6030
 
 /*
  * Creates the "permanent" heap that is never reset.
  * Called once during startup.
  */
-void* MakePermHeap(void *ptr, u32 size)
+struct heap_node *MakePermHeap(void *ptr, u32 size)
 {
-    perm_heap_addr = MakeHeap(ptr, size);
+    perm_heap_addr = (struct heap_node *)MakeHeap(ptr, size);
 }
 
 /*
  * Allocates memory in the permanent heap.
  */
-void* MallocPerm(u32 size)
+void *MallocPerm(u32 size)
 {
     Malloc(perm_heap_addr, size);
 }
@@ -38,14 +31,20 @@ void FreePerm(void *ptr)
     Free(ptr);
 }
 
-u32 func_8003B6E4(u32 unk1, u32 unk2)
+/*
+ * Resizes a previously allocated permanent heap buffer.
+ */
+void *ReallocPerm(void *mem, u32 new_size)
 {
-    return func_800599DC(perm_heap_addr, unk1, unk2);
+    return (void *)Realloc(perm_heap_addr, mem, new_size);
 }
 
-u32 func_8003B710(void)
+/*
+ * Returns the total size of allocated buffers in the permanent heap.
+ */
+u32 GetAllocatedPermHeapSize(void)
 {
-    return func_80059AA4(perm_heap_addr);
+    return GetAllocatedHeapSize(perm_heap_addr);
 }
 
 u32 func_8003B730(void)
