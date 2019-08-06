@@ -109,7 +109,7 @@ glabel D_8001A0F0
 /* 01AE6C 8001A26C 3C0400FD */  lui   $a0, %hi(D_00FCB860) # $a0, 0xfd
 /* 01AE70 8001A270 0C016DB4 */  jal   func_8005B6D0
 /* 01AE74 8001A274 2484B860 */   addiu $a0, %lo(D_00FCB860) # addiu $a0, $a0, -0x47a0
-/* 01AE78 8001A278 0C00EDC4 */  jal   func_8003B710
+/* 01AE78 8001A278 0C00EDC4 */  jal   GetAllocatedPermHeapSize
 /* 01AE7C 8001A27C 00000000 */   nop   
 /* 01AE80 8001A280 3C048002 */  lui   $a0, %hi(D_8001A3DC) # $a0, 0x8002
 /* 01AE84 8001A284 2484A3DC */  addiu $a0, %lo(D_8001A3DC) # addiu $a0, $a0, -0x5c24

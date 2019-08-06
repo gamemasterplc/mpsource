@@ -2495,7 +2495,7 @@ glabel func_8005E3FC
 /* 05F018 8005E418 10400058 */  beqz  $v0, .L8005E57C
 /* 05F01C 8005E41C 2402000E */   li    $v0, 14
 /* 05F020 8005E420 3C01800F */  lui   $at, %hi(D_800ECB24) # $at, 0x800f
-/* 05F024 8005E424 0C00EDC4 */  jal   func_8003B710
+/* 05F024 8005E424 0C00EDC4 */  jal   GetAllocatedPermHeapSize
 /* 05F028 8005E428 AC22CB24 */   sw    $v0, %lo(D_800ECB24)($at)
 /* 05F02C 8005E42C 0C00EDCC */  jal   func_8003B730
 /* 05F030 8005E430 00408021 */   addu  $s0, $v0, $zero
