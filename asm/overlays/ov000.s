@@ -7912,4 +7912,4 @@ ov000_func_800FD6A0:
 /* 0071FC 800FD7DC 27BD0028 */   addiu $sp, $sp, 0x28
 overlay0_rodata:
 .incbin "bin/marioparty.u.0D4C50.overlay0_rodata.bin"
-overlay0_rodata_end:
+

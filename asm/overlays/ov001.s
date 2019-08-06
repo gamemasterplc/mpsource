@@ -11714,4 +11714,3 @@ ov001_func_80101180:
 /* 00AC0C 801011EC 00000000 */  nop   
 overlay1_rodata:
 .incbin "bin/marioparty.u.0DFDF0.overlay1_rodata.bin"
-overlay1_rodata_end:
