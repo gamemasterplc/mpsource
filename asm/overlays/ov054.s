@@ -3549,4 +3549,3 @@ ov054_func_800F97E0:
 
 overlay54_rodata:
 .incbin "bin/marioparty.u.244B50.overlay54_rodata.bin"
-overlay54_rodata_end:
