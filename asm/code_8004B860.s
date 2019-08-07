@@ -1286,7 +1286,7 @@ glabel func_8004CA04
 /* 04D608 8004CA08 00042403 */   sra   $a0, $a0, 0x10
 /* 04D60C 8004CA0C 8C51001C */  lw    $s1, 0x1c($v0)
 glabel func_8004CA10
-/* 04D610 8004CA10 0C0132CE */  jal   func_8004CB38
+/* 04D610 8004CA10 0C0132CE */  jal   GetCurrentSpaceIndex
 /* 04D614 8004CA14 00009021 */   addu  $s2, $zero, $zero
 /* 04D618 8004CA18 0040B021 */  addu  $s6, $v0, $zero
 /* 04D61C 8004CA1C 00102400 */  sll   $a0, $s0, 0x10
@@ -1372,10 +1372,9 @@ glabel func_8004CB20
 SetCurrentSpaceIndex:
 /* 04D72C 8004CB2C 3C01800F */  lui   $at, 0x800f
 /* 04D730 8004CB30 03E00008 */  jr    $ra
-GetCurrentSpaceIndex:
 /* 04D734 8004CB34 A424D5E0 */   sh    $a0, -0x2a20($at)
 
-glabel func_8004CB38
+GetCurrentSpaceIndex:
 /* 04D738 8004CB38 3C02800F */  lui   $v0, 0x800f
 /* 04D73C 8004CB3C 03E00008 */  jr    $ra
 /* 04D740 8004CB40 8442D5E0 */   lh    $v0, -0x2a20($v0)
