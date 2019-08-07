@@ -2014,7 +2014,7 @@ ov054_func_800F8100:
 /* 001C70 800F8250 AFB3001C */  sw    $s3, 0x1c($sp)
 /* 001C74 800F8254 AFB20018 */  sw    $s2, 0x18($sp)
 /* 001C78 800F8258 AFB10014 */  sw    $s1, 0x14($sp)
-/* 001C7C 800F825C 0C0132CE */  jal   func_8004CB38
+/* 001C7C 800F825C 0C0132CE */  jal   GetCurrentSpaceIndex
 /* 001C80 800F8260 AFB00010 */   sw    $s0, 0x10($sp)
 /* 001C84 800F8264 2404FFFF */  addiu $a0, $zero, -1
 /* 001C88 800F8268 2442FFE6 */  addiu $v0, $v0, -0x1a
@@ -3415,7 +3415,7 @@ ov054_func_800F9664:
 
 /* 0030C8 800F96A8 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 0030CC 800F96AC AFBF0010 */  sw    $ra, 0x10($sp)
-/* 0030D0 800F96B0 0C0132CE */  jal   func_8004CB38
+/* 0030D0 800F96B0 0C0132CE */  jal   GetCurrentSpaceIndex
 /* 0030D4 800F96B4 00000000 */   nop   
 /* 0030D8 800F96B8 00021400 */  sll   $v0, $v0, 0x10
 /* 0030DC 800F96BC 0C03DA56 */  jal   ov054_func_800F6958
@@ -3443,7 +3443,7 @@ ov054_func_800F9664:
 /* 00312C 800F970C 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 003130 800F9710 AFBF0018 */  sw    $ra, 0x18($sp)
 /* 003134 800F9714 AFB10014 */  sw    $s1, 0x14($sp)
-/* 003138 800F9718 0C0132CE */  jal   func_8004CB38
+/* 003138 800F9718 0C0132CE */  jal   GetCurrentSpaceIndex
 /* 00313C 800F971C AFB00010 */   sw    $s0, 0x10($sp)
 /* 003140 800F9720 00021400 */  sll   $v0, $v0, 0x10
 /* 003144 800F9724 0C03DA56 */  jal   ov054_func_800F6958
@@ -3480,7 +3480,7 @@ ov054_func_800F9664:
 
 /* 0031B8 800F9798 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 0031BC 800F979C AFBF0010 */  sw    $ra, 0x10($sp)
-/* 0031C0 800F97A0 0C0132CE */  jal   func_8004CB38
+/* 0031C0 800F97A0 0C0132CE */  jal   GetCurrentSpaceIndex
 /* 0031C4 800F97A4 00000000 */   nop   
 /* 0031C8 800F97A8 00021400 */  sll   $v0, $v0, 0x10
 /* 0031CC 800F97AC 00021C03 */  sra   $v1, $v0, 0x10
