@@ -7,7 +7,7 @@ BUILD_DIR = build
 
 # Directories containing source files
 SRC_DIRS := src src/overlays
-ASM_DIRS := asm asm/overlays
+ASM_DIRS := asm asm/overlays asm/libs
 
 # If COMPARE is 1, check the output sha1sum when building 'all'
 COMPARE = 1
@@ -55,6 +55,7 @@ SHA1SUM = sha1sum
 
 build/asm/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 build/asm/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
+build/asm/libs/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 build/src/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 
 default: all
