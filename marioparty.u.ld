@@ -87,11 +87,25 @@ SECTIONS
       build/asm/code_80068410.o(.text);
       build/asm/code_8006C8E0.o(.text);
       build/asm/code_80072190.o(.text);
-      build/asm/libs.o(.text);
-	  build/asm/mainrodata.o(.text);
+      build/asm/libs/code_8007BDF0.o(.text);
+      build/asm/libs/code_8007C080.o(.text);
+      build/asm/libs/code_8007C160.o(.text);
+      build/asm/libs/code_8007FB70.o(.text);
+      build/asm/libs/code_8007FFE0.o(.text);
+      build/asm/libs/code_800815F0.o(.text);
+      build/asm/libs/code_80081840.o(.text);
+      build/asm/libs/code_80081990.o(.text);
+      build/asm/libs/code_80081A80.o(.text);
+      build/asm/libs/code_80081CC0.o(.text);
+      build/asm/libs/code_80081EF0.o(.text);
+      build/asm/libs/code_80082660.o(.text);
+      build/asm/libs/code_800827C0.o(.text);
+      build/asm/libs/code_80082890.o(.text);
+      build/asm/libs/libs.o(.text);
+      build/asm/mainrodata.o(.text);
    }
    rom_pos += SIZEOF(.main);
-   
+
    .ov000 0x800F65E0 : AT(rom_pos)
    {
       build/asm/overlays/ov000.o(.text);
