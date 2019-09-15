@@ -1,20 +1,9 @@
 .set noat      # allow manual use of $at
 .set noreorder # don't insert nops after branches
 
+.include "globals.inc"
+.include "macros.inc"
 
-/* 000000 800F65E0 27BDFFE8 */  addiu $sp, $sp, -0x18
-/* 000004 800F65E4 AFBF0010 */  sw    $ra, 0x10($sp)
-/* 000008 800F65E8 3C048010 */  lui   $a0, 0x8010
-/* 00000C 800F65EC 24849890 */  addiu $a0, $a0, -0x6770
-/* 000010 800F65F0 3C05800C */  lui   $a1, 0x800c
-/* 000014 800F65F4 0C0161D4 */  jal   ExecBoardScene
-/* 000018 800F65F8 84A5597A */   lh    $a1, 0x597a($a1)
-/* 00001C 800F65FC 8FBF0010 */  lw    $ra, 0x10($sp)
-/* 000020 800F6600 03E00008 */  jr    $ra
-/* 000024 800F6604 27BD0018 */   addiu $sp, $sp, 0x18
-
-/* 000028 800F6608 00000000 */  nop   
-/* 00002C 800F660C 00000000 */  nop   
 ov054_func_800F6610:
 /* 000030 800F6610 3C02800F */  lui   $v0, 0x800f
 /* 000034 800F6614 2442D5CA */  addiu $v0, $v0, -0x2a36
@@ -640,6 +629,7 @@ ov054_func_800F6E08:
 /* 000924 800F6F04 03E00008 */  jr    $ra
 /* 000928 800F6F08 27BD0020 */   addiu $sp, $sp, 0x20
 
+glabel ov054_entrypoint0
 /* 00092C 800F6F0C 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 000930 800F6F10 AFBF0010 */  sw    $ra, 0x10($sp)
 /* 000934 800F6F14 3C01800F */  lui   $at, 0x800f
@@ -655,6 +645,7 @@ ov054_func_800F6E08:
 /* 00095C 800F6F3C 03E00008 */  jr    $ra
 /* 000960 800F6F40 27BD0018 */   addiu $sp, $sp, 0x18
 
+glabel ov054_entrypoint1
 /* 000964 800F6F44 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 000968 800F6F48 AFBF0010 */  sw    $ra, 0x10($sp)
 /* 00096C 800F6F4C 2404000A */  addiu $a0, $zero, 0xa
@@ -816,6 +807,7 @@ ov054_func_800F7024:
 /* 000BA8 800F7188 03E00008 */  jr    $ra
 /* 000BAC 800F718C 27BD0020 */   addiu $sp, $sp, 0x20
 
+glabel ov054_entrypoint2
 /* 000BB0 800F7190 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 000BB4 800F7194 AFBF0010 */  sw    $ra, 0x10($sp)
 /* 000BB8 800F7198 0C01804A */  jal   func_80060128
@@ -857,6 +849,7 @@ ov054_func_800F7024:
 /* 000C3C 800F721C 03E00008 */  jr    $ra
 /* 000C40 800F7220 27BD0018 */   addiu $sp, $sp, 0x18
 
+glabel ov054_entrypoint3
 /* 000C44 800F7224 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 000C48 800F7228 AFBF0010 */  sw    $ra, 0x10($sp)
 /* 000C4C 800F722C 0C007490 */  jal   func_8001D240
@@ -3525,6 +3518,7 @@ ov054_func_800F97E0:
 /* 003254 800F9834 03E00008 */  jr    $ra
 /* 003258 800F9838 27BD0018 */   addiu $sp, $sp, 0x18
 
+glabel ov054_entrypoint4
 /* 00325C 800F983C 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 003260 800F9840 AFBF0010 */  sw    $ra, 0x10($sp)
 /* 003264 800F9844 0C007490 */  jal   func_8001D240
@@ -3546,6 +3540,3 @@ ov054_func_800F97E0:
 /* 0032A4 800F9884 8FBF0010 */  lw    $ra, 0x10($sp)
 /* 0032A8 800F9888 03E00008 */  jr    $ra
 /* 0032AC 800F988C 27BD0018 */   addiu $sp, $sp, 0x18
-
-overlay54_rodata:
-.incbin "bin/marioparty.u.244B50.overlay54_rodata.bin"
