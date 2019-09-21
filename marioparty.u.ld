@@ -380,9 +380,10 @@ SECTIONS
    {
       build/src/overlays/ov054/main.o(.text);
       . = ALIGN (16);
-      build/asm/overlays/ov054.o(.text);
+      build/src/overlays/ov054/dk_jungle_adventure.o(.text);
       build/src/overlays/ov054/main.o(.rodata);
       build/asm/overlays/ov054rodata.o(.text);
+      build/src/overlays/ov054/dk_jungle_adventure.o(.rodata);
    }
    rom_pos += SIZEOF(.ov054);
    .ov055 0x800F65E0 : AT(rom_pos)

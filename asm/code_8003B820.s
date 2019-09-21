@@ -70,6 +70,7 @@ glabel func_8003B8D4
 /* 03C500 8003B900 03E00008 */  jr    $ra
 /* 03C504 8003B904 27BD0018 */   addiu $sp, $sp, 0x18
 
+FreeObject:
 glabel func_8003B908
 /* 03C508 8003B908 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 03C50C 8003B90C AFBF0024 */  sw    $ra, 0x24($sp)
@@ -606,6 +607,7 @@ glabel func_8003BFE4
 /* 03CC58 8003C058 03E00008 */  jr    $ra
 /* 03CC5C 8003C05C 27BD0060 */   addiu $sp, $sp, 0x60
 
+InitDirArrows:
 glabel func_8003C060
 /* 03CC60 8003C060 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 03CC64 8003C064 AFBF001C */  sw    $ra, 0x1c($sp)
@@ -729,6 +731,7 @@ glabel func_8003C198
 /* 03CE10 8003C210 03E00008 */  jr    $ra
 /* 03CE14 8003C214 27BD0038 */   addiu $sp, $sp, 0x38
 
+SpawnDirArrows:
 glabel func_8003C218
 /* 03CE18 8003C218 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 03CE1C 8003C21C AFBF0020 */  sw    $ra, 0x20($sp)

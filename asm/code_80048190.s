@@ -3808,6 +3808,7 @@ glabel func_8004B844
 /* 04C448 8004B848 03E00008 */  jr    $ra
 /* 04C44C 8004B84C C420672C */   lwc1  $f0, 0x672c($at)
 
+IsCameraMoving:
 glabel func_8004B850
 /* 04C450 8004B850 3C02800D */  lui   $v0, %hi(D_800D6730) # $v0, 0x800d
 /* 04C454 8004B854 94426730 */  lhu   $v0, %lo(D_800D6730)($v0)
