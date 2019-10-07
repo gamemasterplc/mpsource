@@ -9,6 +9,7 @@
 .include "globals.inc"
 .include "macros.inc"
 
+InitCameras:
 glabel func_8001D240
 /* 01DE40 8001D240 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 01DE44 8001D244 AFBF0020 */  sw    $ra, 0x20($sp)

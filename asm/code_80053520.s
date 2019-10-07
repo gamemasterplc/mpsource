@@ -2544,6 +2544,7 @@ glabel func_80055948
 /* 056558 80055958 03E00008 */  jr    $ra
 /* 05655C 8005595C 27BD0028 */   addiu $sp, $sp, 0x28
 
+AdjustPlayerCoinsGradual:
 glabel func_80055960
 /* 056560 80055960 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 056564 80055964 AFBF0010 */  sw    $ra, 0x10($sp)
@@ -3710,7 +3711,7 @@ glabel func_8005699C
 /* 057600 80056A00 03E00008 */  jr    $ra
 /* 057604 80056A04 27BD0020 */   addiu $sp, $sp, 0x20
 
-SetupDKBoard:
+SetupBoard:
 /* 057608 80056A08 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 05760C 80056A0C AFBF001C */  sw    $ra, 0x1c($sp)
 /* 057610 80056A10 AFB20018 */  sw    $s2, 0x18($sp)

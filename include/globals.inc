@@ -46,7 +46,7 @@
 .global PlayerIsCPU
 .global AdjustPlayerCoins
 .global PlayerHasCoins
-.global SetupDKBoard
+.global SetupBoard
 .global ExecBoardScene
 .global IsBoardFeatureDisabled
 .global SetBoardFeatureEnabled
@@ -76,4 +76,15 @@
 .global sprintf
 .global rmonPrintf
 .global osSyncPrintf
-
+.global SetAnimation
+.global SpawnDirArrows
+.global InitDirArrows
+.global RunDecisionTree
+.global FreeObject
+.global IsCameraMoving
+.global LinkChildProcess
+.global WaitForChildProcess
+.global GetCurrProcess
+.global AdjustPlayerCoinsGradual
+.global ShowPlayerCoinChange
+.global InitCameras

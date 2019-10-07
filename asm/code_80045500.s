@@ -186,6 +186,7 @@ glabel func_800456C4
 /* 046370 80045770 03E00008 */  jr    $ra
 /* 046374 80045774 27BD0028 */   addiu $sp, $sp, 0x28
 
+ShowPlayerCoinChange:
 glabel func_80045778
 /* 046378 80045778 27BDFFB0 */  addiu $sp, $sp, -0x50
 /* 04637C 8004577C AFBF0048 */  sw    $ra, 0x48($sp)

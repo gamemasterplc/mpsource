@@ -161,6 +161,7 @@ glabel func_8006324C
 /* 063E68 80063268 03E00008 */  jr    $ra
 /* 063E6C 8006326C 27BD0030 */   addiu $sp, $sp, 0x30
 
+LinkChildProcess:
 glabel func_80063270
 /* 063E70 80063270 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 063E74 80063274 AFBF0018 */  sw    $ra, 0x18($sp)
@@ -231,6 +232,7 @@ glabel func_80063314
 /* 063F50 80063350 03E00008 */  jr    $ra
 /* 063F54 80063354 27BD0020 */   addiu $sp, $sp, 0x20
 
+WaitForChildProcess:
 glabel func_80063358
 /* 063F58 80063358 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 063F5C 8006335C AFBF0010 */  sw    $ra, 0x10($sp)
@@ -254,6 +256,7 @@ glabel func_80063358
 /* 063FA0 800633A0 03E00008 */  jr    $ra
 /* 063FA4 800633A4 27BD0018 */   addiu $sp, $sp, 0x18
 
+GetCurrProcess:
 glabel func_800633A8
 /* 063FA8 800633A8 3C02800E */  lui   $v0, 0x800e
 /* 063FAC 800633AC 03E00008 */  jr    $ra

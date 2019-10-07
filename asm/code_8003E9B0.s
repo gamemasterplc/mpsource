@@ -9,6 +9,7 @@
 .include "globals.inc"
 .include "macros.inc"
 
+RunDecisionTree:
 glabel func_8003E9B0
 /* 03F5B0 8003E9B0 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 03F5B4 8003E9B4 AFBF0024 */  sw    $ra, 0x24($sp)

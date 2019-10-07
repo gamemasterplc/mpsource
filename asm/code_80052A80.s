@@ -117,6 +117,7 @@ PlayerHasCoins:
 /* 0537E0 80052BE0 03E00008 */  jr    $ra
 /* 0537E4 80052BE4 27BD0018 */   addiu $sp, $sp, 0x18
 
+SetAnimation:
 glabel func_80052BE8
 /* 0537E8 80052BE8 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 0537EC 80052BEC AFBF001C */  sw    $ra, 0x1c($sp)

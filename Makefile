@@ -6,8 +6,8 @@
 BUILD_DIR = build
 
 # Directories containing source files
-SRC_DIRS := src src/overlays
-ASM_DIRS := asm asm/overlays asm/libs
+SRC_DIRS := src src/overlays src/overlays/ov054
+ASM_DIRS := asm asm/libs asm/overlays
 
 # If COMPARE is 1, check the output sha1sum when building 'all'
 COMPARE = 1
@@ -41,7 +41,6 @@ LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 TOOLS_DIR = tools
 AS = $(TOOLS_DIR)/mips-linux-gnu-as
 CC1 = $(TOOLS_DIR)/mips-cc1
-MIO0TOOL = $(TOOLS_DIR)/mio0
 N64CKSUM = $(TOOLS_DIR)/n64cksum
 N64GRAPHICS = $(TOOLS_DIR)/n64graphics
 EMULATOR = mupen64plus
@@ -54,9 +53,10 @@ SHA1SUM = sha1sum
 ######################## Targets #############################
 
 build/asm/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
-build/asm/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 build/asm/libs/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
+build/asm/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 build/src/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
+build/src/overlays/ov054/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 
 default: all
 
@@ -72,9 +72,6 @@ endif
 clean:
 	$(RM) -r $(BUILD_DIR)
 
-$(MIO0_DIR)/%.mio0: $(MIO0_DIR)/%.bin
-	$(MIO0TOOL) $< $@
-
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,$(SRC_DIRS) $(ASM_DIRS))
 
@@ -86,7 +83,7 @@ $(BUILD_DIR)/%.s: $(BUILD_DIR)/%.i $(BUILD_DIR)
 
 $(BUILD_DIR)/%.o: %.s $(BUILD_DIR)
 	$(AS) $(ASFLAGS) -o $@ $<
-	
+
 $(BUILD_DIR)/$(TARGET).elf: $(O_FILES) $(LD_SCRIPT)
 	$(LD) $(LDFLAGS) -o $@ $(O_FILES) $(LIBS)
 
