@@ -104,7 +104,7 @@ SECTIONS
    }
    rom_pos += SIZEOF(.main);
 
-   OVERLAY 0x800F65E0 : NOCROSSREFS AT(rom_pos)
+   OVERLAY 0x800F65E0 : NOCROSSREFS AT(rom_pos) SUBALIGN(16)
    {
       .ov000
       {
@@ -379,7 +379,6 @@ SECTIONS
       .ov054
       {
          build/src/overlays/ov054/main.o(.text);
-         . = ALIGN (16);
          build/src/overlays/ov054/dk_jungle_adventure.o(.text);
          build/src/overlays/ov054/main.o(.rodata);
          build/asm/overlays/ov054rodata.o(.text);
