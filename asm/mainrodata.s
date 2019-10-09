@@ -3,7 +3,11 @@
 # US: 0x800b1760
 
 main_rodata:
-.incbin "bin/marioparty.u.0B2360.main_rodata.bin", 0x0, 0x18788
+.incbin "bin/marioparty.u.0B2360.main_rodata.bin", 0x0, 0x10514
+
+.include "asm/overlay_table.s"
+
+.incbin "bin/marioparty.u.0B2360.main_rodata.bin", 0x117A4, 0x6fe4
 
 # 0x800C9EE8
 glabel jtbl_800C9EE8
