@@ -118,6 +118,8 @@ struct space_data {
 };
 
 extern struct space_data *GetSpaceData(s16 index);
+
+extern void func_80023504(s32 a, f32 b, f32 c, f32 d);
 extern void *func_8003C314(s16 a, void *ptr, s16 c, s16 d);
 
 struct object_type {
@@ -167,6 +169,7 @@ extern f32 func_8004B5D0();
 extern void *func_8004CDCC(struct object_type *unk);
 extern struct process *func_8004D1EC(void *a, void *b, void *c, s32 d);
 extern struct process *func_8004D3F4(void *a, void *b, void *c, s32 d);
+extern struct process *func_8004D648(void *a, void *b, void *c, f32 d);
 extern void func_80056E30(s16 unk);
 extern void func_8005CF30(u16 a, u16 b);
 extern void func_8005E044(u16 a, u16 b, u16 c);
@@ -511,13 +514,13 @@ void ov054_ShowNextStarSpotProcess() {
     ftemp = 0.0f;
     for (s0 = 0; s0 < 6; s0++) {
         func_800A0D00(&ptr->unk36, ftemp, ftemp, ftemp);
-        ftemp += 0.05f;
+        ftemp += 0.4f;
         SleepVProcess();
     }
 
     for (s0 = 0; s0 < 3; s0++) {
         func_800A0D00(&ptr->unk36, ftemp, ftemp, ftemp);
-        ftemp -= 0.05f;
+        ftemp -= 0.4f;
         SleepVProcess();
     }
 
@@ -1026,8 +1029,6 @@ void ov054_Entrypoint1() {
     func_8005DFB8(1);
 }
 
-#ifdef OV054_NONMATCHING
-// Matches besides float assembler issue.
 // 0x800F7024
 void ov054_SetupRoutine() {
     s32 player_index;
@@ -1038,7 +1039,6 @@ void ov054_SetupRoutine() {
     func_80023448(1);
     func_800234B8(0, 0x78, 0x78, 0x78);
     func_800234B8(1, 0x40, 0x40, 0x60);
-    // NONMATCHING: Float issue
     func_80023504(1, -100.0f, 100.0f, 300.0f);
     SetupBoard(0, 0x45, 4, 0);
 
@@ -1076,110 +1076,6 @@ void ov054_SetupRoutine() {
         ov054_DrawBowserOuter();
     }
 }
-#else
-void __attribute__ ((naked)) ov054_SetupRoutine() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-    sw    $ra, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    addiu $a0, $zero, 0x50\n\
-    jal   func_8005CF30\n\
-     addiu $a1, $zero, 0x28\n\
-    jal   func_80060088\n\
-     addu  $s1, $zero, $zero\n\
-    jal   func_80023448\n\
-     addiu $a0, $zero, 1\n\
-    addu  $a0, $zero, $zero\n\
-    addiu $a1, $zero, 0x78\n\
-    addiu $a2, $zero, 0x78\n\
-    jal   func_800234B8\n\
-     addiu $a3, $zero, 0x78\n\
-    addiu $a0, $zero, 1\n\
-    addiu $a1, $zero, 0x40\n\
-    addiu $a2, $zero, 0x40\n\
-    jal   func_800234B8\n\
-     addiu $a3, $zero, 0x60\n\
-    lui   $a1, 0xc2c8\n\
-    lui   $a2, 0x42c8\n\
-    lui   $a3, 0x4396\n\
-    jal   func_80023504\n\
-     addiu $a0, $zero, 1\n\
-    addu  $a0, $zero, $zero\n\
-    addiu $a1, $zero, 0x45\n\
-    addiu $a2, $zero, 4\n\
-    jal   SetupBoard\n\
-     addu  $a3, $zero, $zero\n\
-    jal   func_80052E84\n\
-     addu  $a0, $zero, $zero\n\
-    jal   func_80052E84\n\
-     addiu $a0, $zero, 1\n\
-    jal   func_80052E84\n\
-     addiu $a0, $zero, 2\n\
-    jal   func_80052E84\n\
-     addiu $a0, $zero, 3\n\
-  .ov054_L800F70C0:\n\
-    jal   GetPlayerStruct\n\
-     addu  $a0, $s1, $zero\n\
-    addu  $s0, $v0, $zero\n\
-    lw    $a0, 0x20($s0)\n\
-    jal   func_8003E174\n\
-     addiu $s1, $s1, 1\n\
-    lw    $v1, 0x20($s0)\n\
-    lhu   $v0, 0xa($v1)\n\
-    ori   $v0, $v0, 2\n\
-    sh    $v0, 0xa($v1)\n\
-    slti  $v0, $s1, 4\n\
-    bnez  $v0, .ov054_L800F70C0\n\
-     nop   \n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x4e\n\
-    beqz  $v0, .ov054_L800F7114\n\
-     nop   \n\
-    jal   SetBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x4e\n\
-    jal   ov054_func_800F67A4\n\
-     nop   \n\
-  .ov054_L800F7114:\n\
-    jal   ov054_func_800F6830\n\
-     nop   \n\
-    jal   ov054_DrawToadsOuter\n\
-     nop   \n\
-    jal   ov054_DrawThwompsOuter\n\
-     nop   \n\
-    jal   ov054_Draw20CoinGateOuter\n\
-     nop   \n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0xe\n\
-    bnez  $v0, .ov054_L800F714C\n\
-     nop   \n\
-    jal   ov054_DrawKoopaOuter\n\
-     nop   \n\
-  .ov054_L800F714C:\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0xf\n\
-    bnez  $v0, .ov054_L800F7164\n\
-     nop   \n\
-    jal   ov054_DrawBooOuter\n\
-     nop   \n\
-  .ov054_L800F7164:\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0xd\n\
-    bnez  $v0, .ov054_L800F717C\n\
-     nop   \n\
-    jal   ov054_DrawBowserOuter\n\
-     nop   \n\
-  .ov054_L800F717C:\n\
-    lw    $ra, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x20\n\
-    .set at ");
-}
-#endif
 
 void ov054_Entrypoint2() {
     func_80060128(8);
@@ -1368,8 +1264,6 @@ void ov054_DrawToadsOuter() {
     }
 }
 
-#ifdef OV054_NONMATCHING
-// Only assembler float problem.
 void ov054_DrawThwompsInner(s16 index) {
     struct object_type *ptr;
     struct space_data *spacedata_temp;
@@ -1400,105 +1294,6 @@ void ov054_DrawThwompsInner(s16 index) {
     func_800A0D50(&ptr->unkc, &spacedata_temp->unk4);
     func_800A0E80(&ptr->unk24, &GetSpaceData(D_800F997C[index])->unk4, &ptr->unkc);
 }
-#else
-void __attribute__ ((naked)) ov054_DrawThwompsInner(s16 index) {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-  sw    $ra, 0x1c($sp)\n\
-  sw    $s2, 0x18($sp)\n\
-  sw    $s1, 0x14($sp)\n\
-  sw    $s0, 0x10($sp)\n\
-  addu  $s2, $a0, $zero\n\
-  sll   $a0, $a0, 0x10\n\
-  sra   $a0, $a0, 0xe\n\
-  lui   $v0, 0x8010\n\
-  addu  $v0, $v0, $a0\n\
-  lw    $v0, -0x5cd0($v0)\n\
-  bnez  $v0, .ov054_L800F7654\n\
-   nop   \n\
-  lui   $v0, 0x8010\n\
-  lw    $v0, -0x5cd4($v0)\n\
-  bnez  $v0, .ov054_L800F7584\n\
-   nop   \n\
-  lui   $a1, 0x8010\n\
-  addiu $a1, $a1, -0x667c\n\
-  jal   func_8003DBE0\n\
-   addiu $a0, $zero, 0xa\n\
-  addu  $s1, $v0, $zero\n\
-  jal   func_8003E174\n\
-   addu  $a0, $s1, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $s1, -0x5cd4($at)\n\
-  j     ov054_func_800F7598\n\
-   sll   $s0, $s2, 0x10\n\
- .ov054_L800F7584:\n\
-  lui   $a0, 0x8010\n\
-  lw    $a0, -0x5cd4($a0)\n\
-  jal   func_8003E320\n\
-   sll   $s0, $s2, 0x10\n\
-  addu  $s1, $v0, $zero\n\
- ov054_func_800F7598:\n\
-  sra   $s0, $s0, 0x10\n\
-  sll   $v0, $s0, 2\n\
-  lui   $at, 0x8010\n\
-  addu  $at, $at, $v0\n\
-  sw    $s1, -0x5cd0($at)\n\
-  addiu $a0, $s1, 0x24\n\
-  lui   $a1, 0x3f4c\n\
-  ori   $a1, $a1, 0xcccd\n\
-  addu  $a2, $a1, $zero\n\
-  jal   func_800A0D00\n\
-   addu  $a3, $a1, $zero\n\
-  lhu   $v0, 0xa($s1)\n\
-  ori   $v0, $v0, 2\n\
-  sh    $v0, 0xa($s1)\n\
-  sll   $s0, $s0, 1\n\
-  lui   $v0, 0x8010\n\
-  addu  $v0, $v0, $s0\n\
-  lh    $v0, -0x669c($v0)\n\
-  sll   $v0, $v0, 1\n\
-  lui   $at, 0x800f\n\
-  addu  $at, $at, $v0\n\
-  lh    $v0, -0x2eac($at)\n\
-  bnez  $v0, .ov054_L800F7608\n\
-   sll   $v0, $s2, 0x10\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $s0\n\
-  j     ov054_func_800F7618\n\
-   lh    $a0, -0x6694($a0)\n\
- .ov054_L800F7608:\n\
-  sra   $v0, $v0, 0xf\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $v0\n\
-  lh    $a0, -0x668c($a0)\n\
- ov054_func_800F7618:\n\
-  jal   GetSpaceData\n\
-   addiu $s0, $s1, 0xc\n\
-  addu  $a0, $s0, $zero\n\
-  jal   func_800A0D50\n\
-   addiu $a1, $v0, 4\n\
-  sll   $v0, $s2, 0x10\n\
-  sra   $v0, $v0, 0xf\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $v0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, -0x6684($a0)\n\
-  addiu $a0, $s1, 0x18\n\
-  addiu $a1, $v0, 4\n\
-  jal   func_800A0E80\n\
-   addu  $a2, $s0, $zero\n\
- .ov054_L800F7654:\n\
-  lw    $ra, 0x1c($sp)\n\
-  lw    $s2, 0x18($sp)\n\
-  lw    $s1, 0x14($sp)\n\
-  lw    $s0, 0x10($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x20\n\
-   .set at");
-}
-#endif
 
 // draw_thwomps_outer
 void ov054_DrawThwompsOuter() {
@@ -1510,8 +1305,7 @@ void ov054_DrawThwompsOuter() {
     }
 }
 
-// Feels like this is right, except the 100.0f really messes
-// it up with the current float assembler bug.
+// Feels like this is right, why is sp+16 being used?
 #ifdef OV054_NONMATCHING
 void ov054_DrawBooInner(s16 index) {
     struct object_type *ptr;
@@ -2157,7 +1951,7 @@ void ov054_RestoreModelsAfterBoulder() {
 }
 
 #ifdef OV054_NONMATCHING
-// Only problem is float behavior.
+// Only problem is float delay slots.
 void ov054_BoulderFunc_800F84E0() {
     func_800726AC(4, 16);
     SleepProcess(16);
@@ -2252,7 +2046,7 @@ void __attribute__ ((naked)) ov054_BoulderFunc_800F84E0() {
 #endif
 
 #ifdef OV054_NONMATCHING
-// Only problem is float behavior.
+// Only problem is float delay slots.
 void ov054_BoulderEventProcess2Inner() {
     func_800726AC(4, 16);
     SleepProcess(16);
@@ -2345,7 +2139,7 @@ void __attribute__ ((naked)) ov054_BoulderEventProcess2Inner() {
 #endif
 
 // 800F869C
-// Only problem should be float behavior.
+// Only problem is delay slots.
 #ifdef OV054_NONMATCHING
 void ov054_BoulderEventProcess() {
     s16 s3;
@@ -2354,7 +2148,7 @@ void ov054_BoulderEventProcess() {
     struct process *proc_struct;
     struct object_type *boulder_obj;
     void *boulder_unkc_cached;
-    void *sp10; // maybe ov054_16byte_struct
+    struct ov054_16byte_struct sp10; // maybe
     void *sp24;
 
     s3 = 0;
@@ -3058,6 +2852,7 @@ void __attribute__ ((naked)) ov054_BoulderEvent() {
   ldc1  $f20, 0x48($sp)\n\
   jr    $ra\n\
    addiu $sp, $sp, 0x50\n\
+   .set reorder\n\
   .set at");
 }
 #endif
@@ -3071,8 +2866,7 @@ void ov054_Event20CoinDoorEndInnerProcess() {
     SleepProcess(5);
     PlaySound(0x92);
 
-    // NONMATCHING: The 0.05f should be "inlined" into .text as 0x3D4CCCCD
-    // The delay slot usage is also not the same for c.lt.s
+    // NONMATCHING: The delay slot usage is not the same for c.lt.s
     while (some_struct->unk < 1.0f) {
         SleepVProcess();
         some_struct->unk += 0.05f;
@@ -3160,8 +2954,7 @@ void ov054_Event20CoinDoorProcess() {
 
     PlaySound(146);
 
-    // NONMATCHING: The 0.05f should be "inlined" into .text as 0x3D4CCCCD
-    // The delay slot usage is also not the same for c.lt.s
+    // NONMATCHING: The delay slot usage is not the same for c.lt.s
     while (some_struct->unk > 0) {
         SleepVProcess();
         some_struct->unk -= 0.05f;
