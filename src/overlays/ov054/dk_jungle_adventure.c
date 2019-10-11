@@ -690,15 +690,17 @@ void __attribute__ ((naked)) ov054_ShowNextStarSpotProcess() {
     ldc1  $f20, 0x20($sp)\n\
     jr    $ra\n\
      addiu $sp, $sp, 0x50\n\
-    .set at");
+    .set at\n\
+    .set reorder");
 }
 #endif
 
-#ifdef OV054_NONMATCHING
-// Matches besides float rodata differences.
 void ov054_ShowNextStarSpotInner(struct mystery_struct_ret_func_80048224 *a0) {
-    a0->unk0->funk52 = 20.0f;
-    a0->unk0->funk56 = -3.0f;
+    struct object_type *unk0ptr;
+
+    unk0ptr = a0->unk0;
+    unk0ptr->funk52 = 20.0f;
+    unk0ptr->funk56 = -3.0f;
 
     func_8003E81C(a0->unk0, 0, 0);
     SleepProcess(3);
@@ -709,55 +711,7 @@ void ov054_ShowNextStarSpotInner(struct mystery_struct_ret_func_80048224 *a0) {
 
     func_8003E81C(a0->unk0, -1, 2);
 }
-#else
-void __attribute__ ((naked)) ov054_ShowNextStarSpotInner() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x18\n\
-    sw    $ra, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    addu  $s0, $a0, $zero\n\
-    lw    $v0, ($s0)\n\
-    lui   $at, 0x41a0\n\
-    mtc1  $at, $f0\n\
-    nop   \n\
-    swc1  $f0, 0x34($v0)\n\
-    lui   $at, 0xc040\n\
-    mtc1  $at, $f0\n\
-    nop   \n\
-    swc1  $f0, 0x38($v0)\n\
-    lw    $a0, ($s0)\n\
-    addu  $a1, $zero, $zero\n\
-    jal   func_8003E81C\n\
-     addu  $a2, $zero, $zero\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 3\n\
-  ov054_func_800F6C94:\n\
-    lw    $a0, ($s0)\n\
-    jal   func_8003E940\n\
-     nop   \n\
-    andi  $v0, $v0, 0xffff\n\
-    bnez  $v0, .ov054_L800F6CBC\n\
-     addiu $a1, $zero, -1\n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    j     ov054_func_800F6C94\n\
-     nop   \n\
-  .ov054_L800F6CBC:\n\
-    lw    $a0, ($s0)\n\
-    jal   func_8003E81C\n\
-     addiu $a2, $zero, 2\n\
-    lw    $ra, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x18\n\
-     .set at");
-}
-#endif
 
-#ifdef OV054_NONMATCHING
-// Match besides the float assembler issue
 void ov054_ShowNextStarSpot() {
     struct ed5c0struct *ed5c0;
     struct mystery_struct_ret_func_80048224 *str;
@@ -827,162 +781,6 @@ void ov054_ShowNextStarSpot() {
     func_8005E3A8();
     SleepVProcess();
 }
-#else
-// ov054_func_800F6CD8
-void __attribute__ ((naked)) ov054_ShowNextStarSpot() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-    sw    $ra, 0x1c($sp)\n\
-    sw    $s2, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    lui   $s2, 0x800f\n\
-    addiu $s2, $s2, -0x2a40\n\
-    jal   func_80060128\n\
-     addiu $a0, $zero, 0x2b\n\
-    lui   $a0, 0x8010\n\
-    jal   func_80048224\n\
-     addiu $a0, $a0, -0x66e0\n\
-    addu  $s0, $v0, $zero\n\
-    addiu $a0, $zero, 2\n\
-    jal   func_80072644\n\
-     addiu $a1, $zero, 0x10\n\
-  ov054_func_800F6D18:\n\
-    jal   func_80072718\n\
-     nop   \n\
-    beqz  $v0, .ov054_L800F6D38\n\
-     nop   \n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    j     ov054_func_800F6D18\n\
-     nop   \n\
-  .ov054_L800F6D38:\n\
-    jal   func_8004A520\n\
-     nop   \n\
-    lui   $at, 0x4040\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B5C4\n\
-     nop   \n\
-    jal   ov054_ShowNextStarSpotInner\n\
-     addu  $a0, $s0, $zero\n\
-    lh    $v0, 0xa($s2)\n\
-    bnez  $v0, .ov054_L800F6D78\n\
-     addiu $a1, $zero, 0x4ea\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x44\n\
-    bnezl $v0, .ov054_L800F6D78\n\
-     addiu $a1, $zero, 0x4ea\n\
-    addiu $a1, $zero, 0x4e8\n\
-  .ov054_L800F6D78:\n\
-    lh    $a0, 8($s0)\n\
-    addiu $a2, $zero, -1\n\
-    jal   LoadStringIntoWindow\n\
-     addiu $a3, $zero, -1\n\
-    lh    $a0, 8($s0)\n\
-    jal   func_80071C8C\n\
-     addiu $a1, $zero, 1\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x465\n\
-    lh    $a0, 8($s0)\n\
-    jal   WaitForTextConfirmation\n\
-     nop   \n\
-    lh    $a0, 8($s0)\n\
-    jal   func_80071E80\n\
-     addiu $a1, $zero, 1\n\
-    lh    $a0, 8($s0)\n\
-    jal   func_8006EB40\n\
-     nop   \n\
-    lh    $v0, 0xa($s2)\n\
-    sll   $v0, $v0, 1\n\
-    addu  $v0, $v0, $s2\n\
-    lh    $v0, 0xc($v0)\n\
-    sll   $v0, $v0, 1\n\
-    lui   $a0, 0x8010\n\
-    addu  $a0, $a0, $v0\n\
-    jal   GetSpaceData\n\
-     lh    $a0, -0x66f0($a0)\n\
-    addu  $s1, $v0, $zero\n\
-    jal   func_8004B5DC\n\
-     addiu $a0, $s1, 4\n\
-    lui   $at, 0x40a0\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B838\n\
-     nop   \n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 5\n\
-  ov054_func_800F6E08:\n\
-    jal   func_8004B850\n\
-     nop   \n\
-    beqz  $v0, .ov054_L800F6E28\n\
-     nop   \n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    j     ov054_func_800F6E08\n\
-     nop   \n\
-  .ov054_L800F6E28:\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 5\n\
-    lui   $a0, 0x800f\n\
-    addiu $a0, $a0, 0x6a38\n\
-    addiu $a1, $zero, 0x4800\n\
-    addu  $a2, $zero, $zero\n\
-    jal   InitProcess\n\
-     addu  $a3, $zero, $zero\n\
-    sw    $s1, 0x8c($v0)\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    lh    $v0, 0xa($s2)\n\
-    bnez  $v0, .ov054_L800F6E74\n\
-     addiu $a1, $zero, 0x4eb\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x44\n\
-    bnezl $v0, .ov054_L800F6E74\n\
-     addiu $a1, $zero, 0x4eb\n\
-    addiu $a1, $zero, 0x4e9\n\
-  .ov054_L800F6E74:\n\
-    lh    $a0, 8($s0)\n\
-    addiu $a2, $zero, -1\n\
-    jal   LoadStringIntoWindow\n\
-     addiu $a3, $zero, -1\n\
-    lh    $a0, 8($s0)\n\
-    jal   func_80071C8C\n\
-     addiu $a1, $zero, 1\n\
-    lh    $a0, 8($s0)\n\
-    jal   WaitForTextConfirmation\n\
-     nop   \n\
-    lh    $a0, 8($s0)\n\
-    jal   func_80071E80\n\
-     addiu $a1, $zero, 1\n\
-    jal   func_800601D4\n\
-     addiu $a0, $zero, 0x5a\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    addiu $a0, $zero, 2\n\
-    jal   func_800726AC\n\
-     addiu $a1, $zero, 0x10\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x11\n\
-    jal   func_8004847C\n\
-     addu  $a0, $s0, $zero\n\
-    jal   func_80056AF4\n\
-     nop   \n\
-    jal   func_8005DFB8\n\
-     addiu $a0, $zero, 1\n\
-    jal   func_8005E3A8\n\
-     nop   \n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    lw    $ra, 0x1c($sp)\n\
-    lw    $s2, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x20\n\
-    .set at");
-}
-#endif
 
 void ov054_Entrypoint0() {
     struct ed5c0struct *ed5c0;
@@ -1908,7 +1706,8 @@ void __attribute__ ((naked)) ov054_PostThwompIntersectionEvent() {
     lw    $s0, 0x10($sp)\n\
     jr    $ra\n\
      addiu $sp, $sp, 0x28\n\
-    .set at");
+    .set at\n\
+    .set reorder");
 }
 #endif
 
@@ -1950,8 +1749,6 @@ void ov054_RestoreModelsAfterBoulder() {
     }
 }
 
-#ifdef OV054_NONMATCHING
-// Only problem is float delay slots.
 void ov054_BoulderFunc_800F84E0() {
     func_800726AC(4, 16);
     SleepProcess(16);
@@ -1981,72 +1778,7 @@ void ov054_BoulderFunc_800F84E0() {
     func_80072644(4, 16);
     SleepProcess(16);
 }
-#else
-void __attribute__ ((naked)) ov054_BoulderFunc_800F84E0() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x18\n\
-    sw    $ra, 0x10($sp)\n\
-    addiu $a0, $zero, 4\n\
-    jal   func_800726AC\n\
-     addiu $a1, $zero, 0x10\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x10\n\
-    jal   ov054_MoveModelsForBoulder\n\
-     nop   \n\
-    jal   func_8004A7DC\n\
-     nop   \n\
-    jal   func_8004A7A4\n\
-     nop   \n\
-    jal   func_8004B844\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    swc1  $f0, -0x5c9c($at)\n\
-    lui   $at, 0xbf80\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B838\n\
-     nop   \n\
-    jal   func_8004B5D0\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    swc1  $f0, -0x5c98($at)\n\
-    lui   $at, 0x3f80\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B5C4\n\
-     nop   \n\
-    jal   func_8004A510\n\
-     nop   \n\
-    jal   GetSpaceData\n\
-     addu  $a0, $zero, $zero\n\
-    jal   func_8004B5DC\n\
-     addiu $a0, $v0, 4\n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    jal   func_8004A520\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    jal   func_8004B5C4\n\
-     lwc1  $f12, -0x5c98($at)\n\
-    lui   $at, 0x8010\n\
-    jal   func_8004B838\n\
-     lwc1  $f12, -0x5c9c($at)\n\
-    jal   func_800421E0\n\
-     nop   \n\
-    addiu $a0, $zero, 4\n\
-    jal   func_80072644\n\
-     addiu $a1, $zero, 0x10\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x10\n\
-    lw    $ra, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x18\n\
-    .set at");
-}
-#endif
 
-#ifdef OV054_NONMATCHING
-// Only problem is float delay slots.
 void ov054_BoulderEventProcess2Inner() {
     func_800726AC(4, 16);
     SleepProcess(16);
@@ -2062,7 +1794,7 @@ void ov054_BoulderEventProcess2Inner() {
 
     func_8004A510();
 
-    func_8004B5DC(GetPlayerStruct(-1)->obj->unkc);
+    func_8004B5DC(&GetPlayerStruct(-1)->obj->unkc);
 
     SleepVProcess();
     func_8004A520();
@@ -2073,74 +1805,8 @@ void ov054_BoulderEventProcess2Inner() {
     func_80072644(4, 16);
     SleepProcess(16);
 }
-#else
-void __attribute__ ((naked)) ov054_BoulderEventProcess2Inner() {
-  asm(".set noreorder\n\
-     .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x18\n\
-    sw    $ra, 0x10($sp)\n\
-    addiu $a0, $zero, 4\n\
-    jal   func_800726AC\n\
-     addiu $a1, $zero, 0x10\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x10\n\
-    jal   ov054_RestoreModelsAfterBoulder\n\
-     nop   \n\
-    jal   func_8004A7DC\n\
-     nop   \n\
-    jal   func_8004A7A4\n\
-     nop   \n\
-    jal   func_8004B844\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    swc1  $f0, -0x5c9c($at)\n\
-    lui   $at, 0xbf80\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B838\n\
-     nop   \n\
-    jal   func_8004B5D0\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    swc1  $f0, -0x5c98($at)\n\
-    lui   $at, 0x3f80\n\
-    mtc1  $at, $f12\n\
-    jal   func_8004B5C4\n\
-     nop   \n\
-    jal   func_8004A510\n\
-     nop   \n\
-    jal   GetPlayerStruct\n\
-     addiu $a0, $zero, -1\n\
-    lw    $a0, 0x20($v0)\n\
-    jal   func_8004B5DC\n\
-     addiu $a0, $a0, 0xc\n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    jal   func_8004A520\n\
-     nop   \n\
-    lui   $at, 0x8010\n\
-    jal   func_8004B5C4\n\
-     lwc1  $f12, -0x5c98($at)\n\
-    lui   $at, 0x8010\n\
-    jal   func_8004B838\n\
-     lwc1  $f12, -0x5c9c($at)\n\
-    jal   func_8004220C\n\
-     nop   \n\
-    addiu $a0, $zero, 4\n\
-    jal   func_80072644\n\
-     addiu $a1, $zero, 0x10\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x10\n\
-    lw    $ra, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x18\n\
-    .set at");
-}
-#endif
 
 // 800F869C
-// Only problem is delay slots.
-#ifdef OV054_NONMATCHING
 void ov054_BoulderEventProcess() {
     s16 s3;
     struct player *args_player;
@@ -2219,7 +1885,7 @@ void ov054_BoulderEventProcess() {
                   func_80052BE8(args_player->id, 1, 2);
               }
 
-              if (args_player->obj->funk56 != 0.0f && args_player->obj->unk70 != ONE) {
+              if (args_player->obj->funk56 == 0.0f && args_player->obj->unk70 != ONE) {
                   func_80052BE8(args_player->id, 1, 2);
               }
 
@@ -2240,205 +1906,6 @@ void ov054_BoulderEventProcess() {
     func_80058AD0(sp24);
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_BoulderEventProcess() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x58\n\
-  sw    $ra, 0x4c($sp)\n\
-  sw    $fp, 0x48($sp)\n\
-  sw    $s7, 0x44($sp)\n\
-  sw    $s6, 0x40($sp)\n\
-  sw    $s5, 0x3c($sp)\n\
-  sw    $s4, 0x38($sp)\n\
-  sw    $s3, 0x34($sp)\n\
-  sw    $s2, 0x30($sp)\n\
-  sw    $s1, 0x2c($sp)\n\
-  sw    $s0, 0x28($sp)\n\
-  sdc1  $f20, 0x50($sp)\n\
-  jal   func_800633A8\n\
-   addu  $s3, $zero, $zero\n\
-  lw    $s1, 0x8c($v0)\n\
-  lw    $s2, 0x20($s1)\n\
-  lui   $s6, 0x8010\n\
-  lw    $s6, -0x5c90($s6)\n\
-  jal   func_800633A8\n\
-   addiu $s0, $s6, 0xc\n\
-  addu  $fp, $v0, $zero\n\
-  lbu   $a0, 0x18($s1)\n\
-  addu  $a1, $zero, $zero\n\
-  jal   func_80058A4C\n\
-   addiu $a2, $zero, 0xa\n\
-  sw    $v0, 0x24($sp)\n\
-  lui   $at, 0x439b\n\
-  mtc1  $at, $f20\n\
-ov054_func_800F870C:\n\
-  lhu   $a0, 0xe($s1)\n\
-  jal   GetAbsSpaceIndexFromChainSpaceIndex\n\
-   lhu   $a1, 0x10($s1)\n\
-  sll   $v0, $v0, 0x10\n\
-  jal   GetSpaceData\n\
-   sra   $a0, $v0, 0x10\n\
-  addiu $a0, $v0, 4\n\
-  jal   func_800A13C0\n\
-   addu  $a1, $s0, $zero\n\
-  c.lt.s $f0, $f20\n\
-  nop   \n\
-  nop   \n\
-  bc1t  .ov054_L800F8760\n\
-   addiu $a0, $s2, 0xc\n\
-  addu  $a1, $s0, $zero\n\
-  jal   func_8004CCD0\n\
-   addiu $a2, $s2, 0x18\n\
-  jal   SleepVProcess\n\
-   nop   \n\
-  j     ov054_func_800F870C\n\
-   nop   \n\
-.ov054_L800F8760:\n\
-  lbu   $a1, 0x18($s1)\n\
-  jal   func_80060618\n\
-   addiu $a0, $zero, 0x45f\n\
-  lhu   $a0, 0xe($s1)\n\
-  jal   GetChainLength\n\
-   nop   \n\
-  lhu   $v1, 0x10($s1)\n\
-  subu  $s0, $v0, $v1\n\
-  addu  $s4, $s0, $zero\n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, 1\n\
-  jal   func_80052BE8\n\
-   addiu $a2, $zero, 2\n\
-  sll   $s0, $s0, 0x10\n\
-  blez  $s0, .ov054_L800F8920\n\
-   sll   $v0, $s4, 0x10\n\
-  addiu $s7, $zero, 1\n\
-  addiu $s5, $s2, 0x18\n\
-  addiu $s0, $s2, 0xc\n\
-.ov054_L800F87AC:\n\
-  sra   $v0, $v0, 0x10\n\
-  bne   $v0, $s7, .ov054_L800F87CC\n\
-   sll   $v0, $s3, 0x10\n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, 9\n\
-  jal   SetNextChainAndSpace\n\
-   addiu $a2, $zero, 1\n\
-  sll   $v0, $s3, 0x10\n\
-.ov054_L800F87CC:\n\
-  sra   $v0, $v0, 0x10\n\
-  addiu $v1, $zero, 0x7c\n\
-  bne   $v0, $v1, .ov054_L800F8810\n\
-   sll   $v0, $s3, 0x10\n\
-  lui   $at, 0x4220\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x34($s2)\n\
-  lui   $at, 0xc0a0\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x38($s2)\n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, 2\n\
-  jal   func_80052BE8\n\
-   addu  $a2, $zero, $zero\n\
-  sll   $v0, $s3, 0x10\n\
-.ov054_L800F8810:\n\
-  sra   $v0, $v0, 0x10\n\
-  addiu $v1, $zero, 0x24\n\
-  bne   $v0, $v1, .ov054_L800F8868\n\
-   addiu $a1, $zero, -1\n\
-  lbu   $a0, 0x18($s1)\n\
-  jal   func_80052BE8\n\
-   addiu $a2, $zero, 2\n\
-  addiu $a0, $sp, 0x10\n\
-  addiu $a1, $s6, 0xc\n\
-  jal   func_800A0E80\n\
-   addiu $a2, $s2, 0xc\n\
-  addu  $a0, $s5, $zero\n\
-  addiu $a1, $sp, 0x10\n\
-  addu  $a2, $s5, $zero\n\
-  jal   func_8004D1EC\n\
-   addiu $a3, $zero, 8\n\
-  jal   SleepProcess\n\
-   addiu $a0, $zero, 0x1e\n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, 1\n\
-  jal   func_80052BE8\n\
-   addiu $a2, $zero, 2\n\
-.ov054_L800F8868:\n\
-  lw    $v0, 0x20($s1)\n\
-  mtc1  $zero, $f2\n\
-  lwc1  $f0, 0x38($v0)\n\
-  c.eq.s $f0, $f2\n\
-  nop   \n\
-  bc1f  .ov054_L800F88A0\n\
-   nop   \n\
-  lh    $v0, 0x46($v0)\n\
-  beq   $v0, $s7, .ov054_L800F88A0\n\
-   nop   \n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, 1\n\
-  jal   func_80052BE8\n\
-   addiu $a2, $zero, 2\n\
-.ov054_L800F88A0:\n\
-  lhu   $a0, 0x12($s1)\n\
-  jal   GetAbsSpaceIndexFromChainSpaceIndex\n\
-   lhu   $a1, 0x14($s1)\n\
-  addu  $s3, $v0, $zero\n\
-  sll   $a1, $s3, 0x10\n\
-  lbu   $a0, 0x18($s1)\n\
-  sra   $a1, $a1, 0x10\n\
-  jal   func_8004CB70\n\
-   addiu $a2, $sp, 0x10\n\
-  addu  $a0, $s0, $zero\n\
-  addiu $a1, $sp, 0x10\n\
-  jal   func_8004CCD0\n\
-   addiu $a2, $s2, 0x18\n\
-  addu  $a0, $s0, $zero\n\
-  addiu $a1, $sp, 0x10\n\
-  lui   $a3, 0x41a0\n\
-  jal   func_8004D648\n\
-   addu  $a2, $s0, $zero\n\
-  addu  $a0, $fp, $zero\n\
-  jal   func_80063270\n\
-   addu  $a1, $v0, $zero\n\
-  jal   func_80063358\n\
-   nop   \n\
-  lbu   $a0, 0x18($s1)\n\
-  lh    $a1, 0x12($s1)\n\
-  jal   SetPlayerOntoChain\n\
-   lh    $a2, 0x14($s1)\n\
-  addiu $v0, $s4, -1\n\
-  addu  $s4, $v0, $zero\n\
-  sll   $v0, $v0, 0x10\n\
-  bgtz  $v0, .ov054_L800F87AC\n\
-   sll   $v0, $s4, 0x10\n\
-.ov054_L800F8920:\n\
-  lbu   $a0, 0x18($s1)\n\
-  addiu $a1, $zero, -1\n\
-  jal   func_80052BE8\n\
-   addiu $a2, $zero, 2\n\
-  lw    $a0, 0x24($sp)\n\
-  jal   func_80058AD0\n\
-   nop   \n\
-  jal   EndProcess\n\
-   addu  $a0, $zero, $zero\n\
-  lw    $ra, 0x4c($sp)\n\
-  lw    $fp, 0x48($sp)\n\
-  lw    $s7, 0x44($sp)\n\
-  lw    $s6, 0x40($sp)\n\
-  lw    $s5, 0x3c($sp)\n\
-  lw    $s4, 0x38($sp)\n\
-  lw    $s3, 0x34($sp)\n\
-  lw    $s2, 0x30($sp)\n\
-  lw    $s1, 0x2c($sp)\n\
-  lw    $s0, 0x28($sp)\n\
-  ldc1  $f20, 0x50($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x58\n\
-  .set at");
-}
-#endif
 
 // 800F8978
 void ov054_BoulderEventProcess_2() {
@@ -2858,7 +2325,6 @@ void __attribute__ ((naked)) ov054_BoulderEvent() {
 #endif
 
 // 800F8DC8
-#ifdef OV054_NONMATCHING
 void ov054_Event20CoinDoorEndInnerProcess() {
     struct ov054_unk_event_user_data *some_struct;
 
@@ -2866,7 +2332,6 @@ void ov054_Event20CoinDoorEndInnerProcess() {
     SleepProcess(5);
     PlaySound(0x92);
 
-    // NONMATCHING: The delay slot usage is not the same for c.lt.s
     while (some_struct->unk < 1.0f) {
         SleepVProcess();
         some_struct->unk += 0.05f;
@@ -2876,62 +2341,6 @@ void ov054_Event20CoinDoorEndInnerProcess() {
     PlaySound(0x93);
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_Event20CoinDoorEndInnerProcess() {
-  asm(".set noreorder\n\
-  .set noat\n\
-     \n\
-      addiu $sp, $sp, -0x28\n\
-    sw    $ra, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    sdc1  $f22, 0x20($sp)\n\
-    jal   func_800633A8\n\
-     sdc1  $f20, 0x18($sp)\n\
-    lw    $s0, 0x8c($v0)\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 5\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x92\n\
-    lui   $at, 0x3f80\n\
-    mtc1  $at, $f2\n\
-    lwc1  $f0, 0x28($s0)\n\
-    c.lt.s $f0, $f2\n\
-    nop   \n\
-    bc1f  .ov054_L800F8E48\n\
-     nop   \n\
-    lui   $at, 0x3d4c\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-    lui   $at, 0x3f80\n\
-    mtc1  $at, $f20\n\
-  .ov054_L800F8E24:\n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    lwc1  $f0, 0x28($s0)\n\
-    add.s $f0, $f0, $f22\n\
-    c.lt.s $f0, $f20\n\
-    nop   \n\
-    nop   \n\
-    bc1t  .ov054_L800F8E24\n\
-     swc1  $f0, 0x28($s0)\n\
-  .ov054_L800F8E48:\n\
-    lui   $at, 0x3f80\n\
-    mtc1  $at, $f0\n\
-    nop   \n\
-    swc1  $f0, 0x28($s0)\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x93\n\
-    jal   EndProcess\n\
-     addu  $a0, $zero, $zero\n\
-    lw    $ra, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    ldc1  $f22, 0x20($sp)\n\
-    ldc1  $f20, 0x18($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x28\n\
-    .set at");
-}
-#endif
 
 // Raises a 20 coin gate after the player goes through.
 // 0x800F8E80
@@ -2943,7 +2352,6 @@ void ov054_Event20CoinDoorEndInner(struct ov054_unk_event_user_data *arg) {
 }
 
 // 0x800F8EBC
-#ifdef OV054_NONMATCHING
 void ov054_Event20CoinDoorProcess() {
     struct ov054_unk_event_user_data *some_struct;
     void *value;
@@ -2954,7 +2362,6 @@ void ov054_Event20CoinDoorProcess() {
 
     PlaySound(146);
 
-    // NONMATCHING: The delay slot usage is not the same for c.lt.s
     while (some_struct->unk > 0) {
         SleepVProcess();
         some_struct->unk -= 0.05f;
@@ -2965,67 +2372,6 @@ void ov054_Event20CoinDoorProcess() {
     func_80058AD0(value);
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_Event20CoinDoorProcess() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-      addiu $sp, $sp, -0x30\n\
-    sw    $ra, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    sdc1  $f22, 0x28($sp)\n\
-    jal   func_800633A8\n\
-     sdc1  $f20, 0x20($sp)\n\
-    lw    $s0, 0x8c($v0)\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 5\n\
-    addiu $a0, $zero, -1\n\
-    addu  $a1, $zero, $zero\n\
-    jal   func_80058A4C\n\
-     addiu $a2, $zero, 0xa\n\
-    addu  $s1, $v0, $zero\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x92\n\
-    mtc1  $zero, $f2\n\
-    lwc1  $f0, 0x28($s0)\n\
-    c.lt.s $f2, $f0\n\
-    nop   \n\
-    nop   \n\
-    bc1fl .ov054_L800F8F54\n\
-     sw    $zero, 0x28($s0)\n\
-    lui   $at, 0x3d4c\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-    mtc1  $zero, $f20\n\
-  .ov054_L800F8F2C:\n\
-    jal   SleepVProcess\n\
-     nop   \n\
-    lwc1  $f0, 0x28($s0)\n\
-    sub.s $f0, $f0, $f22\n\
-    c.lt.s $f20, $f0\n\
-    nop   \n\
-    nop   \n\
-    bc1t  .ov054_L800F8F2C\n\
-     swc1  $f0, 0x28($s0)\n\
-    sw    $zero, 0x28($s0)\n\
-  .ov054_L800F8F54:\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x93\n\
-    jal   func_80058AD0\n\
-     addu  $a0, $s1, $zero\n\
-    jal   EndProcess\n\
-     addu  $a0, $zero, $zero\n\
-    lw    $ra, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    ldc1  $f22, 0x28($sp)\n\
-    ldc1  $f20, 0x20($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x30\n\
-     .set at");
-}
-#endif
 
 // 0x800F8F88
 struct process *ov054_Event20CoinDoorInner(struct ov054_unk_event_user_data *arg) {
