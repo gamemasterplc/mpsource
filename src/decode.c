@@ -47,7 +47,7 @@ void DecodeLZ(struct decode_struct *decode)
     bzero(&D_800D1720, 1024);
     while(decode->len)
     {
-        if(!((flag = (((flag & 0xFFFF) >> 1)) & 0x100))
+        if (!((flag = (((flag & 0xFFFF) >> 1)) & 0x100)))
         {
             if(decode->chunk_len >= 1024)
             {
@@ -114,7 +114,6 @@ void __attribute__ ((naked)) DecodeLZ(struct decode_struct *decode)
 {
 asm(".set noat\n\
      .set noreorder\n\
-     .set gp=64\n\
      \n\
     addiu $sp, $sp, -0x30\n\
     sw    $ra, 0x28($sp)\n\
@@ -282,7 +281,9 @@ asm(".set noat\n\
     lw    $s1, 0x1c($sp)\n\
     lw    $s0, 0x18($sp)\n\
     jr    $ra\n\
-    addiu $sp, $sp, 0x30");
+    addiu $sp, $sp, 0x30\n\
+    .set at\n\
+     .set reorder");
 }
 #endif
 
@@ -299,11 +300,11 @@ void DecodeFile(void *src, void *dest, s32 len, s32 decode_type)
         case 0:
             DecodeNone(decode_ptr);
             break;
-        
+
         case 1:
             DecodeLZ(decode_ptr);
             break;
-        
+
         default:
             break;
     }

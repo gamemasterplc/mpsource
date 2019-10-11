@@ -20,8 +20,6 @@ S_FILES := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 O_FILES := $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file:.c=.o)) \
            $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file:.s=.o))
 
-MIPSISET := -mips2
-
 ##################### Compiler Options #######################
 CROSS = mips-linux-gnu-
 CC = $(CROSS)gcc
@@ -30,8 +28,10 @@ CPP       := cpp -P
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-ASFLAGS := -mabi=32 -G 0 -I include $(MIPSISET)
-CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 $(MIPSISET)
+OLD_ASFLAGS := -G 0 -I include -mips2
+NEW_ASFLAGS := -G 0 -I include -mips3 -mabi=32
+
+CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 -mips2
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
@@ -39,10 +39,12 @@ LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
 # N64 tools
 TOOLS_DIR = tools
-AS = $(TOOLS_DIR)/mips-linux-gnu-as
+OLD_AS = $(TOOLS_DIR)/mips-binutils-2.7-as
+NEW_AS = $(CROSS)as
 CC1 = $(TOOLS_DIR)/mips-cc1
 N64CKSUM = $(TOOLS_DIR)/n64cksum
 N64GRAPHICS = $(TOOLS_DIR)/n64graphics
+REPLACE_REGS = $(TOOLS_DIR)/replaceregs.sh
 EMULATOR = mupen64plus
 EMU_FLAGS = --noosd
 LOADER = loader64
@@ -51,12 +53,6 @@ LOADER_FLAGS = -vwf
 SHA1SUM = sha1sum
 
 ######################## Targets #############################
-
-build/asm/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
-build/asm/libs/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
-build/asm/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
-build/src/overlays/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
-build/src/overlays/ov054/%.o: ASFLAGS := -march=vr4300 -mabi=32 -G 0 -I include -mips3
 
 default: all
 
@@ -75,15 +71,26 @@ clean:
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,$(SRC_DIRS) $(ASM_DIRS))
 
-$(BUILD_DIR)/%.i: %.c
+# Pre-process .c files with the modern cpp.
+$(BUILD_DIR)/%.i: %.c $(BUILD_DIR)
 	$(CPP) -MMD -MP -MT $@ -MF $@.d -D_LANGUAGE_C -I include/ -o $@ $<
 
-$(BUILD_DIR)/%.s: $(BUILD_DIR)/%.i $(BUILD_DIR)
+# Go from .i to .S...
+$(BUILD_DIR)/src/%.S: $(BUILD_DIR)/src/%.i
 	$(CC1) $(CFLAGS) -o $@ $<
 
-$(BUILD_DIR)/%.o: %.s $(BUILD_DIR)
-	$(AS) $(ASFLAGS) -o $@ $<
+# ...which we "preprocess" again to remove register names.
+$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.S
+	$(REPLACE_REGS) $< $@
 
+# Run a separate assembler for src and asm .s files.
+$(BUILD_DIR)/asm/%.o: asm/%.s
+	$(NEW_AS) $(NEW_ASFLAGS) -o $@ $<
+
+$(BUILD_DIR)/src/%.o: $(BUILD_DIR)/src/%.s
+	$(OLD_AS) $(OLD_ASFLAGS) -o $@ $<
+
+# Continue the rest of the build...
 $(BUILD_DIR)/$(TARGET).elf: $(O_FILES) $(LD_SCRIPT)
 	$(LD) $(LDFLAGS) -o $@ $(O_FILES) $(LIBS)
 
