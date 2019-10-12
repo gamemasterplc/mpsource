@@ -50,7 +50,7 @@ extern s16 D_800F9928[]; // toad_space_indices_repeat
 extern s16 D_800F992A[];
 extern s16 D_800F9938[];
 extern s16 D_800F9948[];
-extern s16 D_800F994A[];
+//extern s16 D_800F994A[];
 extern s16 D_800F9964[];
 extern s16 D_800F996C[];
 extern s16 D_800F9974[];
@@ -120,7 +120,7 @@ struct space_data {
 extern struct space_data *GetSpaceData(s16 index);
 
 extern void func_80023504(s32 a, f32 b, f32 c, f32 d);
-extern void *func_8003C314(s16 a, void *ptr, s16 c, s16 d);
+extern void *func_8003C314(s32 a, void *ptr, s32 c, s32 d);
 
 struct object_type {
     s8 pad[4];
@@ -150,7 +150,7 @@ struct object_type_indirect2 {
     s16 unk0;
 };
 
-extern struct object_type *func_8003DBE0(s16 model_id, s32 unk);
+extern struct object_type *func_8003DBE0(s32 model_id, s32 unk);
 extern void *func_8003E174(struct object_type *ptr);
 extern struct object_type *func_8003E320(void *unk);
 extern u16 func_8003E940(struct object_type *a0);
@@ -733,16 +733,17 @@ void ov054_DrawKoopaOuter() {
     ov054_DrawKoopaInner();
 }
 
-// not matching, reg alloc
+// not matching, it's just the stack size???
 #ifdef OV054_NONMATCHING
 void ov054_DrawToadsInner(s16 index) {
     struct object_type *ptr;
+    struct space_data *spacedata;
 
     if (D_800FA310[index] != NULL) {
         return;
     }
 
-    if (D_800FA308 != NULL) {
+    if (D_800FA308 == NULL) {
         ptr = func_8003DBE0(0x3A, 0);
         func_8003E174(ptr);
         D_800FA308 = ptr;
@@ -754,8 +755,9 @@ void ov054_DrawToadsInner(s16 index) {
     D_800FA310[index] = ptr;
     ptr->unka = ptr->unka | 0x2;
     func_8004CDCC(ptr);
-    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F9928[index])->unk4);
-    func_8003C314(6, ptr, D_800F9948[index], D_800F994A[index]);
+    spacedata = GetSpaceData(D_800F9928[index]);
+    func_800A0D50(&ptr->unkc, &spacedata->unk4);
+    func_8003C314(6, ptr, D_800F9948[index * 2], D_800F9948[(index * 2) + 1]);
 }
 #else
 void __attribute__ ((naked)) ov054_DrawToadsInner(s16 index) {
