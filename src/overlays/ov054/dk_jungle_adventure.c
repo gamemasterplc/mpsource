@@ -37,7 +37,7 @@ struct f2b7cstruct {
     s8 pad2[64];
 };
 
-extern struct f2b7cstruct D_800F2B7C[];
+extern struct f2b7cstruct *D_800F2B7C;
 
 extern s16 D_800F98C0[]; // data_screen_dimensions
 extern s16 D_800F98D0[]; // func_800F663C_data0
@@ -420,16 +420,15 @@ s32 ov054_StarSpaceEventInner(s32 current_space_index) {
     return 0;
 }
 
-#ifdef OV054_NONMATCHING
-// Has problems, and float rodata issue.
 void ov054_ShowNextStarSpotProcess() {
     struct ov054_unk_event_user_data *some_struct;
     struct object_type *ptr;
     struct f2b7cstruct *f2bstr;
-    void *ret; // not sure
+    void *ret;
     s32 s0;
     f32 ftemp;
     f32 ftt;
+    f32 const20;
 
     some_struct = (func_800633A8())->user_data;
 
@@ -460,13 +459,13 @@ void ov054_ShowNextStarSpotProcess() {
     PlaySound(68);
 
     ftt = 0.0f;
+    const20 = 20.0f;
     while (TRUE) {
-        // NONMATCHING: Something wrong about this struct array access.
         f2bstr = &D_800F2B7C[ptr->unk60->unk64->unk0];
-        func_800A40D0(f2bstr->unk124, ftt);
+        func_800A40D0(&f2bstr->unk124, ftt);
         ftemp -= 0.02f;
 
-        ftt += 20.0f;
+        ftt += const20;
         if (ftemp < 0) {
             break;
         }
@@ -481,151 +480,6 @@ void ov054_ShowNextStarSpotProcess() {
     func_8003E694(ptr);
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_ShowNextStarSpotProcess() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x50\n\
-    sw    $ra, 0x1c($sp)\n\
-    sw    $s2, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    sdc1  $f30, 0x48($sp)\n\
-    sdc1  $f28, 0x40($sp)\n\
-    sdc1  $f26, 0x38($sp)\n\
-    sdc1  $f24, 0x30($sp)\n\
-    sdc1  $f22, 0x28($sp)\n\
-    jal   func_800633A8\n\
-     sdc1  $f20, 0x20($sp)\n\
-    lw    $s0, 0x8c($v0)\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x6d\n\
-    addiu $a0, $zero, 0x40\n\
-    jal   func_8003DBE0\n\
-     addu  $a1, $zero, $zero\n\
-    addu  $s1, $v0, $zero\n\
-    lhu   $v0, 0xa($s1)\n\
-    ori   $v0, $v0, 4\n\
-    sh    $v0, 0xa($s1)\n\
-    jal   func_8004CDCC\n\
-     addu  $a0, $s1, $zero\n\
-    addiu $a0, $s1, 0xc\n\
-    jal   func_800A0D50\n\
-     addiu $a1, $s0, 4\n\
-    lui   $at, 0x43fa\n\
-    mtc1  $at, $f0\n\
-    nop   \n\
-    swc1  $f0, 0x30($s1)\n\
-    addu  $a0, $s1, $zero\n\
-    jal   func_80042728\n\
-     addu  $a1, $zero, $zero\n\
-    addu  $s2, $v0, $zero\n\
-    mtc1  $zero, $f20\n\
-    addu  $s0, $zero, $zero\n\
-    lui   $at, 0x3ecc\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-  .ov054_L800F6AD8:\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    jal   SleepVProcess\n\
-     add.s $f20, $f20, $f22\n\
-    addiu $s0, $s0, 1\n\
-    slti  $v0, $s0, 6\n\
-    bnez  $v0, .ov054_L800F6AD8\n\
-     nop   \n\
-    addu  $s0, $zero, $zero\n\
-    lui   $at, 0x3ecc\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-  .ov054_L800F6B18:\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    jal   SleepVProcess\n\
-     sub.s $f20, $f20, $f22\n\
-    addiu $s0, $s0, 1\n\
-    slti  $v0, $s0, 3\n\
-    bnez  $v0, .ov054_L800F6B18\n\
-     nop   \n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x44\n\
-    mtc1  $zero, $f22\n\
-    lui   $at, 0x41a0\n\
-    mtc1  $at, $f30\n\
-    lui   $at, 0x3ca3\n\
-    ori   $at, $at, 0xd70a\n\
-    mtc1  $at, $f28\n\
-    mtc1  $zero, $f26\n\
-    lui   $at, 0x40c0\n\
-    mtc1  $at, $f24\n\
-  ov054_func_800F6B7C:\n\
-    lw    $v0, 0x3c($s1)\n\
-    lw    $v0, 0x40($v0)\n\
-    lh    $v0, ($v0)\n\
-    sll   $a0, $v0, 1\n\
-    addu  $a0, $a0, $v0\n\
-    sll   $a0, $a0, 6\n\
-    lui   $v0, 0x800f\n\
-    lw    $v0, 0x2b7c($v0)\n\
-    addu  $a0, $a0, $v0\n\
-    mfc1  $a1, $f22\n\
-    nop   \n\
-    jal   func_800A40D0\n\
-     addiu $a0, $a0, 0x7c\n\
-    sub.s $f20, $f20, $f28\n\
-    c.lt.s $f20, $f26\n\
-    nop   \n\
-    nop   \n\
-    bc1t  .ov054_L800F6BF8\n\
-     add.s $f22, $f22, $f30\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    lwc1  $f0, 0x30($s1)\n\
-    sub.s $f0, $f0, $f24\n\
-    jal   SleepVProcess\n\
-     swc1  $f0, 0x30($s1)\n\
-    j     ov054_func_800F6B7C\n\
-     nop   \n\
-  .ov054_L800F6BF8:\n\
-    jal   func_800427D4\n\
-     addu  $a0, $s2, $zero\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    jal   func_8003E694\n\
-     addu  $a0, $s1, $zero\n\
-    jal   EndProcess\n\
-     addu  $a0, $zero, $zero\n\
-    lw    $ra, 0x1c($sp)\n\
-    lw    $s2, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    ldc1  $f30, 0x48($sp)\n\
-    ldc1  $f28, 0x40($sp)\n\
-    ldc1  $f26, 0x38($sp)\n\
-    ldc1  $f24, 0x30($sp)\n\
-    ldc1  $f22, 0x28($sp)\n\
-    ldc1  $f20, 0x20($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x50\n\
-    .set at\n\
-    .set reorder");
-}
-#endif
 
 void ov054_ShowNextStarSpotInner(struct mystery_struct_ret_func_80048224 *a0) {
     struct object_type *unk0ptr;
