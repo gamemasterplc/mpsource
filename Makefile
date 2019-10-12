@@ -75,12 +75,12 @@ $(BUILD_DIR):
 $(BUILD_DIR)/%.i: %.c $(BUILD_DIR)
 	$(CPP) -MMD -MP -MT $@ -MF $@.d -D_LANGUAGE_C -I include/ -o $@ $<
 
-# Go from .i to .S...
-$(BUILD_DIR)/src/%.S: $(BUILD_DIR)/src/%.i
+# Go from .i to .reg...
+$(BUILD_DIR)/src/%.reg: $(BUILD_DIR)/src/%.i
 	$(CC1) $(CFLAGS) -o $@ $<
 
 # ...which we "preprocess" again to remove register names.
-$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.S
+$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.reg
 	$(REPLACE_REGS) $< $@
 
 # Run a separate assembler for src and asm .s files.
