@@ -84,8 +84,8 @@ extern struct object_type *D_800FA318; // bss_toad_boulder
 extern struct object_type *D_800FA320; // bss_toad_boulder_2
 extern void *D_800FA32C; // bss_thwomp_model
 extern void *D_800FA330[]; // thwomp_instances
-extern void *D_800FA33C; // bss_boo_model
-extern void *D_800FA340[]; // bss_boo_2
+extern struct object_type *D_800FA33C; // bss_boo_model
+extern struct object_type *D_800FA340[]; // bss_boo_2
 extern void *D_800FA348; // bss_coin_gate_model
 extern void *D_800FA34C[]; // bss_20_coin_gate_2
 extern void *D_800FA354; // coin gate
@@ -891,8 +891,6 @@ void ov054_DrawThwompsOuter() {
     }
 }
 
-// Feels like this is right, why is sp+16 being used?
-#ifdef OV054_NONMATCHING
 void ov054_DrawBooInner(s16 index) {
     struct object_type *ptr;
 
@@ -915,86 +913,8 @@ void ov054_DrawBooInner(s16 index) {
     ptr->unk48 = 100.0f;
 
     func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F998C[index])->unk4);
-    func_8003C314(8, &ptr, 0, 0);
+    func_8003C314(8, ptr, 0, 0);
 }
-#else
-void __attribute__ ((naked)) ov054_DrawBooInner(s16 index) {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-  sw    $ra, 0x18($sp)\n\
-  sw    $s1, 0x14($sp)\n\
-  sw    $s0, 0x10($sp)\n\
-  addu  $s0, $a0, $zero\n\
-  sll   $a0, $a0, 0x10\n\
-  sra   $a0, $a0, 0xe\n\
-  lui   $v0, 0x8010\n\
-  addu  $v0, $v0, $a0\n\
-  lw    $v0, -0x5cc0($v0)\n\
-  bnez  $v0, .ov054_L800F77A4\n\
-   nop   \n\
-  lui   $v0, 0x8010\n\
-  lw    $v0, -0x5cc4($v0)\n\
-  bnez  $v0, .ov054_L800F7714\n\
-   addiu $a0, $zero, 0x6a\n\
-  jal   func_8003DBE0\n\
-   addu  $a1, $zero, $zero\n\
-  addu  $s1, $v0, $zero\n\
-  jal   func_8003E174\n\
-   addu  $a0, $s1, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $s1, -0x5cc4($at)\n\
-  j     ov054_func_800F7728\n\
-   sll   $s0, $s0, 0x10\n\
-.ov054_L800F7714:\n\
-  lui   $a0, 0x8010\n\
-  lw    $a0, -0x5cc4($a0)\n\
-  jal   func_8003E320\n\
-   sll   $s0, $s0, 0x10\n\
-  addu  $s1, $v0, $zero\n\
-ov054_func_800F7728:\n\
-  sra   $s0, $s0, 0x10\n\
-  sll   $v0, $s0, 2\n\
-  lui   $at, 0x8010\n\
-  addu  $at, $at, $v0\n\
-  sw    $s1, -0x5cc0($at)\n\
-  lhu   $v0, 0xa($s1)\n\
-  ori   $v0, $v0, 2\n\
-  sh    $v0, 0xa($s1)\n\
-  addiu $a0, $s1, 0x24\n\
-  lui   $a1, 0x3f19\n\
-  ori   $a1, $a1, 0x999a\n\
-  addu  $a2, $a1, $zero\n\
-  jal   func_800A0D00\n\
-   addu  $a3, $a1, $zero\n\
-  lui   $at, 0x42c8\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x30($s1)\n\
-  sll   $s0, $s0, 1\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $s0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, -0x6674($a0)\n\
-  addiu $a0, $s1, 0xc\n\
-  jal   func_800A0D50\n\
-   addiu $a1, $v0, 4\n\
-  addiu $a0, $zero, 8\n\
-  addu  $a1, $s1, $zero\n\
-  addu  $a2, $zero, $zero\n\
-  jal   func_8003C314\n\
-   addu  $a3, $zero, $zero\n\
-.ov054_L800F77A4:\n\
-  lw    $ra, 0x18($sp)\n\
-  lw    $s1, 0x14($sp)\n\
-  lw    $s0, 0x10($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x20\n\
-   .set reorder\n\
-   .set at");
-}
-#endif
 
 // boo_draw_outer
 void ov054_DrawBooOuter() {
