@@ -374,119 +374,51 @@ void ov054_func_800F6830() {
     SetBoardFeatureDisabled(D_800F98F0[ed5c0->unkc[ed5c0->unka]]);
 }
 
-// ov054_func_800F6958
-#ifdef OV054_NONMATCHING
-// Has problems
+// 0x800F6958
 s32 ov054_StarSpaceEventInner(s32 current_space_index) {
-    s32 s0;
-    s32 v0;
+    s32 i;
+    s32 j;
+    s16 *D_800F9900ptr;
     struct ed5c0struct *ed5c0;
 
     ed5c0 = &D_800ED5C0;
 
-    for (s0 = 0; s0 < ov054_DK_STAR_COUNT; s0++) {
-        // NONMATCHING: It does this, but typing it verbatim doesn't work.
-        // current_space_index <<= 16;
-        // current_space_index >>= 16;
-        // This function is exact other than this weird cast that occurs.
+    i = 0;
 
-        if (current_space_index == D_800F9900[s0]) {
-            if (s0 == ed5c0->unkc[ed5c0->unka]) {
-                ed5c0->unk1a = D_800F98F0[s0];
+    D_800F9900ptr = &D_800F9900;
+
+    // This feels a bit odd, but the match was difficult.
+    current_space_index <<= 16;
+    current_space_index >>= 16;
+
+    while (i < ov054_DK_STAR_COUNT) {
+        if (current_space_index == D_800F9900ptr[i]) {
+            if (i == ed5c0->unkc[ed5c0->unka]) {
+                ed5c0->unk1a = D_800F98F0[i];
                 return 1;
             }
 
-            if (!IsBoardFeatureDisabled(68)) {
-                current_space_index = ed5c0->unka;
-            }
-            else {
+            if (IsBoardFeatureDisabled(68)) {
                 current_space_index = 7;
             }
+            else {
+                current_space_index = ed5c0->unka;
+            }
 
-            for (v0 = 0; v0 < current_space_index; v0++) {
-                if (s0 == ed5c0->unkc[v0]) {
+            for (j = 0; j < current_space_index; j++) {
+                if (i == ed5c0->unkc[j]) {
                   return 2;
                 }
             }
 
             return 0;
         }
+
+        i++;
     }
 
     return 0;
 }
-#else
-s32 __attribute__ ((naked)) ov054_StarSpaceEventInner(s32 current_space_index) {
-  asm(".set noreorder\n\
-     .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x28\n\
-    sw    $ra, 0x20($sp)\n\
-    sw    $s1, 0x1c($sp)\n\
-    sw    $s0, 0x18($sp)\n\
-    lui   $s1, 0x800f\n\
-    addiu $s1, $s1, -0x2a40\n\
-    addu  $s0, $zero, $zero\n\
-    lui   $a1, 0x8010\n\
-    addiu $a1, $a1, -0x6700\n\
-    sll   $a0, $a0, 0x10\n\
-    sra   $a0, $a0, 0x10\n\
-    lui   $a2, 0x8010\n\
-    addiu $a2, $a2, -0x6710\n\
-    sll   $v1, $s0, 1\n\
-  .ov054_L800F6990:\n\
-    addu  $v0, $v1, $a1\n\
-    lh    $v0, ($v0)\n\
-    bnel  $a0, $v0, .ov054_L800F6A14\n\
-     addiu $s0, $s0, 1\n\
-    lh    $v0, 0xa($s1)\n\
-    sll   $v0, $v0, 1\n\
-    addu  $v0, $v0, $s1\n\
-    lh    $v0, 0xc($v0)\n\
-    bne   $s0, $v0, .ov054_L800F69C8\n\
-     addu  $v0, $v1, $a2\n\
-    lhu   $v0, ($v0)\n\
-    sh    $v0, 0x1a($s1)\n\
-    j     ov054_func_800F6A24\n\
-     addiu $v0, $zero, 1\n\
-  .ov054_L800F69C8:\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x44\n\
-    bnez  $v0, .ov054_L800F69DC\n\
-     addiu $a0, $zero, 7\n\
-    lh    $a0, 0xa($s1)\n\
-  .ov054_L800F69DC:\n\
-    blez  $a0, .ov054_L800F6A20\n\
-     addu  $v1, $zero, $zero\n\
-    sll   $v0, $v1, 1\n\
-  .ov054_L800F69E8:\n\
-    addu  $v0, $v0, $s1\n\
-    lh    $v0, 0xc($v0)\n\
-    bne   $s0, $v0, .ov054_L800F6A00\n\
-     addiu $v1, $v1, 1\n\
-    j     ov054_func_800F6A24\n\
-     addiu $v0, $zero, 2\n\
-  .ov054_L800F6A00:\n\
-    slt   $v0, $v1, $a0\n\
-    bnez  $v0, .ov054_L800F69E8\n\
-     sll   $v0, $v1, 1\n\
-    j     ov054_func_800F6A24\n\
-     addu  $v0, $zero, $zero\n\
-  .ov054_L800F6A14:\n\
-    slti  $v0, $s0, 7\n\
-    bnez  $v0, .ov054_L800F6990\n\
-     sll   $v1, $s0, 1\n\
-  .ov054_L800F6A20:\n\
-    addu  $v0, $zero, $zero\n\
-  ov054_func_800F6A24:\n\
-    lw    $ra, 0x20($sp)\n\
-    lw    $s1, 0x1c($sp)\n\
-    lw    $s0, 0x18($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x28\n\
-    .set at");
-}
-#endif
 
 #ifdef OV054_NONMATCHING
 // Has problems, and float rodata issue.
