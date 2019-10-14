@@ -37,7 +37,7 @@ struct f2b7cstruct {
     s8 pad2[64];
 };
 
-extern struct f2b7cstruct D_800F2B7C[];
+extern struct f2b7cstruct *D_800F2B7C;
 
 extern s16 D_800F98C0[]; // data_screen_dimensions
 extern s16 D_800F98D0[]; // func_800F663C_data0
@@ -50,7 +50,7 @@ extern s16 D_800F9928[]; // toad_space_indices_repeat
 extern s16 D_800F992A[];
 extern s16 D_800F9938[];
 extern s16 D_800F9948[];
-extern s16 D_800F994A[];
+//extern s16 D_800F994A[];
 extern s16 D_800F9964[];
 extern s16 D_800F996C[];
 extern s16 D_800F9974[];
@@ -84,8 +84,8 @@ extern struct object_type *D_800FA318; // bss_toad_boulder
 extern struct object_type *D_800FA320; // bss_toad_boulder_2
 extern void *D_800FA32C; // bss_thwomp_model
 extern void *D_800FA330[]; // thwomp_instances
-extern void *D_800FA33C; // bss_boo_model
-extern void *D_800FA340[]; // bss_boo_2
+extern struct object_type *D_800FA33C; // bss_boo_model
+extern struct object_type *D_800FA340[]; // bss_boo_2
 extern void *D_800FA348; // bss_coin_gate_model
 extern void *D_800FA34C[]; // bss_20_coin_gate_2
 extern void *D_800FA354; // coin gate
@@ -120,7 +120,7 @@ struct space_data {
 extern struct space_data *GetSpaceData(s16 index);
 
 extern void func_80023504(s32 a, f32 b, f32 c, f32 d);
-extern void *func_8003C314(s16 a, void *ptr, s16 c, s16 d);
+extern void *func_8003C314(s32 a, void *ptr, s32 c, s32 d);
 
 struct object_type {
     s8 pad[4];
@@ -150,7 +150,7 @@ struct object_type_indirect2 {
     s16 unk0;
 };
 
-extern struct object_type *func_8003DBE0(s16 model_id, s32 unk);
+extern struct object_type *func_8003DBE0(s32 model_id, s32 unk);
 extern void *func_8003E174(struct object_type *ptr);
 extern struct object_type *func_8003E320(void *unk);
 extern u16 func_8003E940(struct object_type *a0);
@@ -374,130 +374,61 @@ void ov054_func_800F6830() {
     SetBoardFeatureDisabled(D_800F98F0[ed5c0->unkc[ed5c0->unka]]);
 }
 
-// ov054_func_800F6958
-#ifdef OV054_NONMATCHING
-// Has problems
+// 0x800F6958
 s32 ov054_StarSpaceEventInner(s32 current_space_index) {
-    s32 s0;
-    s32 v0;
+    s32 i;
+    s32 j;
+    s16 *D_800F9900ptr;
     struct ed5c0struct *ed5c0;
 
     ed5c0 = &D_800ED5C0;
 
-    for (s0 = 0; s0 < ov054_DK_STAR_COUNT; s0++) {
-        // NONMATCHING: It does this, but typing it verbatim doesn't work.
-        // current_space_index <<= 16;
-        // current_space_index >>= 16;
-        // This function is exact other than this weird cast that occurs.
+    i = 0;
 
-        if (current_space_index == D_800F9900[s0]) {
-            if (s0 == ed5c0->unkc[ed5c0->unka]) {
-                ed5c0->unk1a = D_800F98F0[s0];
+    D_800F9900ptr = &D_800F9900;
+
+    // This feels a bit odd, but the match was difficult.
+    current_space_index <<= 16;
+    current_space_index >>= 16;
+
+    while (i < ov054_DK_STAR_COUNT) {
+        if (current_space_index == D_800F9900ptr[i]) {
+            if (i == ed5c0->unkc[ed5c0->unka]) {
+                ed5c0->unk1a = D_800F98F0[i];
                 return 1;
             }
 
-            if (!IsBoardFeatureDisabled(68)) {
-                current_space_index = ed5c0->unka;
-            }
-            else {
+            if (IsBoardFeatureDisabled(68)) {
                 current_space_index = 7;
             }
+            else {
+                current_space_index = ed5c0->unka;
+            }
 
-            for (v0 = 0; v0 < current_space_index; v0++) {
-                if (s0 == ed5c0->unkc[v0]) {
+            for (j = 0; j < current_space_index; j++) {
+                if (i == ed5c0->unkc[j]) {
                   return 2;
                 }
             }
 
             return 0;
         }
+
+        i++;
     }
 
     return 0;
 }
-#else
-s32 __attribute__ ((naked)) ov054_StarSpaceEventInner(s32 current_space_index) {
-  asm(".set noreorder\n\
-     .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x28\n\
-    sw    $ra, 0x20($sp)\n\
-    sw    $s1, 0x1c($sp)\n\
-    sw    $s0, 0x18($sp)\n\
-    lui   $s1, 0x800f\n\
-    addiu $s1, $s1, -0x2a40\n\
-    addu  $s0, $zero, $zero\n\
-    lui   $a1, 0x8010\n\
-    addiu $a1, $a1, -0x6700\n\
-    sll   $a0, $a0, 0x10\n\
-    sra   $a0, $a0, 0x10\n\
-    lui   $a2, 0x8010\n\
-    addiu $a2, $a2, -0x6710\n\
-    sll   $v1, $s0, 1\n\
-  .ov054_L800F6990:\n\
-    addu  $v0, $v1, $a1\n\
-    lh    $v0, ($v0)\n\
-    bnel  $a0, $v0, .ov054_L800F6A14\n\
-     addiu $s0, $s0, 1\n\
-    lh    $v0, 0xa($s1)\n\
-    sll   $v0, $v0, 1\n\
-    addu  $v0, $v0, $s1\n\
-    lh    $v0, 0xc($v0)\n\
-    bne   $s0, $v0, .ov054_L800F69C8\n\
-     addu  $v0, $v1, $a2\n\
-    lhu   $v0, ($v0)\n\
-    sh    $v0, 0x1a($s1)\n\
-    j     ov054_func_800F6A24\n\
-     addiu $v0, $zero, 1\n\
-  .ov054_L800F69C8:\n\
-    jal   IsBoardFeatureDisabled\n\
-     addiu $a0, $zero, 0x44\n\
-    bnez  $v0, .ov054_L800F69DC\n\
-     addiu $a0, $zero, 7\n\
-    lh    $a0, 0xa($s1)\n\
-  .ov054_L800F69DC:\n\
-    blez  $a0, .ov054_L800F6A20\n\
-     addu  $v1, $zero, $zero\n\
-    sll   $v0, $v1, 1\n\
-  .ov054_L800F69E8:\n\
-    addu  $v0, $v0, $s1\n\
-    lh    $v0, 0xc($v0)\n\
-    bne   $s0, $v0, .ov054_L800F6A00\n\
-     addiu $v1, $v1, 1\n\
-    j     ov054_func_800F6A24\n\
-     addiu $v0, $zero, 2\n\
-  .ov054_L800F6A00:\n\
-    slt   $v0, $v1, $a0\n\
-    bnez  $v0, .ov054_L800F69E8\n\
-     sll   $v0, $v1, 1\n\
-    j     ov054_func_800F6A24\n\
-     addu  $v0, $zero, $zero\n\
-  .ov054_L800F6A14:\n\
-    slti  $v0, $s0, 7\n\
-    bnez  $v0, .ov054_L800F6990\n\
-     sll   $v1, $s0, 1\n\
-  .ov054_L800F6A20:\n\
-    addu  $v0, $zero, $zero\n\
-  ov054_func_800F6A24:\n\
-    lw    $ra, 0x20($sp)\n\
-    lw    $s1, 0x1c($sp)\n\
-    lw    $s0, 0x18($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x28\n\
-    .set at");
-}
-#endif
 
-#ifdef OV054_NONMATCHING
-// Has problems, and float rodata issue.
 void ov054_ShowNextStarSpotProcess() {
     struct ov054_unk_event_user_data *some_struct;
     struct object_type *ptr;
     struct f2b7cstruct *f2bstr;
-    void *ret; // not sure
+    void *ret;
     s32 s0;
     f32 ftemp;
     f32 ftt;
+    f32 const20;
 
     some_struct = (func_800633A8())->user_data;
 
@@ -528,13 +459,13 @@ void ov054_ShowNextStarSpotProcess() {
     PlaySound(68);
 
     ftt = 0.0f;
+    const20 = 20.0f;
     while (TRUE) {
-        // NONMATCHING: Something wrong about this struct array access.
         f2bstr = &D_800F2B7C[ptr->unk60->unk64->unk0];
-        func_800A40D0(f2bstr->unk124, ftt);
+        func_800A40D0(&f2bstr->unk124, ftt);
         ftemp -= 0.02f;
 
-        ftt += 20.0f;
+        ftt += const20;
         if (ftemp < 0) {
             break;
         }
@@ -549,151 +480,6 @@ void ov054_ShowNextStarSpotProcess() {
     func_8003E694(ptr);
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_ShowNextStarSpotProcess() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x50\n\
-    sw    $ra, 0x1c($sp)\n\
-    sw    $s2, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    sw    $s0, 0x10($sp)\n\
-    sdc1  $f30, 0x48($sp)\n\
-    sdc1  $f28, 0x40($sp)\n\
-    sdc1  $f26, 0x38($sp)\n\
-    sdc1  $f24, 0x30($sp)\n\
-    sdc1  $f22, 0x28($sp)\n\
-    jal   func_800633A8\n\
-     sdc1  $f20, 0x20($sp)\n\
-    lw    $s0, 0x8c($v0)\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x6d\n\
-    addiu $a0, $zero, 0x40\n\
-    jal   func_8003DBE0\n\
-     addu  $a1, $zero, $zero\n\
-    addu  $s1, $v0, $zero\n\
-    lhu   $v0, 0xa($s1)\n\
-    ori   $v0, $v0, 4\n\
-    sh    $v0, 0xa($s1)\n\
-    jal   func_8004CDCC\n\
-     addu  $a0, $s1, $zero\n\
-    addiu $a0, $s1, 0xc\n\
-    jal   func_800A0D50\n\
-     addiu $a1, $s0, 4\n\
-    lui   $at, 0x43fa\n\
-    mtc1  $at, $f0\n\
-    nop   \n\
-    swc1  $f0, 0x30($s1)\n\
-    addu  $a0, $s1, $zero\n\
-    jal   func_80042728\n\
-     addu  $a1, $zero, $zero\n\
-    addu  $s2, $v0, $zero\n\
-    mtc1  $zero, $f20\n\
-    addu  $s0, $zero, $zero\n\
-    lui   $at, 0x3ecc\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-  .ov054_L800F6AD8:\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    jal   SleepVProcess\n\
-     add.s $f20, $f20, $f22\n\
-    addiu $s0, $s0, 1\n\
-    slti  $v0, $s0, 6\n\
-    bnez  $v0, .ov054_L800F6AD8\n\
-     nop   \n\
-    addu  $s0, $zero, $zero\n\
-    lui   $at, 0x3ecc\n\
-    ori   $at, $at, 0xcccd\n\
-    mtc1  $at, $f22\n\
-  .ov054_L800F6B18:\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    jal   SleepVProcess\n\
-     sub.s $f20, $f20, $f22\n\
-    addiu $s0, $s0, 1\n\
-    slti  $v0, $s0, 3\n\
-    bnez  $v0, .ov054_L800F6B18\n\
-     nop   \n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    jal   PlaySound\n\
-     addiu $a0, $zero, 0x44\n\
-    mtc1  $zero, $f22\n\
-    lui   $at, 0x41a0\n\
-    mtc1  $at, $f30\n\
-    lui   $at, 0x3ca3\n\
-    ori   $at, $at, 0xd70a\n\
-    mtc1  $at, $f28\n\
-    mtc1  $zero, $f26\n\
-    lui   $at, 0x40c0\n\
-    mtc1  $at, $f24\n\
-  ov054_func_800F6B7C:\n\
-    lw    $v0, 0x3c($s1)\n\
-    lw    $v0, 0x40($v0)\n\
-    lh    $v0, ($v0)\n\
-    sll   $a0, $v0, 1\n\
-    addu  $a0, $a0, $v0\n\
-    sll   $a0, $a0, 6\n\
-    lui   $v0, 0x800f\n\
-    lw    $v0, 0x2b7c($v0)\n\
-    addu  $a0, $a0, $v0\n\
-    mfc1  $a1, $f22\n\
-    nop   \n\
-    jal   func_800A40D0\n\
-     addiu $a0, $a0, 0x7c\n\
-    sub.s $f20, $f20, $f28\n\
-    c.lt.s $f20, $f26\n\
-    nop   \n\
-    nop   \n\
-    bc1t  .ov054_L800F6BF8\n\
-     add.s $f22, $f22, $f30\n\
-    mfc1  $a1, $f20\n\
-    mfc1  $a2, $f20\n\
-    mfc1  $a3, $f20\n\
-    nop   \n\
-    jal   func_800A0D00\n\
-     addiu $a0, $s1, 0x24\n\
-    lwc1  $f0, 0x30($s1)\n\
-    sub.s $f0, $f0, $f24\n\
-    jal   SleepVProcess\n\
-     swc1  $f0, 0x30($s1)\n\
-    j     ov054_func_800F6B7C\n\
-     nop   \n\
-  .ov054_L800F6BF8:\n\
-    jal   func_800427D4\n\
-     addu  $a0, $s2, $zero\n\
-    jal   SleepProcess\n\
-     addiu $a0, $zero, 0x1e\n\
-    jal   func_8003E694\n\
-     addu  $a0, $s1, $zero\n\
-    jal   EndProcess\n\
-     addu  $a0, $zero, $zero\n\
-    lw    $ra, 0x1c($sp)\n\
-    lw    $s2, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    ldc1  $f30, 0x48($sp)\n\
-    ldc1  $f28, 0x40($sp)\n\
-    ldc1  $f26, 0x38($sp)\n\
-    ldc1  $f24, 0x30($sp)\n\
-    ldc1  $f22, 0x28($sp)\n\
-    ldc1  $f20, 0x20($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x50\n\
-    .set at\n\
-    .set reorder");
-}
-#endif
 
 void ov054_ShowNextStarSpotInner(struct mystery_struct_ret_func_80048224 *a0) {
     struct object_type *unk0ptr;
@@ -947,16 +733,17 @@ void ov054_DrawKoopaOuter() {
     ov054_DrawKoopaInner();
 }
 
-// not matching, reg alloc
+// not matching, it's just the stack size???
 #ifdef OV054_NONMATCHING
 void ov054_DrawToadsInner(s16 index) {
     struct object_type *ptr;
+    struct space_data *spacedata;
 
     if (D_800FA310[index] != NULL) {
         return;
     }
 
-    if (D_800FA308 != NULL) {
+    if (D_800FA308 == NULL) {
         ptr = func_8003DBE0(0x3A, 0);
         func_8003E174(ptr);
         D_800FA308 = ptr;
@@ -968,8 +755,9 @@ void ov054_DrawToadsInner(s16 index) {
     D_800FA310[index] = ptr;
     ptr->unka = ptr->unka | 0x2;
     func_8004CDCC(ptr);
-    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F9928[index])->unk4);
-    func_8003C314(6, ptr, D_800F9948[index], D_800F994A[index]);
+    spacedata = GetSpaceData(D_800F9928[index]);
+    func_800A0D50(&ptr->unkc, &spacedata->unk4);
+    func_8003C314(6, ptr, D_800F9948[index * 2], D_800F9948[(index * 2) + 1]);
 }
 #else
 void __attribute__ ((naked)) ov054_DrawToadsInner(s16 index) {
@@ -1103,8 +891,6 @@ void ov054_DrawThwompsOuter() {
     }
 }
 
-// Feels like this is right, why is sp+16 being used?
-#ifdef OV054_NONMATCHING
 void ov054_DrawBooInner(s16 index) {
     struct object_type *ptr;
 
@@ -1127,86 +913,8 @@ void ov054_DrawBooInner(s16 index) {
     ptr->unk48 = 100.0f;
 
     func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F998C[index])->unk4);
-    func_8003C314(8, &ptr, 0, 0);
+    func_8003C314(8, ptr, 0, 0);
 }
-#else
-void __attribute__ ((naked)) ov054_DrawBooInner(s16 index) {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-  sw    $ra, 0x18($sp)\n\
-  sw    $s1, 0x14($sp)\n\
-  sw    $s0, 0x10($sp)\n\
-  addu  $s0, $a0, $zero\n\
-  sll   $a0, $a0, 0x10\n\
-  sra   $a0, $a0, 0xe\n\
-  lui   $v0, 0x8010\n\
-  addu  $v0, $v0, $a0\n\
-  lw    $v0, -0x5cc0($v0)\n\
-  bnez  $v0, .ov054_L800F77A4\n\
-   nop   \n\
-  lui   $v0, 0x8010\n\
-  lw    $v0, -0x5cc4($v0)\n\
-  bnez  $v0, .ov054_L800F7714\n\
-   addiu $a0, $zero, 0x6a\n\
-  jal   func_8003DBE0\n\
-   addu  $a1, $zero, $zero\n\
-  addu  $s1, $v0, $zero\n\
-  jal   func_8003E174\n\
-   addu  $a0, $s1, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $s1, -0x5cc4($at)\n\
-  j     ov054_func_800F7728\n\
-   sll   $s0, $s0, 0x10\n\
-.ov054_L800F7714:\n\
-  lui   $a0, 0x8010\n\
-  lw    $a0, -0x5cc4($a0)\n\
-  jal   func_8003E320\n\
-   sll   $s0, $s0, 0x10\n\
-  addu  $s1, $v0, $zero\n\
-ov054_func_800F7728:\n\
-  sra   $s0, $s0, 0x10\n\
-  sll   $v0, $s0, 2\n\
-  lui   $at, 0x8010\n\
-  addu  $at, $at, $v0\n\
-  sw    $s1, -0x5cc0($at)\n\
-  lhu   $v0, 0xa($s1)\n\
-  ori   $v0, $v0, 2\n\
-  sh    $v0, 0xa($s1)\n\
-  addiu $a0, $s1, 0x24\n\
-  lui   $a1, 0x3f19\n\
-  ori   $a1, $a1, 0x999a\n\
-  addu  $a2, $a1, $zero\n\
-  jal   func_800A0D00\n\
-   addu  $a3, $a1, $zero\n\
-  lui   $at, 0x42c8\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x30($s1)\n\
-  sll   $s0, $s0, 1\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $s0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, -0x6674($a0)\n\
-  addiu $a0, $s1, 0xc\n\
-  jal   func_800A0D50\n\
-   addiu $a1, $v0, 4\n\
-  addiu $a0, $zero, 8\n\
-  addu  $a1, $s1, $zero\n\
-  addu  $a2, $zero, $zero\n\
-  jal   func_8003C314\n\
-   addu  $a3, $zero, $zero\n\
-.ov054_L800F77A4:\n\
-  lw    $ra, 0x18($sp)\n\
-  lw    $s1, 0x14($sp)\n\
-  lw    $s0, 0x10($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x20\n\
-   .set reorder\n\
-   .set at");
-}
-#endif
 
 // boo_draw_outer
 void ov054_DrawBooOuter() {
