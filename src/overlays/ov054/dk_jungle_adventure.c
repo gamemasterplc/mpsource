@@ -50,7 +50,7 @@ extern s16 D_800F9928[]; // toad_space_indices_repeat
 extern s16 D_800F992A[];
 extern s16 D_800F9938[];
 extern s16 D_800F9948[];
-//extern s16 D_800F994A[];
+extern s16 D_800F994A[];
 extern s16 D_800F9964[];
 extern s16 D_800F996C[];
 extern s16 D_800F9974[];
@@ -120,7 +120,7 @@ struct space_data {
 extern struct space_data *GetSpaceData(s16 index);
 
 extern void func_80023504(s32 a, f32 b, f32 c, f32 d);
-extern void *func_8003C314(s32 a, void *ptr, s32 c, s32 d);
+extern void func_8003C314(s8 a, void *ptr, s32 c, s32 d);
 
 struct object_type {
     s8 pad[4];
@@ -129,8 +129,8 @@ struct object_type {
     u16 unka;
     s16 unkc; // pointed to, not sure what this is.
     s8 pad2[10];
-    s16 unk24;
-    s8 pad3[10];
+    void *unk24;
+    s8 pad3[8];
     s8 unk36; // pointed to, not sure what this is.
     s8 pad4[8];
     f32 unk48;
@@ -151,8 +151,8 @@ struct object_type_indirect2 {
 };
 
 extern struct object_type *func_8003DBE0(s32 model_id, s32 unk);
-extern void *func_8003E174(struct object_type *ptr);
-extern struct object_type *func_8003E320(void *unk);
+extern void func_8003E174(struct object_type *ptr);
+extern struct object_type *func_8003E320(struct object_type *unk);
 extern u16 func_8003E940(struct object_type *a0);
 
 struct mystery_struct_ret_func_80048224 {
@@ -166,8 +166,8 @@ extern void func_8004B5C4(f32 unk);
 extern void func_8004B838(f32 unk);
 extern f32 func_8004B844();
 extern f32 func_8004B5D0();
-extern void *func_8004CDCC(struct object_type *unk);
-extern struct process *func_8004D1EC(void *a, void *b, void *c, s32 d);
+extern void func_8004CDCC(struct object_type *unk);
+extern struct process *func_8004D1EC(s16 *a, struct ov054_16byte_struct *b, s16 *c, s32 d);
 extern struct process *func_8004D3F4(void *a, void *b, void *c, s32 d);
 extern struct process *func_8004D648(void *a, void *b, void *c, f32 d);
 extern void func_80056E30(s16 unk);
@@ -733,11 +733,8 @@ void ov054_DrawKoopaOuter() {
     ov054_DrawKoopaInner();
 }
 
-// not matching, it's just the stack size???
-#ifdef OV054_NONMATCHING
 void ov054_DrawToadsInner(s16 index) {
     struct object_type *ptr;
-    struct space_data *spacedata;
 
     if (D_800FA310[index] != NULL) {
         return;
@@ -753,89 +750,11 @@ void ov054_DrawToadsInner(s16 index) {
     }
 
     D_800FA310[index] = ptr;
-    ptr->unka = ptr->unka | 0x2;
+    ptr->unka |= 0x2;
     func_8004CDCC(ptr);
-    spacedata = GetSpaceData(D_800F9928[index]);
-    func_800A0D50(&ptr->unkc, &spacedata->unk4);
-    func_8003C314(6, ptr, D_800F9948[index * 2], D_800F9948[(index * 2) + 1]);
+    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F9928[index])->unk4);
+    func_8003C314(6, ptr, D_800F9948[index * 2], D_800F994A[index * 2]);
 }
-#else
-void __attribute__ ((naked)) ov054_DrawToadsInner(s16 index) {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x20\n\
-  sw    $ra, 0x1c($sp)\n\
-  sw    $s2, 0x18($sp)\n\
-  sw    $s1, 0x14($sp)\n\
-  sw    $s0, 0x10($sp)\n\
-  addu  $s0, $a0, $zero\n\
-  sll   $a0, $a0, 0x10\n\
-  sra   $a0, $a0, 0xe\n\
-  lui   $v0, 0x8010\n\
-  addu  $v0, $v0, $a0\n\
-  lw    $v0, -0x5cf0($v0)\n\
-  bnez  $v0, .ov054_L800F7474\n\
-   nop   \n\
-  lui   $v0, 0x8010\n\
-  lw    $v0, -0x5cf8($v0)\n\
-  bnez  $v0, .ov054_L800F73F4\n\
-   nop   \n\
-  addiu $a0, $zero, 0x3a\n\
-  jal   func_8003DBE0\n\
-   addu  $a1, $zero, $zero\n\
-  addu  $s2, $v0, $zero\n\
-  jal   func_8003E174\n\
-   addu  $a0, $s2, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $s2, -0x5cf8($at)\n\
-  j     ov054_func_800F7408\n\
-   sll   $s0, $s0, 0x10\n\
-.ov054_L800F73F4:\n\
-  lui   $a0, 0x8010\n\
-  lw    $a0, -0x5cf8($a0)\n\
-  jal   func_8003E320\n\
-   sll   $s0, $s0, 0x10\n\
-  addu  $s2, $v0, $zero\n\
-ov054_func_800F7408:\n\
-  sra   $s0, $s0, 0x10\n\
-  sll   $s1, $s0, 2\n\
-  lui   $at, 0x8010\n\
-  addu  $at, $at, $s1\n\
-  sw    $s2, -0x5cf0($at)\n\
-  lhu   $v0, 0xa($s2)\n\
-  ori   $v0, $v0, 2\n\
-  sh    $v0, 0xa($s2)\n\
-  jal   func_8004CDCC\n\
-   addu  $a0, $s2, $zero\n\
-  sll   $s0, $s0, 1\n\
-  lui   $a0, 0x8010\n\
-  addu  $a0, $a0, $s0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, -0x66d8($a0)\n\
-  addiu $a0, $s2, 0xc\n\
-  jal   func_800A0D50\n\
-   addiu $a1, $v0, 4\n\
-  addiu $a0, $zero, 6\n\
-  lui   $a2, 0x8010\n\
-  addu  $a2, $a2, $s1\n\
-  lh    $a2, -0x66b8($a2)\n\
-  lui   $a3, 0x8010\n\
-  addu  $a3, $a3, $s1\n\
-  lh    $a3, -0x66b6($a3)\n\
-  jal   func_8003C314\n\
-   addu  $a1, $s2, $zero\n\
-.ov054_L800F7474:\n\
-  lw    $ra, 0x1c($sp)\n\
-  lw    $s2, 0x18($sp)\n\
-  lw    $s1, 0x14($sp)\n\
-  lw    $s0, 0x10($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x20\n\
-   .set reorder\n\
-   .set at");
-}
-#endif
 
 // draw_toads_outer
 void ov054_DrawToadsOuter() {
@@ -1253,8 +1172,7 @@ struct post_thwomp_proc_args {
 // 800F8248
 #ifdef OV054_NONMATCHING
 // This is totally matching, but it has a jump table.
-// Seems we'd need to figure out the float assembler issue first,
-// to use rodata in any partial manner.
+// Best to wait for the full rodata decompile.
 void ov054_PostThwompIntersectionEvent() {
     s16 idx;
     s16 a0;
@@ -1634,48 +1552,42 @@ void ov054_BoulderEventProcess_2() {
     EndProcess(NULL);
 }
 
-// The boulder event appears to use a struct on the stack...
-// Or at least, something ends up on sp+16.
-struct boulder_unk_struct {
-  s8 pad[8];
-};
-
-#ifdef OV054_NONMATCHING
-// This is a decent effort, but it still has "solvable" non-matchings.
-// The float issues make it hard to iron out the rest of the problems.
 void ov054_BoulderEvent() {
-    s32 cur_player_index;
+    s32 i;
     s32 num_players_in_boulders_path;
     struct process *proc_struct;
-    struct boulder_unk_struct boulder_unk;
+    struct ov054_16byte_struct boulder_unk;
+    struct object_type *obj;
+
+    i = 0;
 
     proc_struct = func_800633A8();
 
     num_players_in_boulders_path = 0;
 
-    for (cur_player_index = 0; cur_player_index < 4; cur_player_index++) {
+    for (i = 0; i < 4; i++) {
         {
-            s16 cur_abs;
-            s16 chspcidx;
+            s16 cur_abs_space_index;
+            s16 chain_space_index;
             struct process *some_struct;
-            struct player *plstr;
+            struct player *player;
 
-            plstr = GetPlayerStruct(cur_player_index);
-            cur_abs = GetAbsSpaceIndexFromChainSpaceIndex(plstr->cur_chain_index, plstr->cur_space_index);
-            chspcidx = GetChainSpaceIndexFromAbsSpaceIndex(cur_abs, 17);
+            player = GetPlayerStruct(i);
+            cur_abs_space_index = GetAbsSpaceIndexFromChainSpaceIndex(player->cur_chain_index, player->cur_space_index);
+            chain_space_index = GetChainSpaceIndexFromAbsSpaceIndex(cur_abs_space_index, 17);
 
-            if (chspcidx >= 0) {
+            if (chain_space_index >= 0) {
                 {
-                    s16 next = chspcidx + 1;
+                    s16 next = chain_space_index + 1;
 
-                    plstr->cur_chain_index = 17;
-                    plstr->cur_space_index = chspcidx;
-                    plstr->next_chain_index = 17;
-                    plstr->next_space_index = next;
+                    player->cur_chain_index = 17;
+                    player->cur_space_index = chain_space_index;
+                    player->next_chain_index = 17;
+                    player->next_space_index = next;
                 }
 
                 some_struct = InitProcess(ov054_BoulderEventProcess, 18432, 0, 0);
-                some_struct->user_data = plstr;
+                some_struct->user_data = player;
 
                 num_players_in_boulders_path++;
             }
@@ -1684,16 +1596,13 @@ void ov054_BoulderEvent() {
 
     if (num_players_in_boulders_path == 0) {
         {
-            struct player *plstr;
-            struct object_type *player_obj;
             s16 win_id;
             struct process *fromret;
 
-            plstr = GetPlayerStruct(-1);
-            player_obj = plstr->obj;
+            obj = GetPlayerStruct(-1)->obj;
             func_8004CD84(&boulder_unk);
             func_8003D514(&boulder_unk, 0);
-            fromret = func_8004D1EC(&player_obj->unk24, &boulder_unk, &player_obj->unk24, 6);
+            fromret = func_8004D1EC(&obj->unk24, &boulder_unk, &obj->unk24, 6);
             func_80063270(proc_struct, fromret);
             func_80063358();
 
@@ -1711,9 +1620,7 @@ void ov054_BoulderEvent() {
     D_800FA370 = NULL;
 
     {
-        struct object_type *obj;
-        s32 s7;
-        s16 **boulder_indices_ptr;
+        s32 sound_ret;
 
         InitProcess(ov054_BoulderEventProcess_2, 4099, 0, 0);
         obj = func_8003DBE0(38, 0);
@@ -1722,10 +1629,10 @@ void ov054_BoulderEvent() {
         func_800A0D50(&obj->unkc, &GetSpaceData(0)->unk4);
         func_800A0D00(&obj->unk36, 0.8f, 0.8f, 0.8f);
         SleepProcess(30);
-        s7 = PlaySound(139);
+        sound_ret = PlaySound(139);
 
-        boulder_indices_ptr = D_800F9FCC;
-        while (*boulder_indices_ptr[0] >= 0) {
+        i = 0;
+        while (D_800F9FCC[i] >= 0) {
             {
                 void *unkccache;
                 void *unk24cache;
@@ -1736,14 +1643,14 @@ void ov054_BoulderEvent() {
                 unkccache = &obj->unkc;
                 unk24cache = &obj->unk24;
 
-                spacedataunk4 = &GetSpaceData(*boulder_indices_ptr[0])->unk4;
+                spacedataunk4 = &GetSpaceData(D_800F9FCC[i])->unk4;
                 func_8004CCD0(unkccache, spacedataunk4, unk24cache);
                 fromret = func_8004D648(unkccache, spacedataunk4, unkccache, 20.0f);
                 func_80063270(proc_struct, fromret);
                 func_80063358();
 
-                if (*boulder_indices_ptr[0] == 6) {
-                    func_800A0E80(&boulder_unk, &GetSpaceData(*boulder_indices_ptr[1])->unk4, unkccache);
+                if (D_800F9FCC[i] == 6) {
+                    func_800A0E80(&boulder_unk, &GetSpaceData(D_800F9FCC[i + 1])->unk4, unkccache);
                     func_8004D1EC(unk24cache, &boulder_unk, unk24cache, 20);
 
                     obj->funk52 = 38.0f;
@@ -1757,13 +1664,13 @@ void ov054_BoulderEvent() {
                     }
 
                     PlaySound(141);
-                    s7 = PlaySound(139);
+                    sound_ret = PlaySound(139);
                 }
             }
-            *boulder_indices_ptr++;
+            i++;
         }
 
-        func_80060BC8(s7, 30);
+        func_80060BC8(sound_ret, 30);
         func_8003E694(obj);
     }
 
@@ -1772,265 +1679,6 @@ void ov054_BoulderEvent() {
     D_800FA36C = 1;
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_BoulderEvent() {
-  asm(".set noreorder\n\
-  .set noat\n\
-     \n\
-    addiu $sp, $sp, -0x50\n\
-  sw    $ra, 0x44($sp)\n\
-  sw    $fp, 0x40($sp)\n\
-  sw    $s7, 0x3c($sp)\n\
-  sw    $s6, 0x38($sp)\n\
-  sw    $s5, 0x34($sp)\n\
-  sw    $s4, 0x30($sp)\n\
-  sw    $s3, 0x2c($sp)\n\
-  sw    $s2, 0x28($sp)\n\
-  sw    $s1, 0x24($sp)\n\
-  sw    $s0, 0x20($sp)\n\
-  sdc1  $f20, 0x48($sp)\n\
-  jal   func_800633A8\n\
-   addu  $s3, $zero, $zero\n\
-  addu  $fp, $v0, $zero\n\
-  addu  $s1, $zero, $zero\n\
-  addiu $s2, $zero, 0x11\n\
- .ov054_L800F8A44:\n\
-  jal   GetPlayerStruct\n\
-   addu  $a0, $s3, $zero\n\
-  addu  $s0, $v0, $zero\n\
-  lhu   $a0, 0xe($s0)\n\
-  jal   GetAbsSpaceIndexFromChainSpaceIndex\n\
-   lhu   $a1, 0x10($s0)\n\
-  sll   $v0, $v0, 0x10\n\
-  sra   $a0, $v0, 0x10\n\
-  jal   GetChainSpaceIndexFromAbsSpaceIndex\n\
-   addiu $a1, $zero, 0x11\n\
-  addu  $v1, $v0, $zero\n\
-  sll   $v0, $v1, 0x10\n\
-  bltz  $v0, .ov054_L800F8AAC\n\
-   addiu $v0, $v1, 1\n\
-  sh    $s2, 0xe($s0)\n\
-  sh    $v1, 0x10($s0)\n\
-  sh    $s2, 0x12($s0)\n\
-  sh    $v0, 0x14($s0)\n\
-  lui   $a0, 0x8010\n\
-  addiu $a0, $a0, -0x7964\n\
-  addiu $a1, $zero, 0x4800\n\
-  addu  $a2, $zero, $zero\n\
-  jal   InitProcess\n\
-   addu  $a3, $zero, $zero\n\
-  sw    $s0, 0x8c($v0)\n\
-  addiu $s1, $s1, 1\n\
- .ov054_L800F8AAC:\n\
-  addiu $s3, $s3, 1\n\
-  slti  $v0, $s3, 4\n\
-  bnez  $v0, .ov054_L800F8A44\n\
-   nop   \n\
-  bnez  $s1, .ov054_L800F8B78\n\
-   nop   \n\
-  jal   GetPlayerStruct\n\
-   addiu $a0, $zero, -1\n\
-  lw    $s2, 0x20($v0)\n\
-  jal   func_8004CD84\n\
-   addiu $a0, $sp, 0x10\n\
-  addiu $a0, $sp, 0x10\n\
-  jal   func_8003D514\n\
-   addu  $a1, $zero, $zero\n\
-  addiu $a2, $s2, 0x18\n\
-  addu  $a0, $a2, $zero\n\
-  addiu $a1, $sp, 0x10\n\
-  jal   func_8004D1EC\n\
-   addiu $a3, $zero, 6\n\
-  addu  $a0, $fp, $zero\n\
-  jal   func_80063270\n\
-   addu  $a1, $v0, $zero\n\
-  jal   func_80063358\n\
-   nop   \n\
-  addiu $a0, $zero, 0x4b\n\
-  addiu $a1, $zero, 0x40\n\
-  addiu $a2, $zero, 0xe\n\
-  jal   CreateTextWindow\n\
-   addiu $a3, $zero, 1\n\
-  sll   $s0, $v0, 0x10\n\
-  sra   $s0, $s0, 0x10\n\
-  addu  $a0, $s0, $zero\n\
-  addiu $a1, $zero, 0x194\n\
-  addiu $a2, $zero, -1\n\
-  jal   LoadStringIntoWindow\n\
-   addiu $a3, $zero, -1\n\
-  addu  $a0, $s0, $zero\n\
-  jal   SetTextCharsPerFrame\n\
-   addu  $a1, $zero, $zero\n\
-  jal   ShowTextWindow\n\
-   addu  $a0, $s0, $zero\n\
-  jal   GetCurrentPlayerIndex\n\
-   nop   \n\
-  sll   $v0, $v0, 0x10\n\
-  addu  $a0, $s0, $zero\n\
-  jal   func_8004DBD4\n\
-   sra   $a1, $v0, 0x10\n\
-  jal   HideTextWindow\n\
-   addu  $a0, $s0, $zero\n\
-  jal   EndProcess\n\
-   addu  $a0, $zero, $zero\n\
- .ov054_L800F8B78:\n\
-  lui   $at, 0x8010\n\
-  sh    $zero, -0x5c94($at)\n\
-  lui   $at, 0x8010\n\
-  sw    $zero, -0x5c90($at)\n\
-  lui   $a0, 0x8010\n\
-  addiu $a0, $a0, -0x7688\n\
-  addiu $a1, $zero, 0x1003\n\
-  addu  $a2, $zero, $zero\n\
-  jal   InitProcess\n\
-   addu  $a3, $zero, $zero\n\
-  addiu $a0, $zero, 0x26\n\
-  jal   func_8003DBE0\n\
-   addu  $a1, $zero, $zero\n\
-  addu  $s2, $v0, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $s2, -0x5c90($at)\n\
-  jal   GetSpaceData\n\
-   addu  $a0, $zero, $zero\n\
-  addiu $a0, $s2, 0xc\n\
-  jal   func_800A0D50\n\
-   addiu $a1, $v0, 4\n\
-  addiu $a0, $s2, 0x24\n\
-  lui   $a1, 0x3f4c\n\
-  ori   $a1, $a1, 0xcccd\n\
-  addu  $a2, $a1, $zero\n\
-  jal   func_800A0D00\n\
-   addu  $a3, $a1, $zero\n\
-  jal   SleepProcess\n\
-   addiu $a0, $zero, 0x1e\n\
-  jal   PlaySound\n\
-   addiu $a0, $zero, 0x8b\n\
-  addu  $s7, $v0, $zero\n\
-  lui   $v0, 0x8010\n\
-  lh    $v0, -0x6034($v0)\n\
-  bltz  $v0, .ov054_L800F8D58\n\
-   addu  $s3, $zero, $zero\n\
-  addiu $s5, $s2, 0xc\n\
-  addiu $s6, $s2, 0x18\n\
-  sll   $s4, $s3, 1\n\
- .ov054_L800F8C14:\n\
-  lui   $t0, 0x8010\n\
-  addiu $t0, $t0, -0x6034\n\
-  addu  $s1, $s4, $t0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, ($s1)\n\
-  addiu $s0, $v0, 4\n\
-  addu  $a0, $s5, $zero\n\
-  addu  $a1, $s0, $zero\n\
-  jal   func_8004CCD0\n\
-   addu  $a2, $s6, $zero\n\
-  addu  $a0, $s5, $zero\n\
-  addu  $a1, $s0, $zero\n\
-  lui   $a3, 0x41a0\n\
-  jal   func_8004D648\n\
-   addu  $a2, $s5, $zero\n\
-  addu  $a0, $fp, $zero\n\
-  jal   func_80063270\n\
-   addu  $a1, $v0, $zero\n\
-  jal   func_80063358\n\
-   nop   \n\
-  lh    $v1, ($s1)\n\
-  addiu $v0, $zero, 6\n\
-  bnel  $v1, $v0, .ov054_L800F8D40\n\
-   addiu $s3, $s3, 1\n\
-  lui   $t0, 0x8010\n\
-  addiu $t0, $t0, -0x6032\n\
-  addu  $v0, $s4, $t0\n\
-  jal   GetSpaceData\n\
-   lh    $a0, ($v0)\n\
-  addiu $a0, $sp, 0x10\n\
-  addiu $a1, $v0, 4\n\
-  jal   func_800A0E80\n\
-   addu  $a2, $s5, $zero\n\
-  addu  $a0, $s6, $zero\n\
-  addiu $a1, $sp, 0x10\n\
-  addu  $a2, $s6, $zero\n\
-  jal   func_8004D1EC\n\
-   addiu $a3, $zero, 0x14\n\
-  lui   $at, 0x4218\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x34($s2)\n\
-  lui   $at, 0xc000\n\
-  mtc1  $at, $f0\n\
-  nop   \n\
-  swc1  $f0, 0x38($s2)\n\
-  jal   PlaySound\n\
-   addiu $a0, $zero, 0x8d\n\
-  jal   func_80060758\n\
-   addiu $a0, $zero, 0x8b\n\
-  lwc1  $f0, 0x38($s2)\n\
-  cvt.d.s $f0, $f0\n\
-  mtc1  $zero, $f2\n\
-  mtc1  $zero, $f3\n\
-  nop   \n\
-  c.eq.d $f0, $f2\n\
-  nop   \n\
-  bc1t  .ov054_L800F8D28\n\
-   nop   \n\
-  mtc1  $zero, $f20\n\
-  mtc1  $zero, $f21\n\
- .ov054_L800F8D08:\n\
-  jal   SleepVProcess\n\
-   nop   \n\
-  lwc1  $f0, 0x38($s2)\n\
-  cvt.d.s $f0, $f0\n\
-  c.eq.d $f0, $f20\n\
-  nop   \n\
-  bc1f  .ov054_L800F8D08\n\
-   nop   \n\
- .ov054_L800F8D28:\n\
-  jal   PlaySound\n\
-   addiu $a0, $zero, 0x8d\n\
-  jal   PlaySound\n\
-   addiu $a0, $zero, 0x8b\n\
-  addu  $s7, $v0, $zero\n\
-  addiu $s3, $s3, 1\n\
- .ov054_L800F8D40:\n\
-  sll   $v0, $s3, 1\n\
-  lui   $at, 0x8010\n\
-  addu  $at, $at, $v0\n\
-  lh    $v0, -0x6034($at)\n\
-  bgez  $v0, .ov054_L800F8C14\n\
-   sll   $s4, $s3, 1\n\
- .ov054_L800F8D58:\n\
-  sll   $a0, $s7, 0x10\n\
-  sra   $a0, $a0, 0x10\n\
-  jal   func_80060BC8\n\
-   addiu $a1, $zero, 0x1e\n\
-  jal   func_8003E694\n\
-   addu  $a0, $s2, $zero\n\
-  lui   $at, 0x8010\n\
-  sw    $zero, -0x5c90($at)\n\
-  jal   SleepProcess\n\
-   addiu $a0, $zero, 0x1e\n\
-  addiu $v0, $zero, 1\n\
-  lui   $at, 0x8010\n\
-  sh    $v0, -0x5c94($at)\n\
-  jal   EndProcess\n\
-   addu  $a0, $zero, $zero\n\
-  lw    $ra, 0x44($sp)\n\
-  lw    $fp, 0x40($sp)\n\
-  lw    $s7, 0x3c($sp)\n\
-  lw    $s6, 0x38($sp)\n\
-  lw    $s5, 0x34($sp)\n\
-  lw    $s4, 0x30($sp)\n\
-  lw    $s3, 0x2c($sp)\n\
-  lw    $s2, 0x28($sp)\n\
-  lw    $s1, 0x24($sp)\n\
-  lw    $s0, 0x20($sp)\n\
-  ldc1  $f20, 0x48($sp)\n\
-  jr    $ra\n\
-   addiu $sp, $sp, 0x50\n\
-   .set reorder\n\
-  .set at");
-}
-#endif
 
 // 800F8DC8
 void ov054_Event20CoinDoorEndInnerProcess() {
