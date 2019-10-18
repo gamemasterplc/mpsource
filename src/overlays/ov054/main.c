@@ -10,6 +10,8 @@ struct board_overlay_entrypoint {
     void *fn;
 };
 
+extern void ExecBoardScene(struct board_overlay_entrypoint *entrypoints, s16 unk);
+
 extern void ov054_Entrypoint0(void);
 extern void ov054_Entrypoint1(void);
 extern void ov054_Entrypoint2(void);
@@ -17,7 +19,7 @@ extern void ov054_Entrypoint3(void);
 extern void ov054_Entrypoint4(void);
 extern s16 D_800C597A;
 
-const struct board_overlay_entrypoint ov54_entrypoints[] = {
+struct board_overlay_entrypoint ov54_entrypoints[] = {
     { 0, ov054_Entrypoint0 },
     { 1, ov054_Entrypoint1 },
     { 2, ov054_Entrypoint2 },

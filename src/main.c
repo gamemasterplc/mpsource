@@ -3,9 +3,9 @@
 extern void osInitialize(void);
 extern void thread3_main(void *arg);
 
-extern u8 gInitThread[];
+extern OSThread gInitThread;
 extern u8 gThread1Stack[];
-extern u8 gMainThread[];
+extern OSThread gMainThread;
 extern u8 gThread3Stack[];
 
 void ultraMain(void);

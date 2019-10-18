@@ -4,8 +4,8 @@ struct decode_struct
 {
     u16 chunk_len;
     s16 pad;
-    s8 *src;
-    s8 *dest;
+    u8 *src;
+    u8 *dest;
     u32 len;
 };
 
@@ -291,8 +291,8 @@ void DecodeFile(void *src, void *dest, s32 len, s32 decode_type)
 {
     struct decode_struct decode_struct;
     struct decode_struct *decode_ptr = &decode_struct;
-    decode_struct.src = (char *)src;
-    decode_struct.dest = (char *)dest;
+    decode_struct.src = (u8 *)src;
+    decode_struct.dest = (u8 *)dest;
     decode_struct.len = len;
     decode_struct.chunk_len = 1024;
     switch(decode_type)

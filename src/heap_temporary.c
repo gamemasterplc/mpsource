@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include "heap.h"
 
 /*
  * Temporary heap. Reset occasionally during gameplay.
@@ -48,5 +49,5 @@ u32 GetAllocatedTempHeapSize(void)
 
 u32 func_8003B800(void)
 {
-    return func_80059AD8(temp_heap_addr);
+    return GetUsedMemoryBlockCount(temp_heap_addr);
 }
