@@ -54,7 +54,7 @@
 .global MakeHeap
 .global Malloc
 .global Free
-.global Ensure16
+.global GetMemoryAllocSize
 .global StringLen
 .global LoadString
 .global FreeString

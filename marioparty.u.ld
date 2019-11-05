@@ -383,9 +383,10 @@ SECTIONS
          build/src/overlays/ov054/main.o(.text);
          build/src/overlays/ov054/dk_jungle_adventure.o(.text);
          __ov054_rodata_start = .;
-         build/src/overlays/ov054/main.o(.rodata);
-         build/asm/overlays/ov054rodata.o(.text);
+         build/src/overlays/ov054/main.o(.data);
+         build/src/overlays/ov054/dk_jungle_adventure.o(.data);
          build/src/overlays/ov054/dk_jungle_adventure.o(.rodata);
+         __ov054_bss_start = .;
       }
 
       .ov055
@@ -769,6 +770,12 @@ SECTIONS
       }
    }
    rom_pos += (__load_stop_ov131 - __load_start_ov000);
+
+   .ov054_bss __ov054_bss_start (NOLOAD) :
+   {
+      build/src/overlays/ov054/dk_jungle_adventure.o(.bss);
+      __ov054_bss_end = .;
+   }
 
    .romdata 0x0 : AT(rom_pos)
    {

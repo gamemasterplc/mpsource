@@ -1,275 +1,511 @@
 #include <ultra64.h>
+#include "dk_jungle_adventure.h"
+#include "../../heap.h"
 
 /**
  * DK Jungle Adventure board logic.
  */
 
-// Several non-matchings, uncomment to see them.
-//#define OV054_NONMATCHING 1
+// ROM: 0x2418A0 - 0x244B60
 
-// Diff in ROM: 0x2418A0 - 0x244B60
+#define DK_STAR_COUNT 7
+#define DK_BOO_COUNT 2
+#define DK_COIN_GATE_COUNT 2
+#define DK_THWOMP_COUNT 3
 
-extern s16 D_800ED154[];
-extern s16 D_800ED172;
-
-struct ed192struct {
-    u16 times_passed_start;
-};
-extern struct ed192struct D_800ED192;
-
-struct ed5c0struct {
-    s16 unk0;
-    s16 unk1;
-    s8 pad[6];
-    s16 unka;
-    s16 unkc[7];
-    s16 unk1a;
-};
-extern struct ed5c0struct D_800ED5C0;
-
-extern s16 D_800ED5D8;
-extern s16 D_800EE320;
-
-// sizeof == 192
-struct f2b7cstruct {
-    s8 pad[124];
-    void *unk124;
-    s8 pad2[64];
+static struct ov054_dimens ov054_data_screen_dimensions = {
+    0.0f,
+    0.0f,
+    320.0f,
+    240.0f
 };
 
-extern struct f2b7cstruct *D_800F2B7C;
+static s16 ov054_func_800F663C_data0[] = {
+    3, 5, 6, 0, 1, 2, 4
+};
 
-extern s16 D_800F98C0[]; // data_screen_dimensions
-extern s16 D_800F98D0[]; // func_800F663C_data0
-extern s16 D_800F98E0[]; // func_800F663C_data1
-extern s16 D_800F98F0[]; // data_mystery_40s_list
-extern s16 D_800F9900[]; // star_space_indices
-extern s16 D_800F9910[]; // toad_space_indices
-extern s16 D_800F9920[]; // data_star_related_800F9920
-extern s16 D_800F9928[]; // toad_space_indices_repeat
-extern s16 D_800F992A[];
-extern s16 D_800F9938[];
-extern s16 D_800F9948[];
-extern s16 D_800F994A[];
-extern s16 D_800F9964[];
-extern s16 D_800F996C[];
-extern s16 D_800F9974[];
-extern s16 D_800F997C[]; // thwomp_event_space_indices
-extern s16 D_800F9984;
-extern s16 D_800F998C[]; // boo
-extern s16 D_800F9990[]; // gate_20_coins_space_indices
-extern s16 D_800F9994[]; // gate_20_coins_player_space_indices
-extern void *D_800F9ADC;
-extern void *D_800F9C74;
-extern void *D_800F9D7C;
-extern void *D_800F9E30; // ov054_Event20CoinDoor_4D_57 ai
-extern void *D_800F9F38; // ov054_Event20CoinDoor_2A_2E ai
-extern s16 D_800F9F5C;
-extern s16 D_800F9F7C;
-extern s16 D_800F9F9C;
-extern s16 D_800F9FCC[]; // boulder_space_indices
-extern s16 D_800F9FEC[]; // arrow dir ov054_Event20CoinDoor_4D_57
-extern s16 D_800FA004;
-extern void *D_800FA0CC;
-extern void *D_800FA1FC;
-extern void *D_800FA20C;
-extern void *D_800FA224;
+static s16 ov054_func_800F663C_data1[] = {
+    0, 0, 0, 1, 1, 1, 3
+};
+
+static s16 ov054_data_mystery_40s[] = {
+    0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C
+};
+
+static s16 ov054_star_space_indices[] = {
+    0x77, 0x80, 0x7F, 0x84, 0x83, 0x75, 0x76
+};
+
+static s16 ov054_toad_space_indices[] = {
+    0x61, 0x6E, 0x6D, 0x72, 0x71, 0x5F, 0x60
+};
+
+static s16 ov054_data_star_related_800F9920[] = {
+    0, 1, 7, 3
+};
+
+static s16 ov054_toad_space_indices_repeat[] = {
+    0x61, 0x6E, 0x6D, 0x72, 0x71, 0x5F, 0x60
+};
+
+static s16 ov054_data_mystery_40s_2[] = {
+    0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B, 0x4C
+};
+
+struct D_800F9948_tuple {
+    s16 one;
+    s16 two;
+};
+static struct D_800F9948_tuple D_800F9948[] = {
+    { 6, 0 },
+    { 0, -3 },
+    { 0, -8 },
+    { -3, 0 },
+    { -2, 0 },
+    { -2, 0 },
+    { -3, 0 },
+};
+
+static s16 ov054_thwomp_nums[] = {
+    0, 1, 2
+};
+
+static s16 ov054_thwomp_spaces_left[] = {
+    0x68, 0x66, 0x67
+};
+
+static s16 ov054_thwomp_spaces_right[] = {
+    0x65, 0x6C, 0x5E
+};
+
+static s16 ov054_thwomp_event_space_indices[] = {
+    0x74, 0x7E, 0x85
+};
+
+static s32 ov054_D_800F9984[2] = { 1, 0x68 };
+
+static s16 ov054_boo_space_indices[] = {
+    0x6F, 0x62
+};
+
+static s16 ov054_gate_20_coins_space_indices[] = {
+    0x64, 0x63
+};
+
+static s16 ov054_gate_20_coins_player_space_indices[] = {
+    0x7A, 0x7B
+};
+
+static struct ai_node ai_entry_thwomp74_1_1_1[] = {
+    { 3, 0x0000003F, { .decision = 0x0001503C } },
+    { 0, 0x00000000, { .decision = 0x00011E32 } },
+};
+static struct ai_node ai_entry_thwomp74_1_1[] = {
+    { 1, 0x00000028, { .decision = 0x00016450 } },
+    { 1, 0x0000001E, { .decision = 0x00015F46 } },
+    { 1, 0x00000014, { .ptr = ai_entry_thwomp74_1_1_1 } },
+    { 3, 0x0000003F, { .decision = 0x00014632 } },
+    { 0, 0x00000000, { .decision = 0x00011E28 } },
+};
+static struct ai_node ai_entry_thwomp74_1_2_1[] = {
+    { 3, 0x0000001F, { .decision = 0x0001503C } },
+    { 0, 0x00000000, { .decision = 0x00012832 } },
+};
+static struct ai_node ai_entry_thwomp74_1_2[] = {
+    { 1, 0x00000028, { .decision = 0x0001645A } },
+    { 1, 0x0000001E, { .decision = 0x00015F50 } },
+    { 1, 0x00000014, { .ptr = ai_entry_thwomp74_1_2_1 } },
+    { 3, 0x0000001F, { .decision = 0x00014632 } },
+    { 0, 0x00000000, { .decision = 0x00011E32 } },
+};
+static struct ai_node ai_entry_thwomp74_1[] = {
+    { 2, 0x00000001, { .decision = 0x00006450 } },
+    { 2, 0x00000002, { .ptr = ai_entry_thwomp74_1_1 } },
+    { 2, 0x00000004, { .ptr = ai_entry_thwomp74_1_2 } },
+    { 1, 0x00000014, { .decision = 0x00015F46 } },
+    { 0, 0x00000000, { .decision = 0x0001503C } },
+};
+static struct ai_node ai_entry_thwomp74_2_1[] = {
+    { 3, 0x0000000F, { .decision = 0x00005F50 } },
+    { 0, 0x00000000, { .decision = 0x00003C3C } },
+};
+static struct ai_node ai_entry_thwomp74_2_2[] = {
+    { 3, 0x0000000F, { .decision = 0x00004646 } },
+    { 0, 0x00000000, { .decision = 0x00001428 } },
+};
+static struct ai_node ai_entry_thwomp74_2[] = {
+    { 2, 0x0000007E, { .decision = 0x0001645A } },
+    { 1, 0x0000001E, { .decision = 0x00005F50 } },
+    { 1, 0x00000014, { .ptr = ai_entry_thwomp74_2_1 } },
+    { 0, 0x00000000, { .ptr = ai_entry_thwomp74_2_2 } },
+};
+static struct ai_node ai_entry_thwomp74[2] = {
+    { 4, 0x00010000, { .ptr = ai_entry_thwomp74_1 } },
+    { 0, 0x00000000, { .ptr = ai_entry_thwomp74_2 } },
+};
+
+
+static struct ai_node ai_entry_thwomp7E_1_1_1[] = {
+    { 3, 0x00000018, { .decision = 0x0001141E } },
+    { 0, 0x00000000, { .decision = 0x00016450 } },
+};
+static struct ai_node ai_entry_thwomp7E_1_1[] = {
+    { 1, 0x0000001E, { .ptr = ai_entry_thwomp7E_1_1_1 } },
+    { 3, 0x00000007, { .decision = 0x00015F50 } },
+    { 0, 0x00000000, { .decision = 0x00011E28 } },
+};
+static struct ai_node ai_entry_thwomp7E_1_2[] = {
+    { 3, 0x00000118, { .decision = 0x00013232 } },
+    { 0, 0x00000000, { .decision = 0x00010028 } },
+};
+static struct ai_node ai_entry_thwomp7E_1[] = {
+    { 2, 0x00000004, { .ptr = ai_entry_thwomp7E_1_1 } },
+    { 2, 0x00000002, { .decision = 0x00006450 } },
+    { 2, 0x00000001, { .ptr = ai_entry_thwomp7E_1_2 } },
+    { 3, 0x00000200, { .decision = 0x0001463C } },
+    { 0, 0x00000000, { .decision = 0x00010028 } },
+};
+static struct ai_node ai_entry_thwomp7E_2_1_1[] = {
+    { 3, 0x00000007, { .decision = 0x00016450 } },
+    { 3, 0x00000007, { .decision = 0x00011432 } },
+    { 0, 0x00000000, { .decision = 0x00016450 } },
+};
+static struct ai_node ai_entry_thwomp7E_2_1[] = {
+    { 1, 0x00000014, { ai_entry_thwomp7E_2_1_1 } },
+    { 3, 0x00000007, { .decision = 0x00016450 } },
+    { 3, 0x00000007, { .decision = 0x00011432 } },
+    { 0, 0x00000000, { .decision = 0x00012846 } },
+};
+static struct ai_node ai_entry_thwomp7E_2_2_1[] = {
+    { 3, 0x0000000F, { .decision = 0x00006446 } },
+    { 0, 0x00000000, { .decision = 0x0000283C } },
+};
+static struct ai_node ai_entry_thwomp7E_2_2[] = {
+    { 1, 0x0000001E, { .decision = 0x00006450 } },
+    { 1, 0x00000014, { .ptr = ai_entry_thwomp7E_2_2_1 } },
+    { 3, 0x0000000F, { .decision = 0x00005A46 } },
+    { 0, 0x00000000, { .decision = 0x00001E32 } },
+};
+static struct ai_node ai_entry_thwomp7E_2_3[] = {
+    { 3, 0x000001FF, { .decision = 0x00000514 } },
+    { 0, 0x00000000, { .decision = 0x00003232 } },
+};
+static struct ai_node ai_entry_thwomp7E_2[] = {
+    { 2, 0x00000004, { .ptr = ai_entry_thwomp7E_2_1 } },
+    { 2, 0x00000002, { .ptr = ai_entry_thwomp7E_2_2 } },
+    { 2, 0x00000001, { .ptr = ai_entry_thwomp7E_2_3 } },
+    { 3, 0x00000118, { .decision = 0x00005046 } },
+    { 0, 0x00000000, { .decision = 0x00000514 } },
+};
+static struct ai_node ai_entry_thwomp7E[] = {
+    { 4, 0x00110000, { .ptr = ai_entry_thwomp7E_1 } },
+    { 0, 0x00000000, { .ptr = ai_entry_thwomp7E_2 } },
+};
+
+
+static struct ai_node ai_entry_thwomp85_1_1_1[] = {
+    { 3, 0x0000007F, { .decision = 0x00016450 } },
+    { 0, 0x00000000, { .decision = 0x00011E32 } },
+};
+static struct ai_node ai_entry_thwomp85_1_1[] = {
+    { 1, 0x0000001E, { .decision = 0x00016450 } },
+    { 1, 0x00000014, { ai_entry_thwomp85_1_1_1 } },
+    { 3, 0x0000007F, { .decision = 0x00016450 } },
+    { 0, 0x00000000, { .decision = 0x00011428 } },
+};
+static struct ai_node ai_entry_thwomp85_1[] = {
+    { 2, 0x00000020, { .decision = 0x00005F50 } },
+    { 2, 0x00000040, { .ptr = ai_entry_thwomp85_1_1 } },
+    { 1, 0x00000037, { .decision = 0x0001463C } },
+    { 1, 0x0000001E, { .decision = 0x00013228 } },
+    { 0, 0x00000000, { .decision = 0x0001141E } },
+};
+static struct ai_node ai_entry_thwomp85_2_1_1[] = {
+    { 3, 0x00000003, { .decision = 0x00006450 } },
+    { 0, 0x00000000, { .decision = 0x00001428 } },
+};
+static struct ai_node ai_entry_thwomp85_2_1[] = {
+    { 1, 0x0000001E, { .decision = 0x00006450 } },
+    { 1, 0x00000014, { .ptr = ai_entry_thwomp85_2_1_1 } },
+    { 3, 0x00000003, { .decision = 0x00005F50 } },
+    { 0, 0x00000000, { .decision = 0x00000A1E } },
+};
+static struct ai_node ai_entry_thwomp85_2[] = {
+    { 2, 0x00000020, { ai_entry_thwomp85_2_1 } },
+    { 2, 0x00000040, { .decision = 0x00015F50 } },
+    { 0, 0x00000000, { .decision = 0x00001428 } },
+};
+static struct ai_node ai_entry_thwomp85[] = {
+    { 4, 0x00200000, { .ptr = ai_entry_thwomp85_1 } },
+    { 0, 0x00000000, { .ptr = ai_entry_thwomp85_2 } },
+};
+
+
+static struct ai_node ai_entry_door7A_1[] = {
+    { 3, 0x00000004, { .decision = 0x00002832 } },
+    { 0, 0x00000000, { .decision = 0x00005A46 } },
+};
+static struct ai_node ai_entry_door7A_2_1[] = {
+    { 5, 0x00000001, { .decision = 0x00005032 } },
+    { 5, 0x00000006, { .decision = 0x00003232 } },
+    { 0, 0x00000000, { .decision = 0x00001E28 } },
+};
+static struct ai_node ai_entry_door7A_2_2[] = {
+    { 5, 0x00000001, { .decision = 0x00001E28 } },
+    { 5, 0x00000006, { .decision = 0x0000463C } },
+    { 0, 0x00000000, { .decision = 0x00005046 } },
+};
+static struct ai_node ai_entry_door7A_2[] = {
+    { 3, 0x00000010, { .ptr = ai_entry_door7A_2_1 } },
+    { 3, 0x00000080, { .ptr = ai_entry_door7A_2_2 } },
+    { 5, 0x00000001, { .decision = 0x00001E28 } },
+    { 5, 0x00000006, { .decision = 0x00003C32 } },
+    { 0, 0x00000000, { .decision = 0x00005A46 } },
+};
+static struct ai_node ai_entry_door7A[] = {
+    { 2, 0x00000016, { .ptr = ai_entry_door7A_1 } },
+    { 2, 0x00000068, { .ptr = ai_entry_door7A_2 } },
+    { 0, 0x00000000, { .decision = 0x00006450 } },
+};
+
+
+static struct ai_node ai_entry_door7B_1_1_1[] = {
+    { 5, 0x00000001, { .decision = 0x00003C32 } },
+    { 5, 0x00000006, { .decision = 0x00001428 } },
+    { 0, 0x00000000, { .decision = 0x00000514 } },
+};
+static struct ai_node ai_entry_door7B_1_1[] = {
+    { 3, 0x00000030, { .ptr = ai_entry_door7B_1_1_1 } },
+    { 0, 0x00000000, { .decision = 0x00006450 } },
+};
+static struct ai_node ai_entry_door7B_1_2[] = {
+    { 5, 0x00000001, { .decision = 0x00002832 } },
+    { 5, 0x00000006, { .decision = 0x00001428 } },
+    { 0, 0x00000000, { .decision = 0x00000514 } },
+};
+static struct ai_node ai_entry_door7B_1[] = {
+    { 1, 0x0000001E, { .ptr = ai_entry_door7B_1_1 } },
+    { 3, 0x0000004F, { .decision = 0x00005A46 } },
+    { 3, 0x00000030, { .ptr = ai_entry_door7B_1_2 } },
+    { 5, 0x00000001, { .decision = 0x00001E32 } },
+    { 5, 0x00000006, { .decision = 0x00000A1E } },
+    { 0, 0x00000000, { .decision = 0x00000014 } },
+};
+static struct ai_node ai_entry_door7B_2_1[] = {
+    { 3, 0x000003F0, { .decision = 0x00001E32 } },
+    { 0, 0x00000000, { .decision = 0x00001428 } },
+};
+static struct ai_node ai_entry_door7B_2[] = {
+    { 1, 0x0000001E, { .ptr = ai_entry_door7B_2_1 } },
+    { 3, 0x000003F0, { .decision = 0x00001428 } },
+    { 0, 0x00000000, { .decision = 0x00000A1E } },
+};
+static struct ai_node ai_entry_door7B[] = {
+    { 2, 0x00000010, { .ptr = ai_entry_door7B_1 } },
+    { 2, 0x00000007, { .ptr = ai_entry_door7B_2 } },
+    { 0, 0x00000000, { .decision = 0x00000014 } },
+};
+
+
+static s16 ov054_thwomp_split_74_space_indices[] = {
+    0x48, 0x45, -1
+};
+
+#define EVENT_LIST_TERMINATOR { 0, 0, NULL }
+
+static struct event_list_entry thwomp_split_74_event_list[] = {
+    { 1, 2, ov054_ThwompSplit_74_PassingEvent },
+    { 2, 1, ov054_ThwompSplit_74_2_Event },
+    EVENT_LIST_TERMINATOR
+};
+
+static s16 ov054_thwomp_split_7E_space_indices[] = {
+    0x42, 0x38, -1
+};
+
+static struct event_list_entry thwomp_split_7E_event_list[] = {
+    { 1, 2, ov054_ThwompSplit_7E_PassingEvent },
+    { 2, 1, ov054_ThwompSplit_7E_2_Event },
+    EVENT_LIST_TERMINATOR
+};
+
+static s16 ov054_thwomp_split_85_space_indices[] = {
+    0x1A, 0x25, -1
+};
+
+static struct event_list_entry thwomp_split_85_event_list[] = {
+    { 1, 2, ov054_ThwompSplit_85_PassingEvent },
+    { 2, 1, ov054_ThwompSplit_85_2_Event },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry post_thwomp_event_list[] = {
+    { 1, 2, ov054_PostThwompIntersectionEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static s16 ov054_boulder_space_indices[] = {
+    1, 2, 3, 4, 5, 6, 7, -1
+};
+
+static struct event_list_entry boulder_event_event_list[] = {
+    { 3, 2, ov054_BoulderEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static s16 event20coindoor_4D_57_spaces[] = {
+    0x4D, 0x57, -1
+};
+
+static struct event_list_entry event20coindoor_4D_57_event_list[] = {
+    { 1, 2, ov054_Event20CoinDoor_4D_57 },
+    EVENT_LIST_TERMINATOR
+};
+
+static s16 event20coindoor_2A_2E_spaces[] = {
+    0x2A, 0x2E, -1
+};
+
+static struct event_list_entry event20coindoor_2A_2E_event_list[] = {
+    { 1, 2, ov054_Event20CoinDoor_2A_2E },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry chain_event_5B_event_list[] = {
+    { 1, 1, ov054_ChainEvent_5B },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry chain_event_56_34_event_list[] = {
+    { 1, 1, ov054_ChainEvent_56_34 },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry chain_event_3A_30_event_list[] = {
+    { 1, 1, ov054_ChainEvent_3A_30 },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry chain_event_54_1C_event_list[] = {
+    { 1, 1, ov054_ChainEvent_54_1C },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry chain_event_9_15_event_list[] = {
+    { 1, 1, ov054_ChainEvent_9_15 },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry koopa_space_event_event_list_main[] = {
+    { 1, 1, ov054_KoopaStartSpaceChainEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry koopa_space_event_event_list[] = {
+    { 1, 1, ov054_KoopaStartSpaceChainEvent },
+    { 1, 2, ov054_KoopaStartSpaceEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry star_space_event_event_list[] = {
+    { 1, 1, ov054_StarSpacePassingEvent },
+    { 3, 1, ov054_StarSpaceChanceLandonEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry boo_space_event_event_list[] = {
+    { 1, 1, ov054_BooSpaceEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+static struct event_list_entry bowser_space_event_event_list[] = {
+    { 1, 1, ov054_BowserSpaceEvent },
+    EVENT_LIST_TERMINATOR
+};
+
+#define EVENT_TABLE_TERMINATOR { -1, NULL }
+
+static struct event_table_entry main_event_table[] = {
+    { 0x77, star_space_event_event_list },
+    { 0x80, star_space_event_event_list },
+    { 0x7F, star_space_event_event_list },
+    { 0x84, star_space_event_event_list },
+    { 0x83, star_space_event_event_list },
+    { 0x75, star_space_event_event_list },
+    { 0x76, star_space_event_event_list },
+    { 0x74, thwomp_split_74_event_list },
+    { 0x45, post_thwomp_event_list },
+    { 0x48, post_thwomp_event_list },
+    { 0x38, post_thwomp_event_list },
+    { 0x42, post_thwomp_event_list },
+    { 0x1A, post_thwomp_event_list },
+    { 0x25, post_thwomp_event_list },
+    { 0x7E, thwomp_split_7E_event_list },
+    { 0x85, thwomp_split_85_event_list },
+    { 0x7A, event20coindoor_4D_57_event_list },
+    { 0x7B, event20coindoor_2A_2E_event_list },
+    { 0x2F, boulder_event_event_list },
+    { 0x33, boulder_event_event_list },
+    { 0x35, boulder_event_event_list },
+    { 0x22, boulder_event_event_list },
+    { 0x21, boulder_event_event_list },
+    { 0x59, boulder_event_event_list },
+    { 0x16, boulder_event_event_list },
+    { 0x0D, boulder_event_event_list },
+    { 0x0C, boulder_event_event_list },
+    { 0x79, koopa_space_event_event_list_main },
+    { 0x56, chain_event_56_34_event_list },
+    { 0x5B, chain_event_5B_event_list },
+    { 0x34, chain_event_56_34_event_list },
+    { 0x3A, chain_event_3A_30_event_list },
+    { 0x30, chain_event_3A_30_event_list },
+    { 0x09, chain_event_9_15_event_list },
+    { 0x15, chain_event_9_15_event_list },
+    { 0x54, chain_event_54_1C_event_list },
+    { 0x1C, chain_event_54_1C_event_list },
+    EVENT_TABLE_TERMINATOR
+};
+
+static struct event_table_entry koopa_event_table[] = {
+    { 0x79, koopa_space_event_event_list },
+    EVENT_TABLE_TERMINATOR
+};
+
+static struct event_table_entry boo_event_table[] = {
+    { 0x81, boo_space_event_event_list },
+    { 0x0A, boo_space_event_event_list },
+    EVENT_TABLE_TERMINATOR
+};
+
+static struct event_table_entry bowser_event_table[] = {
+    { 0x82, bowser_space_event_event_list },
+    EVENT_TABLE_TERMINATOR
+};
+
 
 // bss
-extern struct object_type *D_800FA300; // bss_bowser_model
-extern void *D_800FA304; // bss_koopa_model
-extern struct object_type *D_800FA308; // bss_toad_model
-extern struct object_type *D_800FA310[]; // bss_toad_instances
-extern struct object_type *D_800FA318; // bss_toad_boulder
-extern struct object_type *D_800FA320; // bss_toad_boulder_2
-extern void *D_800FA32C; // bss_thwomp_model
-extern void *D_800FA330[]; // thwomp_instances
-extern struct object_type *D_800FA33C; // bss_boo_model
-extern struct object_type *D_800FA340[]; // bss_boo_2
-extern void *D_800FA348; // bss_coin_gate_model
-extern void *D_800FA34C[]; // bss_20_coin_gate_2
-extern void *D_800FA354; // coin gate
-extern void *D_800FA358; // coin gate
-extern void *D_800FA35C; // coin gate
-extern void *D_800FA360; // coin gate
-f32 D_800FA364; // boulder float
-f32 D_800FA368; // boulder float
-extern s16 D_800FA36C; // bss_boulder_800FA36C
-extern struct object_type *D_800FA370; // bss_boulder_800FA370
+static struct object_type *bss_bowser_model;
+static struct object_type *bss_koopa_model;
+static struct object_type *bss_toad_model;
+static struct object_type *bss_toad_instances[DK_STAR_COUNT];
+static struct object_type *bss_thwomp_model;
+static struct object_type *thwomp_instances[DK_THWOMP_COUNT];
+static struct object_type *boo_model;
+static struct object_type *boo_instances[DK_BOO_COUNT];
+static struct object_type *coin_gate_model;
+// Seems awkward this isn't an array like the others,
+// but memory alignment issues occur with an array.
+static struct object_type *coin_gate_right;
+static struct object_type *coin_gate_left;
+static void *arrow_unk_1;
+static void *arrow_unk_2;
+static void *arrow_unk_3;
+static void *arrow_unk_4;
+static f32 ov054_unk_boulder_float_1;
+static f32 ov054_unk_boulder_float_2;
+static s16 boulder_active;
+static struct object_type *boulder_obj_model;
 
-struct ov054_unk_event_user_data {
-    struct object_type *unk0;
-    struct object_type *unk4;
-    void *unk8;
-    s8 pad[28];
-    f32 unk;
-};
-
-extern s16 GetCurrentPlayerIndex();
-extern s16 GetChainSpaceIndexFromAbsSpaceIndex(s16 a, s16 b);
-extern s16 GetAbsSpaceIndexFromChainSpaceIndex(u16 chain_index, u16 space_index);
-extern void SetPlayerOntoChain(u16 player, s16 chain_index, s16 space_index);
-
-struct space_data {
-    s8 pad[4];
-    void *unk4;
-    s8 pad2[16];
-    void *unk24;
-};
-
-extern struct space_data *GetSpaceData(s16 index);
-
-extern void func_80023504(s32 a, f32 b, f32 c, f32 d);
-extern void func_8003C314(s8 a, void *ptr, s32 c, s32 d);
-
-struct object_type {
-    s8 pad[4];
-    void *unk4;
-    s8 pad1[2];
-    u16 unka;
-    s16 unkc; // pointed to, not sure what this is.
-    s8 pad2[10];
-    void *unk24;
-    s8 pad3[8];
-    s8 unk36; // pointed to, not sure what this is.
-    s8 pad4[8];
-    f32 unk48;
-    f32 funk52;
-    f32 funk56;
-    struct object_type_indirect *unk60;
-    s8 pad5[6];
-    s16 unk70;
-};
-
-struct object_type_indirect {
-    s8 pad[64];
-    struct object_type_indirect2 *unk64;
-};
-
-struct object_type_indirect2 {
-    s16 unk0;
-};
-
-extern struct object_type *func_8003DBE0(s32 model_id, s32 unk);
-extern void func_8003E174(struct object_type *ptr);
-extern struct object_type *func_8003E320(struct object_type *unk);
-extern u16 func_8003E940(struct object_type *a0);
-
-struct mystery_struct_ret_func_80048224 {
-    struct object_type *unk0;
-    s8 pad[4];
-    s16 unk8; // window id
-};
-
-extern void *func_80042728(struct object_type *ptr, s32 num);
-extern void func_8004B5C4(f32 unk);
-extern void func_8004B838(f32 unk);
-extern f32 func_8004B844();
-extern f32 func_8004B5D0();
-extern void func_8004CDCC(struct object_type *unk);
-extern struct process *func_8004D1EC(s16 *a, struct ov054_16byte_struct *b, s16 *c, s32 d);
-extern struct process *func_8004D3F4(void *a, void *b, void *c, s32 d);
-extern struct process *func_8004D648(void *a, void *b, void *c, f32 d);
-extern void func_80056E30(s16 unk);
-extern void func_8005CF30(u16 a, u16 b);
-extern void func_8005E044(u16 a, u16 b, u16 c);
-extern void func_80060BC8(s16 a, s16 b);
-extern struct process *func_800633A8();
-extern void *func_80045D84(s32 a, s32 b, s32 c);
-extern void func_800A0D00(void *ptr, f32 x, f32 y, f32 z);
-extern void func_800A0D50(void *ptr, void *ptr2);
-extern f32 func_800A13C0(void *ptr, void *ptr2);
-extern void func_800A40D0(void *ptr, f32 unk);
-extern u32 IsCameraMoving();
-extern struct player *GetPlayerStruct(s32 player_index);
-extern s16 GetCurrentSpaceIndex();
-extern u8 GetRandomByte();
-extern u32 PlayerHasCoins(s16 player, s16 coins);
-extern s32 CreateTextWindow(s16 x, s16 y, s16 w, s16 h);
-extern void func_8004DBD4(int window, int player);
-extern s32 DirectionPrompt(void *arrow_obj);
-extern void *SpawnDirArrows(int player, short *dir);
-extern void InitDirArrows(void *arrow_obj, s32 player, s16 new_flags);
-extern s16 RunDecisionTree(void *tree);
-extern void LinkChildProcess(void *parent, void *child);
-extern void WaitForChildProcess();
-extern void *GetCurrProcess();
-
-struct player
-{
-    s8 unk0;
-    s8 cpu_difficulty_1;
-    s8 cpu_difficulty_2;
-    s8 pad2;
-    // 4:
-    s8 character;
-    s8 pad3[3];
-    // 8:
-    s16 coins;
-    // 10:
-    s16 minigame_coins;
-    // 12:
-    s16 stars;
-    // 14:
-    u16 cur_chain_index;
-    // 16:
-    u16 cur_space_index;
-    // 18:
-    u16 next_chain_index;
-    // 20:
-    u16 next_space_index;
-    // 22:
-    u8 poisoned;
-    u8 turn_status;
-    // 24:
-    u8 id;
-    u8 pad4;
-    u8 pad5;
-    u8 pad6;
-    // 28:
-    u32 pad7;
-    // 32:
-    struct object_type *obj;
-    s8 pad8[14];
-};
-
-// Process types, should be eventually consolidated.
-typedef void (*process_func)();
-
-typedef struct jump_buf
-{
-    void *sp;
-    process_func func;
-    u32 regs[21];
-} jmp_buf;
-
-struct process
-{
-    struct process *next;
-    struct process *youngest_child;
-    struct process *oldest_child;
-    struct process *relative;
-    struct process *parent_oldest_child;
-    struct process *new_process;
-    void *heap;
-    u16 exec_mode;
-    u16 stat;
-    u16 priority;
-    s16 dtor_idx;
-    s32 sleep_time;
-    void *base_sp;
-    jmp_buf prc_jump;
-    process_func destructor;
-    void *user_data;
-};
-
-// This might be CreateProcess
-extern struct process *InitProcess(process_func func, u16 priority, s32 stack_size, s32 extra_data_size);
-
-#define ov054_DK_STAR_COUNT 7
-#define ov054_DK_BOO_COUNT 2
-#define ov054_DK_COIN_GATE_COUNT 2
-#define ov054_DK_THWOMP_COUNT 3
 
 // 0x800F6610
 s16 ov054_GetNextToadIndex() {
@@ -277,12 +513,12 @@ s16 ov054_GetNextToadIndex() {
     s16 *unkcc;
 
     // FIXME: Seems like it should be something like this, but what???
-    // return D_800F9910[ed5c0->unkc[ed5c0->unka]];
+    // return ov054_toad_space_indices[ed5c0->unkc[ed5c0->unka]];
 
     unkaa = (void *)&D_800ED5C0 + 10;
     unkcc = (void *)unkaa + 2;
 
-    return D_800F9910[*(unkcc + *unkaa)];
+    return ov054_toad_space_indices[*(unkcc + *unkaa)];
 }
 
 void ov054_func_800F663C() {
@@ -300,25 +536,25 @@ void ov054_func_800F663C() {
             continue;
         }
 
-        if (rand1 < D_800F98E0[rand2]) {
+        if (rand1 < ov054_func_800F663C_data1[rand2]) {
             continue;
         }
 
-        if (rand2 < D_800F98E0[rand1]) {
+        if (rand2 < ov054_func_800F663C_data1[rand1]) {
             continue;
         }
 
-        swap1 = D_800F98D0[rand1];
-        D_800F98D0[rand1] = D_800F98D0[rand2];
-        D_800F98D0[rand2] = swap1;
+        swap1 = ov054_func_800F663C_data0[rand1];
+        ov054_func_800F663C_data0[rand1] = ov054_func_800F663C_data0[rand2];
+        ov054_func_800F663C_data0[rand2] = swap1;
 
-        swap1 = D_800F98E0[rand1];
-        D_800F98E0[rand1] = D_800F98E0[rand2];
-        D_800F98E0[rand2] = swap1;
+        swap1 = ov054_func_800F663C_data1[rand1];
+        ov054_func_800F663C_data1[rand1] = ov054_func_800F663C_data1[rand2];
+        ov054_func_800F663C_data1[rand2] = swap1;
     }
 
-    for (s1 = 0; s1 < ov054_DK_STAR_COUNT; s1++) {
-        ed5c0->unkc[s1] = D_800F98D0[s1];
+    for (s1 = 0; s1 < DK_STAR_COUNT; s1++) {
+        ed5c0->unkc[s1] = ov054_func_800F663C_data0[s1];
     }
 }
 
@@ -328,7 +564,7 @@ void ov054_func_800F67A4() {
 
     ed5c0 = &D_800ED5C0;
 
-    if (++ed5c0->unka < ov054_DK_STAR_COUNT) {
+    if (++ed5c0->unka < DK_STAR_COUNT) {
         return;
     }
 
@@ -353,53 +589,53 @@ void ov054_func_800F6830() {
     struct ed5c0struct *ed5c0;
 
     ed5c0 = &D_800ED5C0;
-    for (s1 = 0; s1 < ov054_DK_STAR_COUNT; s1++) {
-        SetSpaceType(D_800F9900[s1], 1);
-        SetBoardFeatureEnabled(D_800F98F0[s1]);
+    for (s1 = 0; s1 < DK_STAR_COUNT; s1++) {
+        SetSpaceType(ov054_star_space_indices[s1], 1);
+        SetBoardFeatureEnabled(ov054_data_mystery_40s[s1]);
     }
 
     if (IsBoardFeatureDisabled(0x44)) {
-        s0 = 7;
+        s0 = DK_STAR_COUNT;
     }
     else {
         s0 = ed5c0->unka;
     }
 
     for (s1 = 0; s1 < s0; s1++) {
-        SetSpaceType(D_800F9900[ed5c0->unkc[s1]], 6);
+        SetSpaceType(ov054_star_space_indices[ed5c0->unkc[s1]], 6);
     }
 
-    SetSpaceType(D_800F9900[ed5c0->unkc[ed5c0->unka]], 5);
+    SetSpaceType(ov054_star_space_indices[ed5c0->unkc[ed5c0->unka]], 5);
 
-    SetBoardFeatureDisabled(D_800F98F0[ed5c0->unkc[ed5c0->unka]]);
+    SetBoardFeatureDisabled(ov054_data_mystery_40s[ed5c0->unkc[ed5c0->unka]]);
 }
 
 // 0x800F6958
 s32 ov054_StarSpaceEventInner(s32 current_space_index) {
     s32 i;
     s32 j;
-    s16 *D_800F9900ptr;
+    s16 *ov054_star_space_indicesptr;
     struct ed5c0struct *ed5c0;
 
     ed5c0 = &D_800ED5C0;
 
     i = 0;
 
-    D_800F9900ptr = &D_800F9900;
+    ov054_star_space_indicesptr = ov054_star_space_indices;
 
     // This feels a bit odd, but the match was difficult.
     current_space_index <<= 16;
     current_space_index >>= 16;
 
-    while (i < ov054_DK_STAR_COUNT) {
-        if (current_space_index == D_800F9900ptr[i]) {
+    while (i < DK_STAR_COUNT) {
+        if (current_space_index == ov054_star_space_indicesptr[i]) {
             if (i == ed5c0->unkc[ed5c0->unka]) {
-                ed5c0->unk1a = D_800F98F0[i];
+                ed5c0->unk1a = ov054_data_mystery_40s[i];
                 return 1;
             }
 
             if (IsBoardFeatureDisabled(68)) {
-                current_space_index = 7;
+                current_space_index = DK_STAR_COUNT;
             }
             else {
                 current_space_index = ed5c0->unka;
@@ -421,7 +657,7 @@ s32 ov054_StarSpaceEventInner(s32 current_space_index) {
 }
 
 void ov054_ShowNextStarSpotProcess() {
-    struct ov054_unk_event_user_data *some_struct;
+    struct space_data *space_data;
     struct object_type *ptr;
     struct f2b7cstruct *f2bstr;
     void *ret;
@@ -430,13 +666,13 @@ void ov054_ShowNextStarSpotProcess() {
     f32 ftt;
     f32 const20;
 
-    some_struct = (func_800633A8())->user_data;
+    space_data = (GetCurrProcess())->user_data;
 
     PlaySound(109);
-    ptr = func_8003DBE0(64, 0);
+    ptr = func_8003DBE0(64, NULL);
     ptr->unka |= 4;
     func_8004CDCC(ptr);
-    func_800A0D50(&ptr->unkc, &some_struct->unk4);
+    func_800A0D50(&ptr->coords, &space_data->coords);
 
     ptr->unk48 = 500.0f;
 
@@ -508,7 +744,7 @@ void ov054_ShowNextStarSpot() {
     ed5c0 = &D_800ED5C0;
 
     func_80060128(43);
-    str = func_80048224(D_800F9920);
+    str = func_80048224(ov054_data_star_related_800F9920);
     func_80072644(2, 16);
 
     while (func_80072718() != 0) {
@@ -532,8 +768,8 @@ void ov054_ShowNextStarSpot() {
     func_80071E80(str->unk8, 1);
     func_8006EB40(str->unk8);
 
-    spacedata = GetSpaceData(D_800F9910[ed5c0->unkc[ed5c0->unka]]);
-    func_8004B5DC(&spacedata->unk4);
+    spacedata = GetSpaceData(ov054_toad_space_indices[ed5c0->unkc[ed5c0->unka]]);
+    func_8004B5DC(&spacedata->coords);
     func_8004B838(5.0f);
     SleepProcess(5);
 
@@ -666,18 +902,18 @@ void ov054_Entrypoint2() {
     InitCameras(2);
     ov054_SetupRoutine();
 
-    EventTableHydrate(&D_800FA0CC);
+    EventTableHydrate(main_event_table);
 
     if (!IsBoardFeatureDisabled(0xe)) {
-        EventTableHydrate(&D_800FA1FC);
+        EventTableHydrate(koopa_event_table);
     }
 
     if (!IsBoardFeatureDisabled(0xf)) {
-        EventTableHydrate(&D_800FA20C);
+        EventTableHydrate(boo_event_table);
     }
 
     if (!IsBoardFeatureDisabled(0xd)) {
-        EventTableHydrate(&D_800FA224);
+        EventTableHydrate(bowser_event_table);
     }
 
     func_800584F0(0);
@@ -692,78 +928,78 @@ void ov054_Entrypoint3() {
 void ov054_DrawBowserInner() {
     struct object_type *ptr;
 
-    if (D_800FA300 != NULL) {
+    if (bss_bowser_model != NULL) {
         return;
     }
 
-    ptr = func_8003DBE0(0x3B, 0);
+    ptr = func_8003DBE0(0x3B, NULL);
     func_8003E174(ptr);
-    D_800FA300 = ptr;
+    bss_bowser_model = ptr;
 
     ptr->unka |= 0x2;
 
-    func_800A0D50(&ptr->unkc, &GetSpaceData(0x70)->unk4);
+    func_800A0D50(&ptr->coords, &GetSpaceData(0x70)->coords);
     func_8003C314(7, ptr, -2, 0);
 }
 
 void ov054_DrawBowserOuter() {
-    D_800FA300 = 0;
+    bss_bowser_model = 0;
     ov054_DrawBowserInner();
 }
 
 void ov054_DrawKoopaInner() {
     struct object_type *ptr;
 
-    if (D_800FA304 != NULL) {
+    if (bss_koopa_model != NULL) {
         return;
     }
 
-    ptr = func_8003DBE0(0x39, 0);
+    ptr = func_8003DBE0(0x39, NULL);
     func_8003E174(ptr);
-    D_800FA304 = ptr;
+    bss_koopa_model = ptr;
 
     ptr->unka |= 0x2;
 
-    func_800A0D50(&ptr->unkc, &GetSpaceData(0x5D)->unk4);
+    func_800A0D50(&ptr->coords, &GetSpaceData(0x5D)->coords);
     func_8003C314(9, ptr, -1, -3);
 }
 
 void ov054_DrawKoopaOuter() {
-    D_800FA304 = 0;
+    bss_koopa_model = 0;
     ov054_DrawKoopaInner();
 }
 
 void ov054_DrawToadsInner(s16 index) {
     struct object_type *ptr;
 
-    if (D_800FA310[index] != NULL) {
+    if (bss_toad_instances[index] != NULL) {
         return;
     }
 
-    if (D_800FA308 == NULL) {
-        ptr = func_8003DBE0(0x3A, 0);
+    if (bss_toad_model == NULL) {
+        ptr = func_8003DBE0(0x3A, NULL);
         func_8003E174(ptr);
-        D_800FA308 = ptr;
+        bss_toad_model = ptr;
     }
     else {
-        ptr = func_8003E320(D_800FA308);
+        ptr = func_8003E320(bss_toad_model);
     }
 
-    D_800FA310[index] = ptr;
+    bss_toad_instances[index] = ptr;
     ptr->unka |= 0x2;
     func_8004CDCC(ptr);
-    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F9928[index])->unk4);
-    func_8003C314(6, ptr, D_800F9948[index * 2], D_800F994A[index * 2]);
+    func_800A0D50(&ptr->coords, &GetSpaceData(ov054_toad_space_indices_repeat[index])->coords);
+    func_8003C314(6, ptr, D_800F9948[index].one, D_800F9948[index].two);
 }
 
 // draw_toads_outer
 void ov054_DrawToadsOuter() {
     s32 i;
 
-    D_800FA308 = NULL;
-    for (i = 0; i < ov054_DK_STAR_COUNT; i++) {
-        D_800FA310[i] = 0;
-        if (!IsBoardFeatureDisabled(D_800F9938[i])) {
+    bss_toad_model = NULL;
+    for (i = 0; i < DK_STAR_COUNT; i++) {
+        bss_toad_instances[i] = 0;
+        if (!IsBoardFeatureDisabled(ov054_data_mystery_40s_2[i])) {
             ov054_DrawToadsInner(i);
         }
     }
@@ -773,39 +1009,39 @@ void ov054_DrawThwompsInner(s16 index) {
     struct object_type *ptr;
     struct space_data *spacedata_temp;
 
-    if (D_800FA330[index] != NULL) {
+    if (thwomp_instances[index] != NULL) {
         return;
     }
 
-    if (D_800FA32C == NULL) {
-        ptr = func_8003DBE0(0xA, &D_800F9984);
+    if (bss_thwomp_model == NULL) {
+        ptr = func_8003DBE0(0xA, ov054_D_800F9984);
         func_8003E174(ptr);
-        D_800FA32C = ptr;
+        bss_thwomp_model = ptr;
     }
     else {
-        ptr = func_8003E320(D_800FA32C);
+        ptr = func_8003E320(bss_thwomp_model);
     }
 
-    D_800FA330[index] = ptr;
+    thwomp_instances[index] = ptr;
     func_800A0D00(&ptr->unk36, 0.8f, 0.8f, 0.8f);
     ptr->unka |= 0x2;
 
-    if (D_800ED154[D_800F9964[index]] == 0) {
-        spacedata_temp = GetSpaceData(D_800F996C[index]);
+    if (D_800ED154[ov054_thwomp_nums[index]] == 0) {
+        spacedata_temp = GetSpaceData(ov054_thwomp_spaces_left[index]);
     }
     else {
-        spacedata_temp = GetSpaceData(D_800F9974[index]);
+        spacedata_temp = GetSpaceData(ov054_thwomp_spaces_right[index]);
     }
-    func_800A0D50(&ptr->unkc, &spacedata_temp->unk4);
-    func_800A0E80(&ptr->unk24, &GetSpaceData(D_800F997C[index])->unk4, &ptr->unkc);
+    func_800A0D50(&ptr->coords, &spacedata_temp->coords);
+    func_800A0E80(&ptr->unk24, &GetSpaceData(ov054_thwomp_event_space_indices[index])->coords, &ptr->coords);
 }
 
 // draw_thwomps_outer
 void ov054_DrawThwompsOuter() {
     s32 i;
 
-    D_800FA32C = NULL;
-    for (i = 0; i < ov054_DK_THWOMP_COUNT; i++) {
+    bss_thwomp_model = NULL;
+    for (i = 0; i < DK_THWOMP_COUNT; i++) {
         ov054_DrawThwompsInner(i);
     }
 }
@@ -813,34 +1049,33 @@ void ov054_DrawThwompsOuter() {
 void ov054_DrawBooInner(s16 index) {
     struct object_type *ptr;
 
-    if (D_800FA340[index] != NULL) {
+    if (boo_instances[index] != NULL) {
         return;
     }
 
-    if (D_800FA33C == NULL) {
+    if (boo_model == NULL) {
         ptr = func_8003DBE0(106, 0);
         func_8003E174(ptr);
-        D_800FA33C = ptr;
+        boo_model = ptr;
     }
     else {
-        ptr = func_8003E320(D_800FA33C);
+        ptr = func_8003E320(boo_model);
     }
 
-    D_800FA340[index] = ptr;
+    boo_instances[index] = ptr;
     ptr->unka |= 0x2;
     func_800A0D00(&ptr->unk36, 0.6f, 0.6f, 0.6f);
     ptr->unk48 = 100.0f;
 
-    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F998C[index])->unk4);
+    func_800A0D50(&ptr->coords, &GetSpaceData(ov054_boo_space_indices[index])->coords);
     func_8003C314(8, ptr, 0, 0);
 }
 
-// boo_draw_outer
 void ov054_DrawBooOuter() {
     s32 i;
 
-    D_800FA33C = 0;
-    for (i = 0; i < ov054_DK_BOO_COUNT; i++) {
+    boo_model = 0;
+    for (i = 0; i < DK_BOO_COUNT; i++) {
         ov054_DrawBooInner(i);
     }
 }
@@ -848,30 +1083,30 @@ void ov054_DrawBooOuter() {
 void ov054_Draw20CoinGateInner(s16 index) {
     struct object_type *ptr;
 
-    if (D_800FA34C[index] != NULL) {
+    if ((&coin_gate_right)[index] != NULL) {
         return;
     }
 
-    if (D_800FA348 == NULL) {
+    if (coin_gate_model == NULL) {
         ptr = func_8003DBE0(41, 0);
         func_8003E174(ptr);
-        D_800FA348 = ptr;
+        coin_gate_model = ptr;
     }
     else {
-        ptr = func_8003E320(D_800FA348);
+        ptr = func_8003E320(coin_gate_model);
     }
 
     ptr->unka |= 0x2;
-    D_800FA34C[index] = ptr;
-    func_800A0D50(&ptr->unkc, &GetSpaceData(D_800F9990[index])->unk4);
-    func_8004CD48(ptr, D_800F9994[index]);
+    (&coin_gate_right)[index] = ptr;
+    func_800A0D50(&ptr->coords, &GetSpaceData(ov054_gate_20_coins_space_indices[index])->coords);
+    func_8004CD48(ptr, ov054_gate_20_coins_player_space_indices[index]);
 }
 
 void ov054_Draw20CoinGateOuter() {
     s32 i;
 
-    D_800FA348 = NULL;
-    for (i = 0; i < ov054_DK_COIN_GATE_COUNT; i++) {
+    coin_gate_model = NULL;
+    for (i = 0; i < DK_COIN_GATE_COUNT; i++) {
         ov054_Draw20CoinGateInner(i);
     }
 }
@@ -882,10 +1117,10 @@ void ov054_AllGatesArrowSetup() {
     }
     SleepVProcess();
 
-    D_800FA354 = func_80045D84(0, 0x92, 1);
-    D_800FA358 = func_80045D84(1, 0xA0, 1);
-    D_800FA35C = func_80045D84(3, 0xAE, 1);
-    D_800FA360 = func_80045D84(0xB, 0xBC, 1);
+    arrow_unk_1 = func_80045D84(0, 0x92, 1);
+    arrow_unk_2 = func_80045D84(1, 0xA0, 1);
+    arrow_unk_3 = func_80045D84(3, 0xAE, 1);
+    arrow_unk_4 = func_80045D84(0xB, 0xBC, 1);
 
     SleepProcess(3);
 
@@ -895,10 +1130,10 @@ void ov054_AllGatesArrowSetup() {
 // 0x800F79D0
 void ov054_AllGatesArrowTeardown() {
     D_800EE320 = 0;
-    func_80045E6C(D_800FA354);
-    func_80045E6C(D_800FA358);
-    func_80045E6C(D_800FA35C);
-    func_80045E6C(D_800FA360);
+    func_80045E6C(arrow_unk_1);
+    func_80045E6C(arrow_unk_2);
+    func_80045E6C(arrow_unk_3);
+    func_80045E6C(arrow_unk_4);
 }
 
 // 800F7A1C
@@ -909,12 +1144,12 @@ void ov054_ThwompSplit_74_PassingEvent() {
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
         ov054_AllGatesArrowSetup();
-        arrowsObj = SpawnDirArrows(-1, &D_800F9F5C);
+        arrowsObj = SpawnDirArrows(-1, ov054_thwomp_split_74_space_indices);
         InitDirArrows(arrowsObj, -1, 0);
         if (PlayerIsCPU(-1)) {
             {
                 s32 i;
-                s32 decision = RunDecisionTree(&D_800F9ADC);
+                s32 decision = RunDecisionTree(&ai_entry_thwomp74);
                 for (i = 0; i < decision; i++) {
                     func_8003BE84(arrowsObj, -2);
                 }
@@ -927,10 +1162,10 @@ void ov054_ThwompSplit_74_PassingEvent() {
             FreeObject(arrowsObj);
             ov054_AllGatesArrowTeardown();
 
-            if (D_800ED154[0] == 0 & decision2 != 0) {
+            if ((D_800ED154[0] == 0) & (decision2 != 0)) {
                 SetNextChainAndSpace(-1, 3, 0);
             }
-            else if (D_800ED154[0] != 0 & decision2 == 0) {
+            else if ((D_800ED154[0] != 0) & (decision2 == 0)) {
                 SetNextChainAndSpace(-1, 1, 0);
             }
             else {
@@ -982,12 +1217,12 @@ void ov054_ThwompSplit_7E_PassingEvent() {
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
         ov054_AllGatesArrowSetup();
-        arrowsObj = SpawnDirArrows(-1, &D_800F9F7C);
+        arrowsObj = SpawnDirArrows(-1, ov054_thwomp_split_7E_space_indices);
         InitDirArrows(arrowsObj, -1, 0);
         if (PlayerIsCPU(-1)) {
             {
                 s32 i = 0;
-                s32 decision = RunDecisionTree(&D_800F9C74);
+                s32 decision = RunDecisionTree(&ai_entry_thwomp7E);
                 for (i = 0; i < decision; i++) {
                     func_8003BE84(arrowsObj, -2);
                 }
@@ -1000,10 +1235,10 @@ void ov054_ThwompSplit_7E_PassingEvent() {
             FreeObject(arrowsObj);
             ov054_AllGatesArrowTeardown();
 
-            if (D_800ED154[1] == 0 & decision2 != 0) {
+            if ((D_800ED154[1] == 0) & (decision2 != 0)) {
                 SetNextChainAndSpace(-1, 0xF, 0);
             }
-            else if (D_800ED154[1] != 0 & decision2 == 0) {
+            else if ((D_800ED154[1] != 0) & (decision2 == 0)) {
                 SetNextChainAndSpace(-1, 0xE, 0);
             }
             else {
@@ -1055,12 +1290,12 @@ void ov054_ThwompSplit_85_PassingEvent() {
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
       ov054_AllGatesArrowSetup();
-      arrowsObj = SpawnDirArrows(-1, &D_800F9F9C);
+      arrowsObj = SpawnDirArrows(-1, ov054_thwomp_split_85_space_indices);
       InitDirArrows(arrowsObj, -1, 0);
       if (PlayerIsCPU(-1)) {
           {
               s32 i;
-              s32 decision = RunDecisionTree(&D_800F9D7C);
+              s32 decision = RunDecisionTree(&ai_entry_thwomp85);
               for (i = 0; i < decision; i++) {
                  func_8003BE84(arrowsObj, -2);
               }
@@ -1073,10 +1308,10 @@ void ov054_ThwompSplit_85_PassingEvent() {
           FreeObject(arrowsObj);
           ov054_AllGatesArrowTeardown();
 
-          if (D_800ED154[2] == 0 & decision2 == 0) {
+          if ((D_800ED154[2] == 0) & (decision2 == 0)) {
               SetNextChainAndSpace(-1, 0x6, 0);
           }
-          else if (D_800ED154[2] != 0 & decision2 != 0) {
+          else if ((D_800ED154[2] != 0) & (decision2 != 0)) {
               SetNextChainAndSpace(-1, 0x5, 0);
           }
           else {
@@ -1121,58 +1356,52 @@ void ov054_ThwompSplit_85_2_Event() {
     }
 }
 
-struct ov054_16byte_struct {
-    s8 pad[16];
-};
-
-// 800F8114
-void ov054_PostThwompIntersectionEventProcess() {
-    struct process *some_struct1;
-    struct ov054_unk_event_user_data *user_data;
-    struct object_type *user_data_unk0cache;
-    struct object_type *user_data_unk4cache;
-    struct process *fromret;
-    struct ov054_16byte_struct unkcptr;
-    void *unkccache;
-    void *unk24cache;
-
-    some_struct1 = func_800633A8();
-    user_data = some_struct1->user_data;
-
-    user_data_unk0cache = user_data->unk0;
-    user_data_unk4cache = user_data->unk4;
-
-    func_8003E81C(user_data_unk0cache, 0, 2);
-    user_data_unk4cache = (struct object_type *)&user_data_unk4cache->unk4;
-    unkccache = &user_data_unk0cache->unkc;
-    func_800A0E80(&unkcptr, user_data_unk4cache, unkccache);
-    unk24cache = &user_data_unk0cache->unk24;
-    fromret = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
-    func_80063270(some_struct1, fromret);
-    func_80063358();
-    func_800A0D50(&unkcptr, unkccache);
-    fromret = func_8004D3F4(&unkcptr, user_data_unk4cache, unkccache, 25);
-    func_80063270(some_struct1, fromret);
-    func_80063358();
-    user_data_unk4cache = user_data->unk8;
-    func_800A0E80(&unkcptr, &user_data_unk4cache->unk4, unkccache);
-    fromret = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
-    func_80063270(some_struct1, fromret);
-    func_80063358();
-    func_8003E81C(user_data_unk0cache, -1, 2);
-    EndProcess(NULL);
-}
-
 struct post_thwomp_proc_args {
-    void *unkptr;
+    struct object_type *obj;
     struct space_data *unkspacedata1;
     struct space_data *unkspacedata2;
 };
 
+// 800F8114
+void ov054_PostThwompIntersectionEventProcess() {
+    struct process *cur_process;
+    struct post_thwomp_proc_args *user_data;
+    struct object_type *obj_temp;
+    struct space_data *space_data_temp;
+    struct coords_3d *space_coords_temp;
+    struct process *child_proc_temp;
+    struct ov054_16byte_struct unkcptr;
+    void *coords_temp;
+    void *unk24cache;
+
+    cur_process = GetCurrProcess();
+    user_data = (struct post_thwomp_proc_args *)cur_process->user_data;
+
+    obj_temp = user_data->obj;
+    space_data_temp = user_data->unkspacedata1;
+
+    func_8003E81C(obj_temp, 0, 2);
+    space_coords_temp = &space_data_temp->coords;
+    coords_temp = &obj_temp->coords;
+    func_800A0E80(&unkcptr, space_coords_temp, coords_temp);
+    unk24cache = &obj_temp->unk24;
+    child_proc_temp = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
+    LinkChildProcess(cur_process, child_proc_temp);
+    WaitForChildProcess();
+    func_800A0D50(&unkcptr, coords_temp);
+    child_proc_temp = func_8004D3F4(&unkcptr, space_coords_temp, coords_temp, 25);
+    LinkChildProcess(cur_process, child_proc_temp);
+    WaitForChildProcess();
+    space_data_temp = user_data->unkspacedata2;
+    func_800A0E80(&unkcptr, &space_data_temp->coords, coords_temp);
+    child_proc_temp = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
+    LinkChildProcess(cur_process, child_proc_temp);
+    WaitForChildProcess();
+    func_8003E81C(obj_temp, -1, 2);
+    EndProcess(NULL);
+}
+
 // 800F8248
-#ifdef OV054_NONMATCHING
-// This is totally matching, but it has a jump table.
-// Best to wait for the full rodata decompile.
 void ov054_PostThwompIntersectionEvent() {
     s16 idx;
     s16 a0;
@@ -1228,131 +1457,30 @@ void ov054_PostThwompIntersectionEvent() {
         proc_args = (struct post_thwomp_proc_args *)Malloc(some_struct->heap, 12);
         some_struct->user_data = proc_args;
 
-        proc_args->unkptr = D_800FA330[s2]; // bss_thwomp_2
+        proc_args->obj = thwomp_instances[s2];
         proc_args->unkspacedata1 = GetSpaceData(a0);
-        proc_args->unkspacedata2 = GetSpaceData(D_800F997C[s2]);
+        proc_args->unkspacedata2 = GetSpaceData(ov054_thwomp_event_space_indices[s2]);
     }
 
     EndProcess(NULL);
 }
-#else
-void __attribute__ ((naked)) ov054_PostThwompIntersectionEvent() {
-  asm(".set noreorder\n\
-    .set noat\n\
-     \n\
-      addiu $sp, $sp, -0x28\n\
-    sw    $ra, 0x20($sp)\n\
-    sw    $s3, 0x1c($sp)\n\
-    sw    $s2, 0x18($sp)\n\
-    sw    $s1, 0x14($sp)\n\
-    jal   GetCurrentSpaceIndex\n\
-     sw    $s0, 0x10($sp)\n\
-    addiu $a0, $zero, -1\n\
-    addiu $v0, $v0, -0x1a\n\
-    sll   $v0, $v0, 0x10\n\
-    sra   $v1, $v0, 0x10\n\
-    sltiu $v0, $v1, 0x2f\n\
-    beqz  $v0, .ov054_L800F8314\n\
-     addu  $s2, $zero, $zero\n\
-    sll   $v0, $v1, 2\n\
-    lui   $at, 0x8010\n\
-    addu  $at, $at, $v0\n\
-    lw    $v0, -0x5dc0($at)\n\
-    jr    $v0\n\
-     nop   \n\
-    addiu $a0, $zero, 0x65\n\
-    addiu $v0, $zero, 1\n\
-    lui   $at, 0x800f\n\
-    sh    $v0, -0x2eac($at)\n\
-    j     .ov054_L800F8314\n\
-     addu  $s2, $zero, $zero\n\
-    addiu $a0, $zero, 0x68\n\
-    lui   $at, 0x800f\n\
-    sh    $zero, -0x2eac($at)\n\
-    j     .ov054_L800F8314\n\
-     addu  $s2, $zero, $zero\n\
-    addiu $s2, $zero, 1\n\
-    lui   $at, 0x800f\n\
-    sh    $s2, -0x2eaa($at)\n\
-    j     .ov054_L800F8314\n\
-     addiu $a0, $zero, 0x6c\n\
-    addiu $a0, $zero, 0x66\n\
-    lui   $at, 0x800f\n\
-    sh    $zero, -0x2eaa($at)\n\
-    j     .ov054_L800F8314\n\
-     addiu $s2, $zero, 1\n\
-    addiu $a0, $zero, 0x5e\n\
-    addiu $v0, $zero, 1\n\
-    lui   $at, 0x800f\n\
-    sh    $v0, -0x2ea8($at)\n\
-    j     .ov054_L800F8314\n\
-     addiu $s2, $zero, 2\n\
-    addiu $a0, $zero, 0x67\n\
-    addiu $s2, $zero, 2\n\
-    lui   $at, 0x800f\n\
-    sh    $zero, -0x2ea8($at)\n\
-  .ov054_L800F8314:\n\
-    sll   $v0, $a0, 0x10\n\
-    sra   $s3, $v0, 0x10\n\
-    beqz  $s3, .ov054_L800F838C\n\
-     addiu $a1, $zero, 0x4800\n\
-    lui   $a0, 0x8010\n\
-    addiu $a0, $a0, -0x7eec\n\
-    addu  $a2, $zero, $zero\n\
-    jal   InitProcess\n\
-     addiu $a3, $zero, 0x40\n\
-    addu  $s0, $v0, $zero\n\
-    lw    $a0, 0x18($s0)\n\
-    jal   Malloc\n\
-     addiu $a1, $zero, 0xc\n\
-    addu  $s1, $v0, $zero\n\
-    sw    $s1, 0x8c($s0)\n\
-    addu  $s0, $s2, $zero\n\
-    sll   $v0, $s0, 2\n\
-    lui   $at, 0x8010\n\
-    addu  $at, $at, $v0\n\
-    lw    $v0, -0x5cd0($at)\n\
-    sw    $v0, ($s1)\n\
-    jal   GetSpaceData\n\
-     addu  $a0, $s3, $zero\n\
-    sw    $v0, 4($s1)\n\
-    sll   $s0, $s0, 1\n\
-    lui   $a0, 0x8010\n\
-    addu  $a0, $a0, $s0\n\
-    jal   GetSpaceData\n\
-     lh    $a0, -0x6684($a0)\n\
-    sw    $v0, 8($s1)\n\
-  .ov054_L800F838C:\n\
-    jal   EndProcess\n\
-     addu  $a0, $zero, $zero\n\
-    lw    $ra, 0x20($sp)\n\
-    lw    $s3, 0x1c($sp)\n\
-    lw    $s2, 0x18($sp)\n\
-    lw    $s1, 0x14($sp)\n\
-    lw    $s0, 0x10($sp)\n\
-    jr    $ra\n\
-     addiu $sp, $sp, 0x28\n\
-    .set at\n\
-    .set reorder");
-}
-#endif
 
 void ov054_MoveModelsForBoulder() {
     struct space_data *spacedata;
 
     if (!IsBoardFeatureDisabled(13)) {
         spacedata = GetSpaceData(106); // Bowser's alternate location space
-        func_800A0D50(&D_800FA300->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_bowser_model->coords, &spacedata->coords);
     }
 
     if (!IsBoardFeatureDisabled(72)) {
         spacedata = GetSpaceData(105);
-        func_800A0D50(&D_800FA318->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_toad_instances[2]->coords, &spacedata->coords);
     }
 
     if (!IsBoardFeatureDisabled(74)) {
         spacedata = GetSpaceData(107);
-        func_800A0D50(&D_800FA320->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_toad_instances[4]->coords, &spacedata->coords);
     }
 }
 
@@ -1361,17 +1489,17 @@ void ov054_RestoreModelsAfterBoulder() {
 
     if (!IsBoardFeatureDisabled(13)) {
         spacedata = GetSpaceData(112); // Bowser's regular space
-        func_800A0D50(&D_800FA300->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_bowser_model->coords, &spacedata->coords);
     }
 
     if (!IsBoardFeatureDisabled(72)) {
         spacedata = GetSpaceData(109);
-        func_800A0D50(&D_800FA318->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_toad_instances[2]->coords, &spacedata->coords);
     }
 
     if (!IsBoardFeatureDisabled(74)) {
         spacedata = GetSpaceData(113);
-        func_800A0D50(&D_800FA320->unkc, &spacedata->unk4);
+        func_800A0D50(&bss_toad_instances[4]->coords, &spacedata->coords);
     }
 }
 
@@ -1382,23 +1510,23 @@ void ov054_BoulderFunc_800F84E0() {
     func_8004A7DC();
     func_8004A7A4();
 
-    D_800FA364 = func_8004B844();
-    func_8004B838(-1.0f); // NOMATCHING: Reads from rodata, bad delay slot
+    ov054_unk_boulder_float_1 = func_8004B844();
+    func_8004B838(-1.0f);
 
-    D_800FA368 = func_8004B5D0();
-    func_8004B5C4(1.0f); // NOMATCHING: Bad delay slot
+    ov054_unk_boulder_float_2 = func_8004B5D0();
+    func_8004B5C4(1.0f);
 
     func_8004A510();
 
     // Space index 0 is start of boulder path.
-    func_8004B5DC(&GetSpaceData(0)->unk4);
+    func_8004B5DC(&GetSpaceData(0)->coords);
 
     SleepVProcess();
 
     func_8004A520();
 
-    func_8004B5C4(D_800FA368);
-    func_8004B838(D_800FA364);
+    func_8004B5C4(ov054_unk_boulder_float_2);
+    func_8004B838(ov054_unk_boulder_float_1);
 
     func_800421E0();
     func_80072644(4, 16);
@@ -1412,21 +1540,21 @@ void ov054_BoulderEventProcess2Inner() {
     func_8004A7DC();
     func_8004A7A4();
 
-    D_800FA364 = func_8004B844();
-    func_8004B838(-1.0f); // NONMATCHING: Reads from rodata, bad delay slot
+    ov054_unk_boulder_float_1 = func_8004B844();
+    func_8004B838(-1.0f);
 
-    D_800FA368 = func_8004B5D0();
-    func_8004B5C4(1.0f); // NONMATCHING: Bad delay slot
+    ov054_unk_boulder_float_2 = func_8004B5D0();
+    func_8004B5C4(1.0f);
 
     func_8004A510();
 
-    func_8004B5DC(&GetPlayerStruct(-1)->obj->unkc);
+    func_8004B5DC(&GetPlayerStruct(-1)->obj->coords);
 
     SleepVProcess();
     func_8004A520();
 
-    func_8004B5C4(D_800FA368);
-    func_8004B838(D_800FA364);
+    func_8004B5C4(ov054_unk_boulder_float_2);
+    func_8004B838(ov054_unk_boulder_float_1);
     func_8004220C();
     func_80072644(4, 16);
     SleepProcess(16);
@@ -1444,13 +1572,13 @@ void ov054_BoulderEventProcess() {
     void *sp24;
 
     s3 = 0;
-    args_player = (func_800633A8())->user_data;
+    args_player = (GetCurrProcess())->user_data;
     player_obj = args_player->obj;
 
-    boulder_obj = D_800FA370;
-    boulder_unkc_cached = &boulder_obj->unkc;
+    boulder_obj = boulder_obj_model;
+    boulder_unkc_cached = &boulder_obj->coords;
 
-    proc_struct = func_800633A8();
+    proc_struct = GetCurrProcess();
 
     sp24 = func_80058A4C(args_player->id, 0, 10);
 
@@ -1462,13 +1590,13 @@ void ov054_BoulderEventProcess() {
 
             abs_index = GetAbsSpaceIndexFromChainSpaceIndex(args_player->cur_chain_index, args_player->cur_space_index);
             spacedata = GetSpaceData(abs_index);
-            fret = func_800A13C0(&spacedata->unk4, boulder_unkc_cached);
+            fret = func_800A13C0(&spacedata->coords, boulder_unkc_cached);
 
             if (fret < 310.0f) {
                 break;
             }
 
-            func_8004CCD0(&player_obj->unkc, boulder_unkc_cached, &player_obj->unk24);
+            func_8004CCD0(&player_obj->coords, boulder_unkc_cached, &player_obj->unk24);
             SleepVProcess();
         }
     }
@@ -1484,7 +1612,7 @@ void ov054_BoulderEventProcess() {
         chain_len = GetChainLength(args_player->cur_chain_index);
         spaces_left = chain_len - args_player->cur_space_index;
 
-        func_80052BE8(args_player->id, 1, 2);
+        SetAnimation(args_player->id, 1, 2);
 
         while (spaces_left > 0) {
           {
@@ -1492,7 +1620,7 @@ void ov054_BoulderEventProcess() {
               s32 ONE = 1;
 
               unk24cache = &player_obj->unk24;
-              unkccache = &player_obj->unkc;
+              unkccache = &player_obj->coords;
 
               if (spaces_left == ONE) {
                   SetNextChainAndSpace(args_player->id, 9, 1);
@@ -1501,26 +1629,26 @@ void ov054_BoulderEventProcess() {
               if (s3 == 124) {
                   player_obj->funk52 = 40.0f;
                   player_obj->funk56 = -5.0f;
-                  func_80052BE8(args_player->id, 2, 0);
+                  SetAnimation(args_player->id, 2, 0);
               }
               if (s3 == 36) {
-                  func_80052BE8(args_player->id, -1, 2);
-                  func_800A0E80(&sp10, &boulder_obj->unkc, &player_obj->unkc);
+                  SetAnimation(args_player->id, -1, 2);
+                  func_800A0E80(&sp10, &boulder_obj->coords, &player_obj->coords);
                   func_8004D1EC(unk24cache, &sp10, unk24cache, 8);
                   SleepProcess(30);
-                  func_80052BE8(args_player->id, 1, 2);
+                  SetAnimation(args_player->id, 1, 2);
               }
 
               if (args_player->obj->funk56 == 0.0f && args_player->obj->unk70 != ONE) {
-                  func_80052BE8(args_player->id, 1, 2);
+                  SetAnimation(args_player->id, 1, 2);
               }
 
               s3 = GetAbsSpaceIndexFromChainSpaceIndex(args_player->next_chain_index, args_player->next_space_index);
               func_8004CB70(args_player->id, s3, &sp10);
               func_8004CCD0(unkccache, &sp10, &player_obj->unk24);
               fromret = func_8004D648(unkccache, &sp10, unkccache, 20.0f);
-              func_80063270(proc_struct, fromret);
-              func_80063358();
+              LinkChildProcess(proc_struct, fromret);
+              WaitForChildProcess();
               SetPlayerOntoChain(args_player->id, args_player->next_chain_index, args_player->next_space_index);
           }
 
@@ -1528,7 +1656,7 @@ void ov054_BoulderEventProcess() {
         }
     }
 
-    func_80052BE8(args_player->id, -1, 2);
+    SetAnimation(args_player->id, -1, 2);
     func_80058AD0(sp24);
     EndProcess(NULL);
 }
@@ -1542,8 +1670,8 @@ void ov054_BoulderEventProcess_2() {
     func_80056E30(0);
     ov054_BoulderFunc_800F84E0();
 
-    while (D_800FA370 != NULL) {
-        func_8004B5DC(&D_800FA370->unkc);
+    while (boulder_obj_model != NULL) {
+        func_8004B5DC(&boulder_obj_model->coords);
         SleepVProcess();
     }
 
@@ -1561,7 +1689,7 @@ void ov054_BoulderEvent() {
 
     i = 0;
 
-    proc_struct = func_800633A8();
+    proc_struct = GetCurrProcess();
 
     num_players_in_boulders_path = 0;
 
@@ -1603,8 +1731,8 @@ void ov054_BoulderEvent() {
             func_8004CD84(&boulder_unk);
             func_8003D514(&boulder_unk, 0);
             fromret = func_8004D1EC(&obj->unk24, &boulder_unk, &obj->unk24, 6);
-            func_80063270(proc_struct, fromret);
-            func_80063358();
+            LinkChildProcess(proc_struct, fromret);
+            WaitForChildProcess();
 
             win_id = CreateTextWindow(75, 64, 14, 1);
             LoadStringIntoWindow(win_id, 404, -1, -1); // "Huh? Nothing happened!?!"
@@ -1616,41 +1744,40 @@ void ov054_BoulderEvent() {
         }
     }
 
-    D_800FA36C = 0;
-    D_800FA370 = NULL;
+    boulder_active = 0;
+    boulder_obj_model = NULL;
 
     {
         s32 sound_ret;
 
         InitProcess(ov054_BoulderEventProcess_2, 4099, 0, 0);
         obj = func_8003DBE0(38, 0);
-        D_800FA370 = obj;
+        boulder_obj_model = obj;
 
-        func_800A0D50(&obj->unkc, &GetSpaceData(0)->unk4);
+        func_800A0D50(&obj->coords, &GetSpaceData(0)->coords);
         func_800A0D00(&obj->unk36, 0.8f, 0.8f, 0.8f);
         SleepProcess(30);
         sound_ret = PlaySound(139);
 
         i = 0;
-        while (D_800F9FCC[i] >= 0) {
+        while (ov054_boulder_space_indices[i] >= 0) {
             {
                 void *unkccache;
                 void *unk24cache;
-                struct space_data *spacedata;
                 void *spacedataunk4;
                 struct process *fromret;
 
-                unkccache = &obj->unkc;
+                unkccache = &obj->coords;
                 unk24cache = &obj->unk24;
 
-                spacedataunk4 = &GetSpaceData(D_800F9FCC[i])->unk4;
+                spacedataunk4 = &GetSpaceData(ov054_boulder_space_indices[i])->coords;
                 func_8004CCD0(unkccache, spacedataunk4, unk24cache);
                 fromret = func_8004D648(unkccache, spacedataunk4, unkccache, 20.0f);
-                func_80063270(proc_struct, fromret);
-                func_80063358();
+                LinkChildProcess(proc_struct, fromret);
+                WaitForChildProcess();
 
-                if (D_800F9FCC[i] == 6) {
-                    func_800A0E80(&boulder_unk, &GetSpaceData(D_800F9FCC[i + 1])->unk4, unkccache);
+                if (ov054_boulder_space_indices[i] == 6) {
+                    func_800A0E80(&boulder_unk, &GetSpaceData(ov054_boulder_space_indices[i + 1])->coords, unkccache);
                     func_8004D1EC(unk24cache, &boulder_unk, unk24cache, 20);
 
                     obj->funk52 = 38.0f;
@@ -1674,33 +1801,33 @@ void ov054_BoulderEvent() {
         func_8003E694(obj);
     }
 
-    D_800FA370 = NULL;
+    boulder_obj_model = NULL;
     SleepProcess(30);
-    D_800FA36C = 1;
+    boulder_active = 1;
     EndProcess(NULL);
 }
 
 // 800F8DC8
 void ov054_Event20CoinDoorEndInnerProcess() {
-    struct ov054_unk_event_user_data *some_struct;
+    struct object_type *some_struct;
 
-    some_struct = (func_800633A8())->user_data;
+    some_struct = (GetCurrProcess())->user_data;
     SleepProcess(5);
     PlaySound(0x92);
 
-    while (some_struct->unk < 1.0f) {
+    while (some_struct->unk40 < 1.0f) {
         SleepVProcess();
-        some_struct->unk += 0.05f;
+        some_struct->unk40 += 0.05f;
     }
 
-    some_struct->unk = 1.0f;
+    some_struct->unk40 = 1.0f;
     PlaySound(0x93);
     EndProcess(NULL);
 }
 
 // Raises a 20 coin gate after the player goes through.
 // 0x800F8E80
-void ov054_Event20CoinDoorEndInner(struct ov054_unk_event_user_data *arg) {
+void ov054_Event20CoinDoorEndInner(struct object_type *arg) {
     struct process *some_struct;
 
     some_struct = InitProcess(ov054_Event20CoinDoorEndInnerProcess, 18432, 0, 0);
@@ -1709,20 +1836,20 @@ void ov054_Event20CoinDoorEndInner(struct ov054_unk_event_user_data *arg) {
 
 // 0x800F8EBC
 void ov054_Event20CoinDoorProcess() {
-    struct ov054_unk_event_user_data *some_struct;
+    struct object_type *some_struct;
     void *value;
 
-    some_struct = (func_800633A8())->user_data;
+    some_struct = (GetCurrProcess())->user_data;
     SleepProcess(5);
     value = func_80058A4C(-1, 0, 10);
 
     PlaySound(146);
 
-    while (some_struct->unk > 0) {
+    while (some_struct->unk40 > 0) {
         SleepVProcess();
-        some_struct->unk -= 0.05f;
+        some_struct->unk40 -= 0.05f;
     }
-    some_struct->unk = 0;
+    some_struct->unk40 = 0;
 
     PlaySound(147);
     func_80058AD0(value);
@@ -1730,7 +1857,7 @@ void ov054_Event20CoinDoorProcess() {
 }
 
 // 0x800F8F88
-struct process *ov054_Event20CoinDoorInner(struct ov054_unk_event_user_data *arg) {
+struct process *ov054_Event20CoinDoorInner(struct object_type *arg) {
     struct process *some_struct;
 
     some_struct = InitProcess(ov054_Event20CoinDoorProcess, 18432, 0, 0);
@@ -1760,18 +1887,18 @@ void ov054_Event20CoinDoor_4D_57() {
     else {
         {
             void *curr_process = GetCurrProcess();
-            void *lower_process = ov054_Event20CoinDoorInner(D_800FA34C[0]);
+            void *lower_process = ov054_Event20CoinDoorInner(coin_gate_right);
             LinkChildProcess(curr_process, lower_process);
         }
         WaitForChildProcess();
         ov054_AllGatesArrowSetup();
         {
-            void *arrow_obj = SpawnDirArrows(-1, D_800F9FEC);
+            void *arrow_obj = SpawnDirArrows(-1, event20coindoor_4D_57_spaces);
             InitDirArrows(arrow_obj, -1, 0);
             if (PlayerIsCPU(-1)) {
                 {
                     s32 i;
-                    s32 num_decisions = RunDecisionTree(&D_800F9E30);
+                    s32 num_decisions = RunDecisionTree(&ai_entry_door7A);
                     for(i=0; i<num_decisions; i++)
                     {
                         func_8003BE84(arrow_obj, -2);
@@ -1791,7 +1918,7 @@ void ov054_Event20CoinDoor_4D_57() {
                 }
             }
         }
-        ov054_Event20CoinDoorEndInner(D_800FA34C[0]);
+        ov054_Event20CoinDoorEndInner(coin_gate_right);
     }
     EndProcess(NULL);
 }
@@ -1818,18 +1945,18 @@ void ov054_Event20CoinDoor_2A_2E() {
     else {
         {
             void *curr_process = GetCurrProcess();
-            void *lower_process = ov054_Event20CoinDoorInner(D_800FA34C[1]);
+            void *lower_process = ov054_Event20CoinDoorInner(coin_gate_left);
             LinkChildProcess(curr_process, lower_process);
         }
         WaitForChildProcess();
         ov054_AllGatesArrowSetup();
         {
-            void *arrow_obj = SpawnDirArrows(-1, &D_800FA004);
+            void *arrow_obj = SpawnDirArrows(-1, event20coindoor_2A_2E_spaces);
             InitDirArrows(arrow_obj, -1, 0);
             if (PlayerIsCPU(-1)) {
                 {
                     s32 i;
-                    s32 num_decisions = RunDecisionTree(&D_800F9F38);
+                    s32 num_decisions = RunDecisionTree(&ai_entry_door7B);
                     for (i = 0; i < num_decisions; i++)
                     {
                         func_8003BE84(arrow_obj, -2);
@@ -1849,7 +1976,7 @@ void ov054_Event20CoinDoor_2A_2E() {
                 }
             }
         }
-        ov054_Event20CoinDoorEndInner(D_800FA34C[1]);
+        ov054_Event20CoinDoorEndInner(coin_gate_left);
     }
     EndProcess(NULL);
 }
@@ -2017,7 +2144,7 @@ void ov054_BowserSpaceEvent() {
 // 800F983C
 void ov054_Entrypoint4() {
     InitCameras(2);
-    func_8001D4D4(1, D_800F98C0);
+    func_8001D4D4(1, &ov054_data_screen_dimensions);
     ov054_SetupRoutine();
     func_800584F0(2);
     InitProcess(ov054_ShowNextStarSpot, 4101, 0, 0);

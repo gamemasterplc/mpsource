@@ -35,6 +35,9 @@ CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 -mips2
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
+# Check code syntax with host compiler
+CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src -std=gnu90 -Wall -Wextra -Wno-format-security -Wno-unused-parameter -D_LANGUAGE_C
+
 ####################### Other Tools #########################
 
 # N64 tools
@@ -73,6 +76,7 @@ $(BUILD_DIR):
 
 # Pre-process .c files with the modern cpp.
 $(BUILD_DIR)/%.i: %.c $(BUILD_DIR)
+	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
 	$(CPP) -MMD -MP -MT $@ -MF $@.d -D_LANGUAGE_C -I include/ -o $@ $<
 
 # Go from .i to .reg...

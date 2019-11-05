@@ -610,12 +610,12 @@
 .word __load_start_ov054
 .word __load_stop_ov054
 .word __overlay_ram_start
-.word __overlay_ram_start
+.word __overlay_ram_start # __overlay_code_start
+.word __ov054_rodata_start # __overlay_code_end
 .word __ov054_rodata_start
-.word __ov054_rodata_start
-.word 0x800FA300
-.word 0x800FA300
-.word 0x800FA380
+.word __ov054_bss_start # __ov054_rodata_end
+.word __ov054_bss_start
+.word __ov054_bss_end
 
 # ov55
 .word __load_start_ov055

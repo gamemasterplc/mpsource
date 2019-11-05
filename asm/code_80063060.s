@@ -96,13 +96,13 @@ glabel func_80063144
 /* 063D74 80063174 00A0A021 */   addu  $s4, $a1, $zero
 /* 063D78 80063178 24130800 */  li    $s3, 2048
 .L8006317C:
-/* 063D7C 8006317C 0C0166C0 */  jal   Ensure16
+/* 063D7C 8006317C 0C0166C0 */  jal   GetMemoryAllocSize
 /* 063D80 80063180 24040090 */   li    $a0, 144
 /* 063D84 80063184 00408821 */  addu  $s1, $v0, $zero
-/* 063D88 80063188 0C0166C0 */  jal   Ensure16
+/* 063D88 80063188 0C0166C0 */  jal   GetMemoryAllocSize
 /* 063D8C 8006318C 02602021 */   addu  $a0, $s3, $zero
 /* 063D90 80063190 00408021 */  addu  $s0, $v0, $zero
-/* 063D94 80063194 0C0166C0 */  jal   Ensure16
+/* 063D94 80063194 0C0166C0 */  jal   GetMemoryAllocSize
 /* 063D98 80063198 02402021 */   addu  $a0, $s2, $zero
 /* 063D9C 8006319C 02308821 */  addu  $s1, $s1, $s0
 /* 063DA0 800631A0 02228821 */  addu  $s1, $s1, $v0

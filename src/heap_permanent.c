@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include "heap.h"
 
 /*
  * Primary heap. Never reset during gameplay.
@@ -49,5 +50,5 @@ u32 GetAllocatedPermHeapSize(void)
 
 u32 func_8003B730(void)
 {
-    return func_80059AD8(perm_heap_addr);
+    return GetUsedMemoryBlockCount(perm_heap_addr);
 }

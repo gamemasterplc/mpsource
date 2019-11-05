@@ -1,16 +1,8 @@
 #include <ultra64.h>
+#include "heap.h"
 
 #define HEAP_CONSTANT 0xA5
 #define MIN_ALLOC_SIZE 16
-
-struct heap_node
-{
-    s32 size;
-    u8 heap_constant;
-    u8 used; // bool
-    struct heap_node *prev;
-    struct heap_node *next;
-};
 
 #define MIN_HEAP_NODE_SIZE sizeof(struct heap_node) + MIN_ALLOC_SIZE
 
@@ -91,6 +83,9 @@ void Free(void *ptr)
         return;
     }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+
     heap_other = given_heap->prev;
     if (((u32)heap_other < (u32)given_heap) && !heap_other->used)
     {
@@ -107,6 +102,8 @@ void Free(void *ptr)
         given_heap->size += given_heap->next->size;
         given_heap->next = given_heap->next->next;
     }
+
+#pragma GCC diagnostic pop
 
     given_heap->used = FALSE;
 }
@@ -180,11 +177,10 @@ u32 GetAllocatedHeapSize(struct heap_node *heap)
     return total_size;
 }
 
-// GetHeapFreeSegmentsCount?
 /*
- * Counts the number of free nodes in the heap's doubly linked list.
+ * Counts the number of used nodes in the heap's doubly linked list.
  */
-u32 func_80059AD8(struct heap_node *heap)
+u32 GetUsedMemoryBlockCount(struct heap_node *heap)
 {
     struct heap_node *cur_heap;
     u32 count_free;
@@ -204,7 +200,7 @@ u32 func_80059AD8(struct heap_node *heap)
 /*
  * Rounds a value up to align by 16.
  */
-s32 Ensure16(s32 value)
+s32 GetMemoryAllocSize(s32 value)
 {
     return (value + 0x1F) & -16;
 }
