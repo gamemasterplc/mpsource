@@ -76,7 +76,7 @@
 .global sprintf
 .global rmonPrintf
 .global osSyncPrintf
-.global SetAnimation
+.global SetPlayerAnimation
 .global SpawnDirArrows
 .global InitDirArrows
 .global RunDecisionTree

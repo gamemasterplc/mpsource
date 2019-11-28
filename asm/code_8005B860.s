@@ -291,7 +291,7 @@ glabel func_8005BC28
 /* 05C83C 8005BC3C 00408021 */  addu  $s0, $v0, $zero
 /* 05C840 8005BC40 2404FFFF */  li    $a0, -1
 /* 05C844 8005BC44 2405FFFF */  li    $a1, -1
-/* 05C848 8005BC48 0C014AFA */  jal   func_80052BE8
+/* 05C848 8005BC48 0C014AFA */  jal   SetPlayerAnimation
 /* 05C84C 8005BC4C 24060002 */   li    $a2, 2
 /* 05C850 8005BC50 0C013361 */  jal   func_8004CD84
 /* 05C854 8005BC54 27A40010 */   addiu $a0, $sp, 0x10
