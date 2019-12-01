@@ -4480,7 +4480,7 @@ glabel func_8005744C
 /* 058088 80057488 10400004 */  beqz  $v0, .L8005749C
 /* 05808C 8005748C 02202021 */   addu  $a0, $s1, $zero
 /* 058090 80057490 24050004 */  li    $a1, 4
-/* 058094 80057494 0C014AFA */  jal   func_80052BE8
+/* 058094 80057494 0C014AFA */  jal   SetPlayerAnimation
 /* 058098 80057498 24060002 */   li    $a2, 2
 .L8005749C:
 /* 05809C 8005749C 26310001 */  addiu $s1, $s1, 1
@@ -4685,7 +4685,7 @@ glabel func_800576B0
 
 .L80057794:
 /* 058394 80057794 00002821 */  addu  $a1, $zero, $zero
-/* 058398 80057798 0C014AFA */  jal   func_80052BE8
+/* 058398 80057798 0C014AFA */  jal   SetPlayerAnimation
 /* 05839C 8005779C 24060002 */   li    $a2, 2
 glabel func_800577A0
 .L800577A0:
@@ -4707,7 +4707,7 @@ glabel func_800577A0
 /* 0583DC 800577DC 00002821 */   addu  $a1, $zero, $zero
 /* 0583E0 800577E0 2404FFFF */  li    $a0, -1
 /* 0583E4 800577E4 24050002 */  li    $a1, 2
-/* 0583E8 800577E8 0C014AFA */  jal   func_80052BE8
+/* 0583E8 800577E8 0C014AFA */  jal   SetPlayerAnimation
 /* 0583EC 800577EC 00003021 */   addu  $a2, $zero, $zero
 /* 0583F0 800577F0 8E420020 */  lw    $v0, 0x20($s2)
 /* 0583F4 800577F4 3C014220 */  li    $at, 0x42200000 # 40.000000
@@ -4731,7 +4731,7 @@ glabel func_800577A0
 /* 058434 80057834 10400004 */  beqz  $v0, .L80057848
 /* 058438 80057838 00002821 */   addu  $a1, $zero, $zero
 /* 05843C 8005783C 2404FFFF */  li    $a0, -1
-/* 058440 80057840 0C014AFA */  jal   func_80052BE8
+/* 058440 80057840 0C014AFA */  jal   SetPlayerAnimation
 /* 058444 80057844 24060002 */   li    $a2, 2
 .L80057848:
 /* 058448 80057848 86A4001C */  lh    $a0, 0x1c($s5)
@@ -4818,7 +4818,7 @@ glabel func_80057954
 /* 058570 80057970 0440FF8B */  bltz  $v0, .L800577A0
 /* 058574 80057974 2404FFFF */   li    $a0, -1
 /* 058578 80057978 2405FFFF */  li    $a1, -1
-/* 05857C 8005797C 0C014AFA */  jal   func_80052BE8
+/* 05857C 8005797C 0C014AFA */  jal   SetPlayerAnimation
 /* 058580 80057980 24060002 */   li    $a2, 2
 /* 058584 80057984 24020002 */  li    $v0, 2
 /* 058588 80057988 3C01800E */  lui   $at, %hi(D_800D86E4) # $at, 0x800e
@@ -4865,7 +4865,7 @@ glabel func_80057954
 glabel func_80057A1C
 .L80057A1C:
 /* 05861C 80057A1C 2405FFFF */  li    $a1, -1
-/* 058620 80057A20 0C014AFA */  jal   func_80052BE8
+/* 058620 80057A20 0C014AFA */  jal   SetPlayerAnimation
 /* 058624 80057A24 24060002 */   li    $a2, 2
 /* 058628 80057A28 9644000E */  lhu   $a0, 0xe($s2)
 /* 05862C 80057A2C 0C013081 */  jal   GetAbsSpaceIndexFromChainSpaceIndex

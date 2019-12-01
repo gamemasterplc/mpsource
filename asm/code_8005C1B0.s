@@ -700,7 +700,7 @@ glabel func_8005CA7C
 /* 05D730 8005CB30 00002821 */   addu  $a1, $zero, $zero
 /* 05D734 8005CB34 2404FFFF */  li    $a0, -1
 /* 05D738 8005CB38 24050002 */  li    $a1, 2
-/* 05D73C 8005CB3C 0C014AFA */  jal   func_80052BE8
+/* 05D73C 8005CB3C 0C014AFA */  jal   SetPlayerAnimation
 /* 05D740 8005CB40 00003021 */   addu  $a2, $zero, $zero
 /* 05D744 8005CB44 8E420020 */  lw    $v0, 0x20($s2)
 /* 05D748 8005CB48 3C014220 */  li    $at, 0x42200000 # 40.000000
@@ -724,7 +724,7 @@ glabel func_8005CA7C
 /* 05D788 8005CB88 10400004 */  beqz  $v0, .L8005CB9C
 /* 05D78C 8005CB8C 2404FFFF */   li    $a0, -1
 /* 05D790 8005CB90 00002821 */  addu  $a1, $zero, $zero
-/* 05D794 8005CB94 0C014AFA */  jal   func_80052BE8
+/* 05D794 8005CB94 0C014AFA */  jal   SetPlayerAnimation
 /* 05D798 8005CB98 24060002 */   li    $a2, 2
 .L8005CB9C:
 /* 05D79C 8005CB9C 86C4001C */  lh    $a0, 0x1c($s6)

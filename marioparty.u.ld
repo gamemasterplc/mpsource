@@ -62,7 +62,7 @@ SECTIONS
       build/asm/code_8004CB70.o(.text);
       build/asm/code_8004D930.o(.text);
       build/asm/code_80050600.o(.text);
-      build/asm/code_80052A80.o(.text);
+      build/src/player.o(.text);
       build/asm/code_80053080.o(.text);
       build/asm/code_80053520.o(.text);
       build/asm/code_80058910.o(.text);

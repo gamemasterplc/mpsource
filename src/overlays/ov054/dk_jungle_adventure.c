@@ -1,6 +1,5 @@
 #include <ultra64.h>
 #include "dk_jungle_adventure.h"
-#include "../../heap.h"
 
 /**
  * DK Jungle Adventure board logic.
@@ -484,19 +483,19 @@ static struct event_table_entry bowser_event_table[] = {
 
 
 // bss
-static struct object_type *bss_bowser_model;
-static struct object_type *bss_koopa_model;
-static struct object_type *bss_toad_model;
-static struct object_type *bss_toad_instances[DK_STAR_COUNT];
-static struct object_type *bss_thwomp_model;
-static struct object_type *thwomp_instances[DK_THWOMP_COUNT];
-static struct object_type *boo_model;
-static struct object_type *boo_instances[DK_BOO_COUNT];
-static struct object_type *coin_gate_model;
+static struct object *bss_bowser_model;
+static struct object *bss_koopa_model;
+static struct object *bss_toad_model;
+static struct object *bss_toad_instances[DK_STAR_COUNT];
+static struct object *bss_thwomp_model;
+static struct object *thwomp_instances[DK_THWOMP_COUNT];
+static struct object *boo_model;
+static struct object *boo_instances[DK_BOO_COUNT];
+static struct object *coin_gate_model;
 // Seems awkward this isn't an array like the others,
 // but memory alignment issues occur with an array.
-static struct object_type *coin_gate_right;
-static struct object_type *coin_gate_left;
+static struct object *coin_gate_right;
+static struct object *coin_gate_left;
 static void *arrow_unk_1;
 static void *arrow_unk_2;
 static void *arrow_unk_3;
@@ -504,7 +503,7 @@ static void *arrow_unk_4;
 static f32 ov054_unk_boulder_float_1;
 static f32 ov054_unk_boulder_float_2;
 static s16 boulder_active;
-static struct object_type *boulder_obj_model;
+static struct object *boulder_obj_model;
 
 
 // 0x800F6610
@@ -658,7 +657,7 @@ s32 ov054_StarSpaceEventInner(s32 current_space_index) {
 
 void ov054_ShowNextStarSpotProcess() {
     struct space_data *space_data;
-    struct object_type *ptr;
+    struct object *ptr;
     struct f2b7cstruct *f2bstr;
     void *ret;
     s32 s0;
@@ -718,7 +717,7 @@ void ov054_ShowNextStarSpotProcess() {
 }
 
 void ov054_ShowNextStarSpotInner(struct mystery_struct_ret_func_80048224 *a0) {
-    struct object_type *unk0ptr;
+    struct object *unk0ptr;
 
     unk0ptr = a0->unk0;
     unk0ptr->funk52 = 20.0f;
@@ -926,7 +925,7 @@ void ov054_Entrypoint3() {
 }
 
 void ov054_DrawBowserInner() {
-    struct object_type *ptr;
+    struct object *ptr;
 
     if (bss_bowser_model != NULL) {
         return;
@@ -948,7 +947,7 @@ void ov054_DrawBowserOuter() {
 }
 
 void ov054_DrawKoopaInner() {
-    struct object_type *ptr;
+    struct object *ptr;
 
     if (bss_koopa_model != NULL) {
         return;
@@ -970,7 +969,7 @@ void ov054_DrawKoopaOuter() {
 }
 
 void ov054_DrawToadsInner(s16 index) {
-    struct object_type *ptr;
+    struct object *ptr;
 
     if (bss_toad_instances[index] != NULL) {
         return;
@@ -1006,7 +1005,7 @@ void ov054_DrawToadsOuter() {
 }
 
 void ov054_DrawThwompsInner(s16 index) {
-    struct object_type *ptr;
+    struct object *ptr;
     struct space_data *spacedata_temp;
 
     if (thwomp_instances[index] != NULL) {
@@ -1047,7 +1046,7 @@ void ov054_DrawThwompsOuter() {
 }
 
 void ov054_DrawBooInner(s16 index) {
-    struct object_type *ptr;
+    struct object *ptr;
 
     if (boo_instances[index] != NULL) {
         return;
@@ -1081,7 +1080,7 @@ void ov054_DrawBooOuter() {
 }
 
 void ov054_Draw20CoinGateInner(s16 index) {
-    struct object_type *ptr;
+    struct object *ptr;
 
     if ((&coin_gate_right)[index] != NULL) {
         return;
@@ -1140,7 +1139,7 @@ void ov054_AllGatesArrowTeardown() {
 void ov054_ThwompSplit_74_PassingEvent() {
     void *arrowsObj;
 
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
         ov054_AllGatesArrowSetup();
@@ -1213,7 +1212,7 @@ void ov054_ThwompSplit_74_2_Event() {
 void ov054_ThwompSplit_7E_PassingEvent() {
     void *arrowsObj;
 
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
         ov054_AllGatesArrowSetup();
@@ -1286,7 +1285,7 @@ void ov054_ThwompSplit_7E_2_Event() {
 void ov054_ThwompSplit_85_PassingEvent() {
     void *arrowsObj;
 
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
     SleepVProcess();
     if (PlayerHasCoins(-1, 10)) {
       ov054_AllGatesArrowSetup();
@@ -1357,7 +1356,7 @@ void ov054_ThwompSplit_85_2_Event() {
 }
 
 struct post_thwomp_proc_args {
-    struct object_type *obj;
+    struct object *obj;
     struct space_data *unkspacedata1;
     struct space_data *unkspacedata2;
 };
@@ -1366,7 +1365,7 @@ struct post_thwomp_proc_args {
 void ov054_PostThwompIntersectionEventProcess() {
     struct process *cur_process;
     struct post_thwomp_proc_args *user_data;
-    struct object_type *obj_temp;
+    struct object *obj_temp;
     struct space_data *space_data_temp;
     struct coords_3d *space_coords_temp;
     struct process *child_proc_temp;
@@ -1564,9 +1563,9 @@ void ov054_BoulderEventProcess2Inner() {
 void ov054_BoulderEventProcess() {
     s16 s3;
     struct player *args_player;
-    struct object_type *player_obj;
+    struct object *player_obj;
     struct process *proc_struct;
-    struct object_type *boulder_obj;
+    struct object *boulder_obj;
     void *boulder_unkc_cached;
     struct ov054_16byte_struct sp10; // maybe
     void *sp24;
@@ -1612,7 +1611,7 @@ void ov054_BoulderEventProcess() {
         chain_len = GetChainLength(args_player->cur_chain_index);
         spaces_left = chain_len - args_player->cur_space_index;
 
-        SetAnimation(args_player->id, 1, 2);
+        SetPlayerAnimation(args_player->id, 1, 2);
 
         while (spaces_left > 0) {
           {
@@ -1629,18 +1628,18 @@ void ov054_BoulderEventProcess() {
               if (s3 == 124) {
                   player_obj->funk52 = 40.0f;
                   player_obj->funk56 = -5.0f;
-                  SetAnimation(args_player->id, 2, 0);
+                  SetPlayerAnimation(args_player->id, 2, 0);
               }
               if (s3 == 36) {
-                  SetAnimation(args_player->id, -1, 2);
+                  SetPlayerAnimation(args_player->id, -1, 2);
                   func_800A0E80(&sp10, &boulder_obj->coords, &player_obj->coords);
                   func_8004D1EC(unk24cache, &sp10, unk24cache, 8);
                   SleepProcess(30);
-                  SetAnimation(args_player->id, 1, 2);
+                  SetPlayerAnimation(args_player->id, 1, 2);
               }
 
               if (args_player->obj->funk56 == 0.0f && args_player->obj->unk70 != ONE) {
-                  SetAnimation(args_player->id, 1, 2);
+                  SetPlayerAnimation(args_player->id, 1, 2);
               }
 
               s3 = GetAbsSpaceIndexFromChainSpaceIndex(args_player->next_chain_index, args_player->next_space_index);
@@ -1656,7 +1655,7 @@ void ov054_BoulderEventProcess() {
         }
     }
 
-    SetAnimation(args_player->id, -1, 2);
+    SetPlayerAnimation(args_player->id, -1, 2);
     func_80058AD0(sp24);
     EndProcess(NULL);
 }
@@ -1685,7 +1684,7 @@ void ov054_BoulderEvent() {
     s32 num_players_in_boulders_path;
     struct process *proc_struct;
     struct ov054_16byte_struct boulder_unk;
-    struct object_type *obj;
+    struct object *obj;
 
     i = 0;
 
@@ -1809,7 +1808,7 @@ void ov054_BoulderEvent() {
 
 // 800F8DC8
 void ov054_Event20CoinDoorEndInnerProcess() {
-    struct object_type *some_struct;
+    struct object *some_struct;
 
     some_struct = (GetCurrProcess())->user_data;
     SleepProcess(5);
@@ -1827,7 +1826,7 @@ void ov054_Event20CoinDoorEndInnerProcess() {
 
 // Raises a 20 coin gate after the player goes through.
 // 0x800F8E80
-void ov054_Event20CoinDoorEndInner(struct object_type *arg) {
+void ov054_Event20CoinDoorEndInner(struct object *arg) {
     struct process *some_struct;
 
     some_struct = InitProcess(ov054_Event20CoinDoorEndInnerProcess, 18432, 0, 0);
@@ -1836,7 +1835,7 @@ void ov054_Event20CoinDoorEndInner(struct object_type *arg) {
 
 // 0x800F8EBC
 void ov054_Event20CoinDoorProcess() {
-    struct object_type *some_struct;
+    struct object *some_struct;
     void *value;
 
     some_struct = (GetCurrProcess())->user_data;
@@ -1857,7 +1856,7 @@ void ov054_Event20CoinDoorProcess() {
 }
 
 // 0x800F8F88
-struct process *ov054_Event20CoinDoorInner(struct object_type *arg) {
+struct process *ov054_Event20CoinDoorInner(struct object *arg) {
     struct process *some_struct;
 
     some_struct = InitProcess(ov054_Event20CoinDoorProcess, 18432, 0, 0);
@@ -1868,7 +1867,7 @@ struct process *ov054_Event20CoinDoorInner(struct object_type *arg) {
 // 0x800F8FC4
 void ov054_Event20CoinDoor_4D_57() {
     struct player *curr_player = GetPlayerStruct(-1);
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
     if (curr_player->coins < 20) {
         while (IsCameraMoving()) {
             SleepVProcess();
@@ -1926,7 +1925,7 @@ void ov054_Event20CoinDoor_4D_57() {
 // 800F91B4
 void ov054_Event20CoinDoor_2A_2E() {
     struct player *curr_player = GetPlayerStruct(-1);
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
     if (curr_player->coins < 20) {
         while (IsCameraMoving()) {
             SleepVProcess();
@@ -2020,7 +2019,7 @@ void ov054_ReceiveKoopaBonus() {
     current_player_index = GetCurrentPlayerIndex();
 
     func_800405DC(current_player_index);
-    SetAnimation(-1, -1, 2);
+    SetPlayerAnimation(-1, -1, 2);
 
     if (!IsBoardFeatureDisabled(0x42)) {
         win_id = CreateTextWindow(72, 60, 16, 3);
