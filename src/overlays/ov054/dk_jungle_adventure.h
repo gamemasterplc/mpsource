@@ -2,6 +2,8 @@
 #include "../../object.h"
 #include "../../process.h"
 #include "../../player.h"
+#include "../../spaces.h"
+#include "../../../asm/code_800174C0.h"
 #include "../../../asm/code_8003D960.h"
 #include "../../../asm/code_80059280.h"
 #include "../../../asm/libs/libs.h"
@@ -73,17 +75,6 @@ struct ov054_dimens {
     f32 y_lower;
 };
 
-struct event_list_entry {
-    s16 activation_type;
-    s16 execution_type;
-    void *event_fn;
-};
-
-struct event_table_entry {
-    s16 space_index;
-    struct event_list_entry *event_list;
-};
-
 union ai_next {
     struct ai_node *ptr;
     u32 decision;
@@ -93,13 +84,6 @@ struct ai_node {
     u8 type;
     u32 data;
     union ai_next next;
-};
-
-struct space_data {
-    s8 pad[4];
-    struct coords_3d coords;
-    s8 pad2[8];
-    void *unk24;
 };
 
 struct ov054_16byte_struct {
@@ -179,10 +163,7 @@ extern s32 func_80072718();
 
 extern u32 IsCameraMoving();
 extern s16 GetCurrentSpaceIndex();
-extern u8 GetRandomByte();
 extern void SetNextChainAndSpace(s16 player, s16 chain, s16 space);
-extern s32 GetChainLength(s32 chain_index);
-extern void SetSpaceType(s16 space_index, s32 space_type);
 extern void AdjustPlayerCoinsGradual(s16 player_index, s16 coins);
 extern void ShowPlayerCoinChange(s16 player_index, s16 coins);
 extern s32 CreateTextWindow(s16 x, s16 y, s16 w, s16 h);
@@ -198,9 +179,5 @@ extern s16 RunDecisionTree(void *tree);
 extern void FreeObject(void *obj);
 extern s32 PlaySound(s32 sound_index);
 extern void InitCameras(s32 count);
-extern void EventTableHydrate(struct event_table_entry *table);
 extern void SetupBoard(s32 bg_index, s32 board_def_file, s32 board_bg_index, s32 d);
-extern struct space_data *GetSpaceData(s16 index);
-extern s16 GetChainSpaceIndexFromAbsSpaceIndex(s16 a, s16 b);
-extern s16 GetAbsSpaceIndexFromChainSpaceIndex(u16 chain_index, u16 space_index);
 extern void SetPlayerOntoChain(u16 player, s16 chain_index, s16 space_index);

@@ -9,6 +9,7 @@ extern struct heap_node *temp_heap_addr; // 800D6040
 
 /*
  * Creates the "temporary" heap.
+ * 8003B750
  */
 struct heap_node *MakeTempHeap(void *ptr, u32 size)
 {
@@ -17,6 +18,7 @@ struct heap_node *MakeTempHeap(void *ptr, u32 size)
 
 /*
  * Allocates memory in the temporary heap.
+ * 8003B774
  */
 void *MallocTemp(u32 size)
 {
@@ -25,6 +27,7 @@ void *MallocTemp(u32 size)
 
 /*
  * Frees a memory pointer in the temporary heap.
+ * 8003B798
  */
 void FreeTemp(void *ptr)
 {

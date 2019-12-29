@@ -2068,7 +2068,7 @@ glabel func_8004F628
 /* 0502B0 8004F6B0 0C019E29 */  jal   func_800678A4
 /* 0502B4 8004F6B4 02002021 */   addu  $a0, $s0, $zero
 /* 0502B8 8004F6B8 A6220002 */  sh    $v0, 2($s1)
-/* 0502BC 8004F6BC 0C0051CC */  jal   func_80014730
+/* 0502BC 8004F6BC 0C0051CC */  jal   FreeMainFS
 /* 0502C0 8004F6C0 02002021 */   addu  $a0, $s0, $zero
 /* 0502C4 8004F6C4 86240000 */  lh    $a0, ($s1)
 /* 0502C8 8004F6C8 00002821 */  addu  $a1, $zero, $zero
@@ -2412,7 +2412,7 @@ glabel func_8004FB50
 /* 05078C 8004FB8C 8E040000 */  lw    $a0, ($s0)
 /* 050790 8004FB90 10800004 */  beqz  $a0, .L8004FBA4
 /* 050794 8004FB94 00000000 */   nop   
-/* 050798 8004FB98 0C0051CC */  jal   func_80014730
+/* 050798 8004FB98 0C0051CC */  jal   FreeMainFS
 /* 05079C 8004FB9C 00000000 */   nop   
 /* 0507A0 8004FBA0 AE000000 */  sw    $zero, ($s0)
 .L8004FBA4:

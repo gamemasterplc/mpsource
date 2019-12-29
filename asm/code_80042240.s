@@ -459,7 +459,7 @@ glabel func_80042854
 /* 0434D0 800428D0 00002821 */  addu  $a1, $zero, $zero
 /* 0434D4 800428D4 0C019D2F */  jal   func_800674BC
 /* 0434D8 800428D8 24061800 */   li    $a2, 6144
-/* 0434DC 800428DC 0C0051CC */  jal   func_80014730
+/* 0434DC 800428DC 0C0051CC */  jal   FreeMainFS
 /* 0434E0 800428E0 02202021 */   addu  $a0, $s1, $zero
 /* 0434E4 800428E4 8FBF0018 */  lw    $ra, 0x18($sp)
 /* 0434E8 800428E8 8FB10014 */  lw    $s1, 0x14($sp)

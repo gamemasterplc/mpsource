@@ -5,3 +5,11 @@ build/*
 
 # Tools
 tools/n64cksum
+
+# Cache files
+__pycache__/
+.pyc
+
+# Text editor remnants
+.vscode/
+.vs/

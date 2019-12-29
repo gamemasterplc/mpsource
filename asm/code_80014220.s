@@ -376,6 +376,7 @@ glabel func_800146D4
 /* 015328 80014728 03E00008 */  jr    $ra
 /* 01532C 8001472C 27BD0028 */   addiu $sp, $sp, 0x28
 
+FreeMainFS:
 glabel func_80014730
 /* 015330 80014730 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 015334 80014734 10800003 */  beqz  $a0, .L80014744

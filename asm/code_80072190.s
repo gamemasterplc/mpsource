@@ -2292,7 +2292,7 @@ glabel func_80074124
 /* 074DDC 800741DC 00000000 */  nop   
 /* 074DE0 800741E0 0C008E8E */  jal   func_80023A38
 /* 074DE4 800741E4 00402821 */   addu  $a1, $v0, $zero
-/* 074DE8 800741E8 0C0051CC */  jal   func_80014730
+/* 074DE8 800741E8 0C0051CC */  jal   FreeMainFS
 /* 074DEC 800741EC 02202021 */   addu  $a0, $s1, $zero
 /* 074DF0 800741F0 02201021 */  addu  $v0, $s1, $zero
 /* 074DF4 800741F4 8FBF001C */  lw    $ra, 0x1c($sp)
@@ -10771,7 +10771,7 @@ glabel func_8007B9C0
 /* 07C61C 8007BA1C 24050005 */   li    $a1, 5
 /* 07C620 8007BA20 3C01800F */  lui   $at, %hi(D_800F6548) # $at, 0x800f
 /* 07C624 8007BA24 A4226548 */  sh    $v0, %lo(D_800F6548)($at)
-/* 07C628 8007BA28 0C0051CC */  jal   func_80014730
+/* 07C628 8007BA28 0C0051CC */  jal   FreeMainFS
 /* 07C62C 8007BA2C 02202021 */   addu  $a0, $s1, $zero
 /* 07C630 8007BA30 3C04800F */  lui   $a0, %hi(D_800F6548) # $a0, 0x800f
 /* 07C634 8007BA34 84846548 */  lh    $a0, %lo(D_800F6548)($a0)

@@ -1,5 +1,14 @@
 # Makefile to rebuild Mario Party (US) split image
 
+### Build Options ###
+
+# If COMPARE is 1, check the output sha1sum when building 'all'
+COMPARE ?= 1
+
+# Microcode
+GRUCODE_CFLAGS := -DF3DEX_GBI_2
+GRUCODE_ASFLAGS := --defsym F3DEX_GBI_2=1
+
 ################ Target Executable and Sources ###############
 
 # BUILD_DIR is location where all build artifacts are placed
@@ -8,9 +17,6 @@ BUILD_DIR = build
 # Directories containing source files
 SRC_DIRS := src src/overlays src/overlays/ov054
 ASM_DIRS := asm asm/libs asm/overlays
-
-# If COMPARE is 1, check the output sha1sum when building 'all'
-COMPARE = 1
 
 # Source code files
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
@@ -28,15 +34,17 @@ CPP       := cpp -P
 OBJDUMP = $(CROSS)objdump
 OBJCOPY = $(CROSS)objcopy --pad-to=0x2000000 --gap-fill=0xFF
 
-OLD_ASFLAGS := -G 0 -I include -mips2
-NEW_ASFLAGS := -G 0 -I include -mips3 -mabi=32
+OLD_ASFLAGS := -G 0 -I include -mips2 $(GRUCODE_ASFLAGS)
+NEW_ASFLAGS := -G 0 -I include -mips3 -mabi=32 $(GRUCODE_ASFLAGS)
 
-CFLAGS  := -O1 -G 0 -quiet -mfix4300 -mcpu=r4300 -mips2
+# Doesn't need -mfix4300?
+CFLAGS  := -O1 -G 0 -quiet -mcpu=r4300 -mips2
 
 LDFLAGS = undefined_syms.txt -T $(LD_SCRIPT) -Map $(BUILD_DIR)/mp1.us.map
 
 # Check code syntax with host compiler
-CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src -std=gnu90 -Wall -Wextra -Wno-format-security -Wno-unused-parameter -D_LANGUAGE_C
+CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I $(BUILD_DIR)/include -I src\
+	-std=gnu90 -Wall -Wextra -Wno-format-security -Wno-unused-parameter -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast $(GRUCODE_CFLAGS)
 
 ####################### Other Tools #########################
 
@@ -77,7 +85,7 @@ $(BUILD_DIR):
 # Pre-process .c files with the modern cpp.
 $(BUILD_DIR)/%.i: %.c $(BUILD_DIR)
 	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
-	$(CPP) -MMD -MP -MT $@ -MF $@.d -D_LANGUAGE_C -I include/ -o $@ $<
+	$(CPP) -MMD -MP -MT $@ -MF $@.d -I include/ -o $@ $<
 
 # Go from .i to .reg...
 $(BUILD_DIR)/src/%.reg: $(BUILD_DIR)/src/%.i
