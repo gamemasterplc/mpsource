@@ -2821,7 +2821,7 @@ ov000_func_800F8DF4:
 /* 00282C 800F8E0C 0C019E29 */  jal   func_800678A4
 /* 002830 800F8E10 02002021 */   addu  $a0, $s0, $zero
 /* 002834 800F8E14 00408821 */  addu  $s1, $v0, $zero
-/* 002838 800F8E18 0C0051CC */  jal   func_80014730
+/* 002838 800F8E18 0C0051CC */  jal   FreeMainFS
 /* 00283C 800F8E1C 02002021 */   addu  $a0, $s0, $zero
 /* 002840 800F8E20 3222FFFF */  andi  $v0, $s1, 0xffff
 /* 002844 800F8E24 8FBF0018 */  lw    $ra, 0x18($sp)

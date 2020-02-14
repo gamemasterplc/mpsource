@@ -51,7 +51,7 @@ glabel func_80008DE0
 /* 009A78 80008E78 8CE78A50 */  lw    $a3, -0x75b0($a3)
 /* 009A7C 80008E7C 0C00E2A7 */  jal   func_80038A9C
 /* 009A80 80008E80 00003021 */   addu  $a2, $zero, $zero
-/* 009A84 80008E84 0C0051CC */  jal   func_80014730
+/* 009A84 80008E84 0C0051CC */  jal   FreeMainFS
 /* 009A88 80008E88 02602021 */   addu  $a0, $s3, $zero
 /* 009A8C 80008E8C 00108400 */  sll   $s0, $s0, 0x10
 /* 009A90 80008E90 00108403 */  sra   $s0, $s0, 0x10

@@ -2,6 +2,7 @@
 # these will be accessible by C code and show up in the .map file
 
 .global ReadMainFS
+.global FreeMainFS
 .global DMA
 .global LoadFormFile
 .global GetRandomByte

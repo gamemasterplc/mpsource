@@ -3,6 +3,15 @@
 
 #include <math.h>
 
+#ifndef _LANGUAGE_C
+#define _LANGUAGE_C
+#endif
+
+// Shouldn't need this, but can't find a way to pass -DF3DEX_GBI to cc1.
+#ifndef  F3DEX_GBI_2
+#define F3DEX_GBI_2
+#endif
+
 #include <PR/ultratypes.h>
 #include <PR/os_exception.h>
 #include <PR/os_misc.h>

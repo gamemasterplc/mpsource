@@ -1287,7 +1287,7 @@ glabel func_8005AD04
 /* 05B97C 8005AD7C 02002021 */   addu  $a0, $s0, $zero
 /* 05B980 8005AD80 3C01800E */  lui   $at, %hi(D_800D8906) # $at, 0x800e
 /* 05B984 8005AD84 A4228906 */  sh    $v0, %lo(D_800D8906)($at)
-/* 05B988 8005AD88 0C0051CC */  jal   func_80014730
+/* 05B988 8005AD88 0C0051CC */  jal   FreeMainFS
 /* 05B98C 8005AD8C 02002021 */   addu  $a0, $s0, $zero
 /* 05B990 8005AD90 24040001 */  li    $a0, 1
 /* 05B994 8005AD94 0C0193BD */  jal   func_80064EF4

@@ -70,7 +70,7 @@ glabel func_80058B10
 /* 0597F0 80058BF0 2A620004 */  slti  $v0, $s3, 4
 /* 0597F4 80058BF4 1440FFD6 */  bnez  $v0, .L80058B50
 /* 0597F8 80058BF8 00000000 */   nop   
-/* 0597FC 80058BFC 0C0051CC */  jal   func_80014730
+/* 0597FC 80058BFC 0C0051CC */  jal   FreeMainFS
 /* 059800 80058C00 02802021 */   addu  $a0, $s4, $zero
 /* 059804 80058C04 02401021 */  addu  $v0, $s2, $zero
 /* 059808 80058C08 8FBF0024 */  lw    $ra, 0x24($sp)
