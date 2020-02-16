@@ -18,6 +18,7 @@ struct heap_node *MakePermHeap(void *ptr, u32 size)
 
 /*
  * Allocates memory in the permanent heap.
+ * 8003B6A4
  */
 void *MallocPerm(u32 size)
 {
@@ -26,6 +27,7 @@ void *MallocPerm(u32 size)
 
 /*
  * Frees a memory pointer in the permanent heap.
+ * 8003B6C8
  */
 void FreePerm(void *ptr)
 {

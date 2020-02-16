@@ -1,5 +1,6 @@
 #include <ultra64.h>
 #include "dk_jungle_adventure.h"
+#include "../../../asm/code_8005C1B0.h"
 
 /**
  * DK Jungle Adventure board logic.
@@ -665,7 +666,7 @@ void ov054_ShowNextStarSpotProcess() {
     f32 ftt;
     f32 const20;
 
-    space_data = (GetCurrProcess())->user_data;
+    space_data = (GetCurrentProcess())->user_data;
 
     PlaySound(109);
     ptr = func_8003DBE0(64, NULL);
@@ -1373,7 +1374,7 @@ void ov054_PostThwompIntersectionEventProcess() {
     void *coords_temp;
     void *unk24cache;
 
-    cur_process = GetCurrProcess();
+    cur_process = GetCurrentProcess();
     user_data = (struct post_thwomp_proc_args *)cur_process->user_data;
 
     obj_temp = user_data->obj;
@@ -1571,13 +1572,13 @@ void ov054_BoulderEventProcess() {
     void *sp24;
 
     s3 = 0;
-    args_player = (GetCurrProcess())->user_data;
+    args_player = (GetCurrentProcess())->user_data;
     player_obj = args_player->obj;
 
     boulder_obj = boulder_obj_model;
     boulder_unkc_cached = &boulder_obj->coords;
 
-    proc_struct = GetCurrProcess();
+    proc_struct = GetCurrentProcess();
 
     sp24 = func_80058A4C(args_player->id, 0, 10);
 
@@ -1688,7 +1689,7 @@ void ov054_BoulderEvent() {
 
     i = 0;
 
-    proc_struct = GetCurrProcess();
+    proc_struct = GetCurrentProcess();
 
     num_players_in_boulders_path = 0;
 
@@ -1810,7 +1811,7 @@ void ov054_BoulderEvent() {
 void ov054_Event20CoinDoorEndInnerProcess() {
     struct object *some_struct;
 
-    some_struct = (GetCurrProcess())->user_data;
+    some_struct = (GetCurrentProcess())->user_data;
     SleepProcess(5);
     PlaySound(0x92);
 
@@ -1838,7 +1839,7 @@ void ov054_Event20CoinDoorProcess() {
     struct object *some_struct;
     void *value;
 
-    some_struct = (GetCurrProcess())->user_data;
+    some_struct = (GetCurrentProcess())->user_data;
     SleepProcess(5);
     value = func_80058A4C(-1, 0, 10);
 
@@ -1885,7 +1886,7 @@ void ov054_Event20CoinDoor_4D_57() {
     }
     else {
         {
-            void *curr_process = GetCurrProcess();
+            void *curr_process = GetCurrentProcess();
             void *lower_process = ov054_Event20CoinDoorInner(coin_gate_right);
             LinkChildProcess(curr_process, lower_process);
         }
@@ -1943,7 +1944,7 @@ void ov054_Event20CoinDoor_2A_2E() {
     }
     else {
         {
-            void *curr_process = GetCurrProcess();
+            void *curr_process = GetCurrentProcess();
             void *lower_process = ov054_Event20CoinDoorInner(coin_gate_left);
             LinkChildProcess(curr_process, lower_process);
         }

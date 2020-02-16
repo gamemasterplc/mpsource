@@ -1,6 +1,8 @@
 # globally accessible functions and data
 # these will be accessible by C code and show up in the .map file
 
+.global setjmp
+.global longjmp
 .global ReadMainFS
 .global FreeMainFS
 .global DMA
@@ -83,9 +85,10 @@
 .global RunDecisionTree
 .global FreeObject
 .global IsCameraMoving
+.global InitProcessSys
 .global LinkChildProcess
 .global WaitForChildProcess
-.global GetCurrProcess
+.global GetCurrentProcess
 .global AdjustPlayerCoinsGradual
 .global ShowPlayerCoinChange
 .global InitCameras

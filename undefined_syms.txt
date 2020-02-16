@@ -1671,3 +1671,7 @@ D_A5000510 = 0xA5000510;
 D_A6001010 = 0xA6001010;
 func_800F65E0 = 0x800F65E0;
 gPlayers = 0x800F32B0;
+process_jmp_buf = 0x800E2370;
+top_process = 0x800E23CC;
+current_process = 0x800E23D0;
+process_count = 0x800E23D4;

@@ -22,6 +22,7 @@ void* MakeHeap(void *ptr, u32 size)
 
 /*
  * Allocates the requested size of memory in the given heap.
+ * 800598A0
  */
 void *Malloc(struct heap_node *heap, s32 size)
 {
@@ -199,6 +200,7 @@ u32 GetUsedMemoryBlockCount(struct heap_node *heap)
 
 /*
  * Rounds a value up to align by 16.
+ * 80059B00
  */
 s32 GetMemoryAllocSize(s32 value)
 {

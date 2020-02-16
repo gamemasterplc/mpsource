@@ -273,7 +273,7 @@ D_8003ED30:
 /* 03F930 8003ED30 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 03F934 8003ED34 AFBF0020 */  sw    $ra, 0x20($sp)
 /* 03F938 8003ED38 AFB1001C */  sw    $s1, 0x1c($sp)
-/* 03F93C 8003ED3C 0C018CEA */  jal   func_800633A8
+/* 03F93C 8003ED3C 0C018CEA */  jal   GetCurrentProcess
 /* 03F940 8003ED40 AFB00018 */   sw    $s0, 0x18($sp)
 /* 03F944 8003ED44 8C50008C */  lw    $s0, 0x8c($v0)
 /* 03F948 8003ED48 2411FFFF */  li    $s1, -1
@@ -3161,7 +3161,7 @@ D_80041684:
 /* 04228C 8004168C AFB3001C */  sw    $s3, 0x1c($sp)
 /* 042290 80041690 AFB20018 */  sw    $s2, 0x18($sp)
 /* 042294 80041694 AFB10014 */  sw    $s1, 0x14($sp)
-/* 042298 80041698 0C018CEA */  jal   func_800633A8
+/* 042298 80041698 0C018CEA */  jal   GetCurrentProcess
 /* 04229C 8004169C AFB00010 */   sw    $s0, 0x10($sp)
 /* 0422A0 800416A0 8C50008C */  lw    $s0, 0x8c($v0)
 /* 0422A4 800416A4 24130001 */  li    $s3, 1
@@ -3254,7 +3254,7 @@ D_800417B4:
 /* 0423C0 800417C0 AFB30024 */  sw    $s3, 0x24($sp)
 /* 0423C4 800417C4 AFB20020 */  sw    $s2, 0x20($sp)
 /* 0423C8 800417C8 AFB1001C */  sw    $s1, 0x1c($sp)
-/* 0423CC 800417CC 0C018CEA */  jal   func_800633A8
+/* 0423CC 800417CC 0C018CEA */  jal   GetCurrentProcess
 /* 0423D0 800417D0 AFB00018 */   sw    $s0, 0x18($sp)
 /* 0423D4 800417D4 8C50008C */  lw    $s0, 0x8c($v0)
 /* 0423D8 800417D8 00008821 */  addu  $s1, $zero, $zero
@@ -3435,7 +3435,7 @@ D_80041A38:
 /* 042644 80041A44 AFB30024 */  sw    $s3, 0x24($sp)
 /* 042648 80041A48 AFB20020 */  sw    $s2, 0x20($sp)
 /* 04264C 80041A4C AFB1001C */  sw    $s1, 0x1c($sp)
-/* 042650 80041A50 0C018CEA */  jal   func_800633A8
+/* 042650 80041A50 0C018CEA */  jal   GetCurrentProcess
 /* 042654 80041A54 AFB00018 */   sw    $s0, 0x18($sp)
 /* 042658 80041A58 8C50008C */  lw    $s0, 0x8c($v0)
 /* 04265C 80041A5C 00008821 */  addu  $s1, $zero, $zero
@@ -3596,7 +3596,7 @@ D_80041C64:
 /* 04287C 80041C7C F7B80040 */  sdc1  $f24, 0x40($sp)
 /* 042880 80041C80 F7B60038 */  sdc1  $f22, 0x38($sp)
 /* 042884 80041C84 F7B40030 */  sdc1  $f20, 0x30($sp)
-/* 042888 80041C88 0C018CEA */  jal   func_800633A8
+/* 042888 80041C88 0C018CEA */  jal   GetCurrentProcess
 /* 04288C 80041C8C 00008821 */   addu  $s1, $zero, $zero
 /* 042890 80041C90 8C50008C */  lw    $s0, 0x8c($v0)
 /* 042894 80041C94 24130001 */  li    $s3, 1

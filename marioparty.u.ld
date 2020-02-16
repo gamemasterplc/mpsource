@@ -78,7 +78,7 @@ SECTIONS
       build/asm/code_80061540.o(.text);
       build/asm/code_80061F60.o(.text);
       build/asm/code_80062140.o(.text);
-      build/asm/code_80063060.o(.text);
+      build/src/process.o(.text);
       build/asm/code_800637C0.o(.text);
       build/asm/code_80063F40.o(.text);
       build/asm/code_800643D0.o(.text);
@@ -87,7 +87,7 @@ SECTIONS
       build/asm/code_8006C8E0.o(.text);
       build/asm/code_80072190.o(.text);
       build/asm/libs/code_8007BDF0.o(.text);
-      build/asm/libs/code_8007C080.o(.text);
+      build/asm/libs/setjmp.o(.text);
       build/asm/libs/code_8007C160.o(.text);
       build/asm/libs/code_8007FB70.o(.text);
       build/asm/libs/code_8007FFE0.o(.text);

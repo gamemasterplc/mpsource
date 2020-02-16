@@ -3,6 +3,7 @@
 #include "process.h"
 #include "../asm/code_8003D960.h"
 #include "../asm/code_80059280.h"
+#include "../asm/code_8005C1B0.h"
 #include "../asm/libs/libs.h"
 #include "player.h"
 
@@ -123,7 +124,7 @@ void func_80052CCC(s32 index, u8 b) {
 }
 
 void func_80052D34() {
-    struct process *process = GetCurrProcess();
+    struct process *process = GetCurrentProcess();
     struct player *player = (struct player *)process->user_data;
     u16 flags;
 

@@ -551,7 +551,7 @@ D_80046180:
 glabel func_800466C0
 /* 0472C0 800466C0 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 0472C4 800466C4 AFBF0014 */  sw    $ra, 0x14($sp)
-/* 0472C8 800466C8 0C018CEA */  jal   func_800633A8
+/* 0472C8 800466C8 0C018CEA */  jal   GetCurrentProcess
 /* 0472CC 800466CC AFB00010 */   sw    $s0, 0x10($sp)
 /* 0472D0 800466D0 00408021 */  addu  $s0, $v0, $zero
 /* 0472D4 800466D4 3C048004 */  lui   $a0, %hi(D_80046180) # $a0, 0x8004
@@ -561,9 +561,9 @@ glabel func_800466C0
 /* 0472E4 800466E4 0C01770A */  jal   InitProcess
 /* 0472E8 800466E8 00003821 */   addu  $a3, $zero, $zero
 /* 0472EC 800466EC 02002021 */  addu  $a0, $s0, $zero
-/* 0472F0 800466F0 0C018C9C */  jal   func_80063270
+/* 0472F0 800466F0 0C018C9C */  jal   LinkChildProcess
 /* 0472F4 800466F4 00402821 */   addu  $a1, $v0, $zero
-/* 0472F8 800466F8 0C018CD6 */  jal   func_80063358
+/* 0472F8 800466F8 0C018CD6 */  jal   WaitForChildProcess
 /* 0472FC 800466FC 00000000 */   nop   
 /* 047300 80046700 8FBF0014 */  lw    $ra, 0x14($sp)
 /* 047304 80046704 8FB00010 */  lw    $s0, 0x10($sp)

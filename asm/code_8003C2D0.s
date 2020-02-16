@@ -89,7 +89,7 @@ D_8003C3C4:
 /* 03CFD0 8003C3D0 F7BA0038 */  sdc1  $f26, 0x38($sp)
 /* 03CFD4 8003C3D4 F7B80030 */  sdc1  $f24, 0x30($sp)
 /* 03CFD8 8003C3D8 F7B60028 */  sdc1  $f22, 0x28($sp)
-/* 03CFDC 8003C3DC 0C018CEA */  jal   func_800633A8
+/* 03CFDC 8003C3DC 0C018CEA */  jal   GetCurrentProcess
 /* 03CFE0 8003C3E0 F7B40020 */   sdc1  $f20, 0x20($sp)
 /* 03CFE4 8003C3E4 8C50008C */  lw    $s0, 0x8c($v0)
 /* 03CFE8 8003C3E8 4480A000 */  mtc1  $zero, $f20
@@ -566,7 +566,7 @@ D_8003CAB4:
 /* 03D6D0 8003CAD0 AFB3004C */  sw    $s3, 0x4c($sp)
 /* 03D6D4 8003CAD4 AFB20048 */  sw    $s2, 0x48($sp)
 /* 03D6D8 8003CAD8 AFB10044 */  sw    $s1, 0x44($sp)
-/* 03D6DC 8003CADC 0C018CEA */  jal   func_800633A8
+/* 03D6DC 8003CADC 0C018CEA */  jal   GetCurrentProcess
 /* 03D6E0 8003CAE0 AFB00040 */   sw    $s0, 0x40($sp)
 /* 03D6E4 8003CAE4 8C42008C */  lw    $v0, 0x8c($v0)
 /* 03D6E8 8003CAE8 AFA20024 */  sw    $v0, 0x24($sp)
@@ -1051,7 +1051,7 @@ glabel func_8003D20C
 /* 03DE28 8003D228 A022CC22 */  sb    $v0, %lo(D_800ECC22)($at)
 /* 03DE2C 8003D22C 0C017F5F */  jal   func_8005FD7C
 /* 03DE30 8003D230 00809021 */   addu  $s2, $a0, $zero
-/* 03DE34 8003D234 0C018CEA */  jal   func_800633A8
+/* 03DE34 8003D234 0C018CEA */  jal   GetCurrentProcess
 /* 03DE38 8003D238 00000000 */   nop   
 /* 03DE3C 8003D23C 00408821 */  addu  $s1, $v0, $zero
 /* 03DE40 8003D240 3C048004 */  lui   $a0, %hi(D_8003CAB4) # $a0, 0x8004
@@ -1066,9 +1066,9 @@ glabel func_8003D20C
 /* 03DE64 8003D264 0C017640 */  jal   func_8005D900
 /* 03DE68 8003D268 24050080 */   li    $a1, 128
 /* 03DE6C 8003D26C 02202021 */  addu  $a0, $s1, $zero
-/* 03DE70 8003D270 0C018C9C */  jal   func_80063270
+/* 03DE70 8003D270 0C018C9C */  jal   LinkChildProcess
 /* 03DE74 8003D274 02002821 */   addu  $a1, $s0, $zero
-/* 03DE78 8003D278 0C018CD6 */  jal   func_80063358
+/* 03DE78 8003D278 0C018CD6 */  jal   WaitForChildProcess
 /* 03DE7C 8003D27C 00000000 */   nop   
 /* 03DE80 8003D280 0C017FB3 */  jal   func_8005FECC
 /* 03DE84 8003D284 00000000 */   nop   

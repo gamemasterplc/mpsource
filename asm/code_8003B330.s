@@ -71,7 +71,7 @@ glabel thread3_main
 /* 03C014 8003B414 3C040032 */  lui   $a0, %hi(D_0031C7E0) # $a0, 0x32
 /* 03C018 8003B418 0C005118 */  jal   func_80014460
 /* 03C01C 8003B41C 2484C7E0 */   addiu $a0, %lo(D_0031C7E0) # addiu $a0, $a0, -0x3820
-/* 03C020 8003B420 0C018C18 */  jal   func_80063060
+/* 03C020 8003B420 0C018C18 */  jal   InitProcessSys
 /* 03C024 8003B424 00000000 */   nop   
 /* 03C028 8003B428 3C04800F */  lui   $a0, %hi(D_800ED538) # $a0, 0x800f
 /* 03C02C 8003B42C 2484D538 */  addiu $a0, %lo(D_800ED538) # addiu $a0, $a0, -0x2ac8
@@ -93,7 +93,7 @@ glabel thread3_main
 /* 03C06C 8003B46C 2484A0F0 */  addiu $a0, %lo(D_8001A0F0) # addiu $a0, $a0, -0x5f10
 /* 03C070 8003B470 24050001 */  li    $a1, 1
 /* 03C074 8003B474 00003021 */  addu  $a2, $zero, $zero
-/* 03C078 8003B478 0C018C51 */  jal   func_80063144
+/* 03C078 8003B478 0C018C51 */  jal   CreateProcess
 /* 03C07C 8003B47C 00003821 */   addu  $a3, $zero, $zero
 /* 03C080 8003B480 1640004F */  bnez  $s2, .L8003B5C0
 /* 03C084 8003B484 00000000 */   nop   
@@ -149,7 +149,7 @@ glabel thread3_main
 /* 03C138 8003B538 00000000 */   nop   
 /* 03C13C 8003B53C 3C10800C */  lui   $s0, %hi(D_800C32B0) # $s0, 0x800c
 /* 03C140 8003B540 8E1032B0 */  lw    $s0, %lo(D_800C32B0)($s0)
-/* 03C144 8003B544 0C018D84 */  jal   func_80063610
+/* 03C144 8003B544 0C018D84 */  jal   CallProcess
 /* 03C148 8003B548 24040001 */   li    $a0, 1
 /* 03C14C 8003B54C 3C02800C */  lui   $v0, %hi(D_800C32B0) # $v0, 0x800c
 /* 03C150 8003B550 8C4232B0 */  lw    $v0, %lo(D_800C32B0)($v0)

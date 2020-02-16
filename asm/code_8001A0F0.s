@@ -115,7 +115,7 @@ glabel D_8001A0F0
 /* 01AE84 8001A284 2484A3DC */  addiu $a0, %lo(D_8001A3DC) # addiu $a0, $a0, -0x5c24
 /* 01AE88 8001A288 3405F000 */  li    $a1, 61440
 /* 01AE8C 8001A28C 24063000 */  li    $a2, 12288
-/* 01AE90 8001A290 0C018C51 */  jal   func_80063144
+/* 01AE90 8001A290 0C018C51 */  jal   CreateProcess
 /* 01AE94 8001A294 00003821 */   addu  $a3, $zero, $zero
 /* 01AE98 8001A298 3C01800F */  lui   $at, %hi(D_800F2BD0) # $at, 0x800f
 /* 01AE9C 8001A29C AC222BD0 */  sw    $v0, %lo(D_800F2BD0)($at)
@@ -123,13 +123,13 @@ glabel D_8001A0F0
 /* 01AEA4 8001A2A4 2484A428 */  addiu $a0, %lo(D_8001A428) # addiu $a0, $a0, -0x5bd8
 /* 01AEA8 8001A2A8 24054000 */  li    $a1, 16384
 /* 01AEAC 8001A2AC 24063000 */  li    $a2, 12288
-/* 01AEB0 8001A2B0 0C018C51 */  jal   func_80063144
+/* 01AEB0 8001A2B0 0C018C51 */  jal   CreateProcess
 /* 01AEB4 8001A2B4 00003821 */   addu  $a3, $zero, $zero
 /* 01AEB8 8001A2B8 3C048002 */  lui   $a0, %hi(D_8001A454) # $a0, 0x8002
 /* 01AEBC 8001A2BC 2484A454 */  addiu $a0, %lo(D_8001A454) # addiu $a0, $a0, -0x5bac
 /* 01AEC0 8001A2C0 24051000 */  li    $a1, 4096
 /* 01AEC4 8001A2C4 24063000 */  li    $a2, 12288
-/* 01AEC8 8001A2C8 0C018C51 */  jal   func_80063144
+/* 01AEC8 8001A2C8 0C018C51 */  jal   CreateProcess
 /* 01AECC 8001A2CC 00003821 */   addu  $a3, $zero, $zero
 /* 01AED0 8001A2D0 3C01800F */  lui   $at, %hi(D_800F3700) # $at, 0x800f
 /* 01AED4 8001A2D4 0C006926 */  jal   func_8001A498
@@ -187,9 +187,9 @@ glabel D_8001A0F0
 .L8001A3A0:
 /* 01AFA0 8001A3A0 0C002CD9 */  jal   func_8000B364
 /* 01AFA4 8001A3A4 00000000 */   nop   
-/* 01AFA8 8001A3A8 0C018CEA */  jal   func_800633A8
+/* 01AFA8 8001A3A8 0C018CEA */  jal   GetCurrentProcess
 /* 01AFAC 8001A3AC 00000000 */   nop   
-/* 01AFB0 8001A3B0 0C018D06 */  jal   func_80063418
+/* 01AFB0 8001A3B0 0C018D06 */  jal   KillProcess
 /* 01AFB4 8001A3B4 00402021 */   addu  $a0, $v0, $zero
 glabel func_8001A3B8
 /* 01AFB8 8001A3B8 0C018D6D */  jal   SleepVProcess

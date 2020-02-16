@@ -85,7 +85,7 @@ glabel func_800589F4
 D_80058A0C:
 /* 05960C 80058A0C 27BDFFE8 */  addiu $sp, $sp, -0x18
 /* 059610 80058A10 AFBF0014 */  sw    $ra, 0x14($sp)
-/* 059614 80058A14 0C018CEA */  jal   func_800633A8
+/* 059614 80058A14 0C018CEA */  jal   GetCurrentProcess
 /* 059618 80058A18 AFB00010 */   sw    $s0, 0x10($sp)
 /* 05961C 80058A1C 8C50008C */  lw    $s0, 0x8c($v0)
 glabel func_80058A20
