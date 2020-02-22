@@ -2,43 +2,57 @@
 #define _PROCESS_H
 
 #include <ultra64.h>
+#include "../asm/libs/setjmp.h"
+
+#define EXEC_PROCESS_DEFAULT 0
+#define EXEC_PROCESS_SLEEPING 1
+#define EXEC_PROCESS_WATCH 2
+#define EXEC_PROCESS_DEAD 3
 
 typedef void (*process_func)();
 
-typedef struct jump_buf
-{
-    void *sp;
-    process_func func;
-    u32 regs[21];
-} jmp_buf;
-
 struct process
 {
-    struct process *next;
-    struct process *youngest_child;
-    struct process *oldest_child;
-    struct process *relative;
-    struct process *parent_oldest_child;
-    struct process *new_process;
-    void *heap;
-    u16 exec_mode;
-    u16 stat;
-    u16 priority;
-    s16 dtor_idx;
-    s32 sleep_time;
-    void *base_sp;
-    jmp_buf prc_jump;
-    process_func destructor;
-    void *user_data;
+    /*0x00*/ struct process *next;
+    /*0x04*/ struct process *youngest_child;
+    /*0x08*/ struct process *oldest_child;
+    /*0x0C*/ struct process *relative;
+    /*0x10*/ struct process *parent_oldest_child;
+    /*0x14*/ struct process *new_process;
+    /*0x18*/ void *heap;
+    /*0x1C*/ u16 exec_mode;
+    /*0x1E*/ u16 stat;
+    /*0x20*/ u16 priority;
+    /*0x22*/ s16 dtor_idx;
+    /*0x24*/ s32 sleep_time;
+    /*0x28*/ void *base_sp;
+    /*0x2C*/ jmp_buf prc_jump;
+    /*0x88*/ process_func destructor;
+    /*0x8C*/ void *user_data;
 };
 
-// This might be CreateProcess
-extern struct process *InitProcess(process_func func, u16 priority, s32 stack_size, s32 extra_data_size);
-extern void LinkChildProcess(void *parent, void *child);
-extern void WaitForChildProcess();
-extern struct process *GetCurrProcess();
-extern void EndProcess(struct process *proc);
-extern void SleepProcess(s32 frames);
-extern void SleepVProcess();
+void InitProcessSys();
+void LinkProcess(struct process **root, struct process *process);
+void UnlinkProcess(struct process **root, struct process *process);
+struct process *CreateProcess(process_func func, u16 priority, s32 stack_size, s32 extra_data_size);
+void LinkChildProcess(struct process *process, struct process *child);
+void UnlinkChildProcess(struct process *process);
+struct process *CreateChildProcess(process_func func, u16 priority, s32 stack_size, s32 extra_data_size, struct process *parent);
+void WaitForChildProcess();
+struct process *GetCurrentProcess();
+struct process *GetChildProcess(struct process *process);
+s32 SetKillStatusProcess(struct process *process);
+void KillProcess(struct process *process);
+void KillChildProcess(struct process *process);
+void TerminateProcess(struct process *process);
+void ExitProcess();
+void SleepProcess(s32 time);
+void SleepVProcess();
+void WakeupProcess(struct process *process);
+void SetProcessDestructor(struct process *process, process_func destructor);
+void SetCurrentProcessDestructor(process_func destructor);
+void CallProcess(s32 time);
+void *AllocProcessMemory(s32 size);
+void FreeProcessMemory(void *ptr);
 
 #endif /* _PROCESS_H */

@@ -1594,7 +1594,7 @@ D_80047DBC:
 /* 0489C0 80047DC0 AFBF001C */  sw    $ra, 0x1c($sp)
 /* 0489C4 80047DC4 AFB20018 */  sw    $s2, 0x18($sp)
 /* 0489C8 80047DC8 AFB10014 */  sw    $s1, 0x14($sp)
-/* 0489CC 80047DCC 0C018CEA */  jal   func_800633A8
+/* 0489CC 80047DCC 0C018CEA */  jal   GetCurrentProcess
 /* 0489D0 80047DD0 AFB00010 */   sw    $s0, 0x10($sp)
 /* 0489D4 80047DD4 8C50008C */  lw    $s0, 0x8c($v0)
 /* 0489D8 80047DD8 24120001 */  li    $s2, 1
@@ -1691,7 +1691,7 @@ D_80047F04:
 /* 048B10 80047F10 AFB3001C */  sw    $s3, 0x1c($sp)
 /* 048B14 80047F14 AFB20018 */  sw    $s2, 0x18($sp)
 /* 048B18 80047F18 AFB10014 */  sw    $s1, 0x14($sp)
-/* 048B1C 80047F1C 0C018CEA */  jal   func_800633A8
+/* 048B1C 80047F1C 0C018CEA */  jal   GetCurrentProcess
 /* 048B20 80047F20 AFB00010 */   sw    $s0, 0x10($sp)
 /* 048B24 80047F24 8C50008C */  lw    $s0, 0x8c($v0)
 /* 048B28 80047F28 24140001 */  li    $s4, 1
@@ -1789,7 +1789,7 @@ D_80048060:
 /* 048C60 80048060 27BDFFE0 */  addiu $sp, $sp, -0x20
 /* 048C64 80048064 AFBF0018 */  sw    $ra, 0x18($sp)
 /* 048C68 80048068 AFB10014 */  sw    $s1, 0x14($sp)
-/* 048C6C 8004806C 0C018CEA */  jal   func_800633A8
+/* 048C6C 8004806C 0C018CEA */  jal   GetCurrentProcess
 /* 048C70 80048070 AFB00010 */   sw    $s0, 0x10($sp)
 /* 048C74 80048074 8C50008C */  lw    $s0, 0x8c($v0)
 /* 048C78 80048078 3C02800F */  lui   $v0, %hi(D_800ED5C6) # $v0, 0x800f

@@ -251,7 +251,7 @@ D_8003BB48:
 /* 03C768 8003BB68 AFB00020 */  sw    $s0, 0x20($sp)
 /* 03C76C 8003BB6C F7B60048 */  sdc1  $f22, 0x48($sp)
 /* 03C770 8003BB70 F7B40040 */  sdc1  $f20, 0x40($sp)
-/* 03C774 8003BB74 0C018CEA */  jal   func_800633A8
+/* 03C774 8003BB74 0C018CEA */  jal   GetCurrentProcess
 /* 03C778 8003BB78 2413FFFF */   li    $s3, -1
 /* 03C77C 8003BB7C 8C51008C */  lw    $s1, 0x8c($v0)
 /* 03C780 8003BB80 9634000C */  lhu   $s4, 0xc($s1)
@@ -501,7 +501,7 @@ D_8003BEB4:
 /* 03CACC 8003BECC AFB1003C */  sw    $s1, 0x3c($sp)
 /* 03CAD0 8003BED0 AFB00038 */  sw    $s0, 0x38($sp)
 /* 03CAD4 8003BED4 F7B40058 */  sdc1  $f20, 0x58($sp)
-/* 03CAD8 8003BED8 0C018CEA */  jal   func_800633A8
+/* 03CAD8 8003BED8 0C018CEA */  jal   GetCurrentProcess
 /* 03CADC 8003BEDC 24140001 */   li    $s4, 1
 /* 03CAE0 8003BEE0 8C51008C */  lw    $s1, 0x8c($v0)
 /* 03CAE4 8003BEE4 8E350068 */  lw    $s5, 0x68($s1)
@@ -683,12 +683,12 @@ DirectionPrompt:
 /* 03CD5C 8003C15C 8E020008 */  lw    $v0, 8($s0)
 /* 03CD60 8003C160 10400008 */  beqz  $v0, .L8003C184
 /* 03CD64 8003C164 00000000 */   nop   
-/* 03CD68 8003C168 0C018CEA */  jal   func_800633A8
+/* 03CD68 8003C168 0C018CEA */  jal   GetCurrentProcess
 /* 03CD6C 8003C16C 00000000 */   nop   
 /* 03CD70 8003C170 8E050008 */  lw    $a1, 8($s0)
-/* 03CD74 8003C174 0C018C9C */  jal   func_80063270
+/* 03CD74 8003C174 0C018C9C */  jal   LinkChildProcess
 /* 03CD78 8003C178 00402021 */   addu  $a0, $v0, $zero
-/* 03CD7C 8003C17C 0C018CD6 */  jal   func_80063358
+/* 03CD7C 8003C17C 0C018CD6 */  jal   WaitForChildProcess
 /* 03CD80 8003C180 00000000 */   nop   
 .L8003C184:
 /* 03CD84 8003C184 8602000C */  lh    $v0, 0xc($s0)

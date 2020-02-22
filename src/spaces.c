@@ -2,6 +2,7 @@
 #include "../asm/code_80014220.h"
 #include "../asm/code_800174C0.h"
 #include "../asm/code_80023B40.h"
+#include "../asm/code_8005C1B0.h"
 #include "spaces.h"
 #include "process.h"
 #include "heap_temporary.h"
@@ -467,7 +468,7 @@ void func_8004C558() {
     struct space_data *space;
     f32 fval;
 
-    process = GetCurrProcess();
+    process = GetCurrentProcess();
     space = GetSpaceData((s16)process->user_data);
 
     fval = 1.4f;
@@ -499,7 +500,7 @@ void func_8004C660() {
     struct space_data *space;
     f32 fval;
 
-    process = GetCurrProcess();
+    process = GetCurrentProcess();
     space = GetSpaceData((s16)process->user_data);
 
     fval = 1.0f;
@@ -531,7 +532,7 @@ void func_8004C760() {
     struct space_data *space;
     f32 fval;
 
-    process = GetCurrProcess();
+    process = GetCurrentProcess();
     space = GetSpaceData((s16)process->user_data);
 
     fval = 0.0f;
@@ -636,7 +637,7 @@ s32 ExecuteEventForSpace(s16 space_index, s16 activation_type) {
 
                     case 2:
                         {
-                            struct process *cur_process = GetCurrProcess();
+                            struct process *cur_process = GetCurrentProcess();
                             struct process *space_process = InitProcess(event_list->event_fn, 0x4800, 0, 0);
                             LinkChildProcess(cur_process, space_process);
                             WaitForChildProcess();
