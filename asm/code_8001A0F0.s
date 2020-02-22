@@ -9,7 +9,7 @@
 .include "globals.inc"
 .include "macros.inc"
 
-glabel D_8001A0F0
+glabel func_8001A0F0
 /* 01ACF0 8001A0F0 27BDFFD8 */  addiu $sp, $sp, -0x28
 /* 01ACF4 8001A0F4 AFBF0020 */  sw    $ra, 0x20($sp)
 /* 01ACF8 8001A0F8 AFB1001C */  sw    $s1, 0x1c($sp)
