@@ -42,7 +42,7 @@ SECTIONS
       build/asm/code_80034180.o(.text);
       build/asm/code_80037CE0.o(.text);
       build/asm/code_8003A060.o(.text);
-      build/asm/code_8003B330.o(.text);
+      build/src/thread3_main.o(.text);
       build/src/heap_permanent.o(.text);
       build/src/heap_temporary.o(.text);
       build/asm/code_8003B820.o(.text);
