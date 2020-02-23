@@ -1033,7 +1033,7 @@ void ov054_DrawThwompsInner(s16 index) {
         spacedata_temp = GetSpaceData(ov054_thwomp_spaces_right[index]);
     }
     func_800A0D50(&ptr->coords, &spacedata_temp->coords);
-    func_800A0E80(&ptr->unk24, &GetSpaceData(ov054_thwomp_event_space_indices[index])->coords, &ptr->coords);
+    func_800A0E80(&ptr->rot1, &GetSpaceData(ov054_thwomp_event_space_indices[index])->coords, &ptr->coords);
 }
 
 // draw_thwomps_outer
@@ -1372,7 +1372,7 @@ void ov054_PostThwompIntersectionEventProcess() {
     struct process *child_proc_temp;
     struct ov054_16byte_struct unkcptr;
     void *coords_temp;
-    void *unk24cache;
+    void *rotcache;
 
     cur_process = GetCurrentProcess();
     user_data = (struct post_thwomp_proc_args *)cur_process->user_data;
@@ -1384,8 +1384,8 @@ void ov054_PostThwompIntersectionEventProcess() {
     space_coords_temp = &space_data_temp->coords;
     coords_temp = &obj_temp->coords;
     func_800A0E80(&unkcptr, space_coords_temp, coords_temp);
-    unk24cache = &obj_temp->unk24;
-    child_proc_temp = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
+    rotcache = &obj_temp->rot1;
+    child_proc_temp = func_8004D1EC(rotcache, &unkcptr, rotcache, 10);
     LinkChildProcess(cur_process, child_proc_temp);
     WaitForChildProcess();
     func_800A0D50(&unkcptr, coords_temp);
@@ -1394,7 +1394,7 @@ void ov054_PostThwompIntersectionEventProcess() {
     WaitForChildProcess();
     space_data_temp = user_data->unkspacedata2;
     func_800A0E80(&unkcptr, &space_data_temp->coords, coords_temp);
-    child_proc_temp = func_8004D1EC(unk24cache, &unkcptr, unk24cache, 10);
+    child_proc_temp = func_8004D1EC(rotcache, &unkcptr, rotcache, 10);
     LinkChildProcess(cur_process, child_proc_temp);
     WaitForChildProcess();
     func_8003E81C(obj_temp, -1, 2);
@@ -1596,7 +1596,7 @@ void ov054_BoulderEventProcess() {
                 break;
             }
 
-            func_8004CCD0(&player_obj->coords, boulder_unkc_cached, &player_obj->unk24);
+            func_8004CCD0(&player_obj->coords, boulder_unkc_cached, &player_obj->rot1);
             SleepVProcess();
         }
     }
@@ -1607,7 +1607,7 @@ void ov054_BoulderEventProcess() {
         s16 chain_len;
         s16 spaces_left;
         void *unkccache;
-        void *unk24cache;
+        void *rotcache;
 
         chain_len = GetChainLength(args_player->cur_chain_index);
         spaces_left = chain_len - args_player->cur_space_index;
@@ -1619,7 +1619,7 @@ void ov054_BoulderEventProcess() {
               struct process *fromret;
               s32 ONE = 1;
 
-              unk24cache = &player_obj->unk24;
+              rotcache = &player_obj->rot1;
               unkccache = &player_obj->coords;
 
               if (spaces_left == ONE) {
@@ -1634,7 +1634,7 @@ void ov054_BoulderEventProcess() {
               if (s3 == 36) {
                   SetPlayerAnimation(args_player->id, -1, 2);
                   func_800A0E80(&sp10, &boulder_obj->coords, &player_obj->coords);
-                  func_8004D1EC(unk24cache, &sp10, unk24cache, 8);
+                  func_8004D1EC(rotcache, &sp10, rotcache, 8);
                   SleepProcess(30);
                   SetPlayerAnimation(args_player->id, 1, 2);
               }
@@ -1645,7 +1645,7 @@ void ov054_BoulderEventProcess() {
 
               s3 = GetAbsSpaceIndexFromChainSpaceIndex(args_player->next_chain_index, args_player->next_space_index);
               func_8004CB70(args_player->id, s3, &sp10);
-              func_8004CCD0(unkccache, &sp10, &player_obj->unk24);
+              func_8004CCD0(unkccache, &sp10, &player_obj->rot1);
               fromret = func_8004D648(unkccache, &sp10, unkccache, 20.0f);
               LinkChildProcess(proc_struct, fromret);
               WaitForChildProcess();
@@ -1730,7 +1730,7 @@ void ov054_BoulderEvent() {
             obj = GetPlayerStruct(-1)->obj;
             func_8004CD84(&boulder_unk);
             func_8003D514(&boulder_unk, 0);
-            fromret = func_8004D1EC(&obj->unk24, &boulder_unk, &obj->unk24, 6);
+            fromret = func_8004D1EC(&obj->rot1, &boulder_unk, &obj->rot1, 6);
             LinkChildProcess(proc_struct, fromret);
             WaitForChildProcess();
 
@@ -1763,22 +1763,22 @@ void ov054_BoulderEvent() {
         while (ov054_boulder_space_indices[i] >= 0) {
             {
                 void *unkccache;
-                void *unk24cache;
+                void *rotcache;
                 void *spacedataunk4;
                 struct process *fromret;
 
                 unkccache = &obj->coords;
-                unk24cache = &obj->unk24;
+                rotcache = &obj->rot1;
 
                 spacedataunk4 = &GetSpaceData(ov054_boulder_space_indices[i])->coords;
-                func_8004CCD0(unkccache, spacedataunk4, unk24cache);
+                func_8004CCD0(unkccache, spacedataunk4, rotcache);
                 fromret = func_8004D648(unkccache, spacedataunk4, unkccache, 20.0f);
                 LinkChildProcess(proc_struct, fromret);
                 WaitForChildProcess();
 
                 if (ov054_boulder_space_indices[i] == 6) {
                     func_800A0E80(&boulder_unk, &GetSpaceData(ov054_boulder_space_indices[i + 1])->coords, unkccache);
-                    func_8004D1EC(unk24cache, &boulder_unk, unk24cache, 20);
+                    func_8004D1EC(rotcache, &boulder_unk, rotcache, 20);
 
                     obj->funk52 = 38.0f;
                     obj->funk56 = -2.0f;

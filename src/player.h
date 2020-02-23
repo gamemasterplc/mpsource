@@ -12,7 +12,7 @@ struct player {
     s8 unk0;
     s8 cpu_difficulty_1;
     s8 cpu_difficulty_2;
-    s8 pad0;
+    u8 controller;
     u8 character; // 4
     s8 pad1;
     /**
@@ -45,6 +45,8 @@ struct player {
     s16 max_coins; // 38
     s8 pad9[8];
 };
+
+extern struct player gPlayers[4];
 
 s16 GetCurrentPlayerIndex();
 struct player *GetPlayerStruct(s32 index);

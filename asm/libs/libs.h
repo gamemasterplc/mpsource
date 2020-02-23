@@ -1,5 +1,7 @@
 #include <ultra64.h>
 
+extern f32 cosf(f32);
+extern f32 sinf(f32);
 extern void func_80092390(s32);
 extern void func_8009B770(void *, u8, u32);
 extern void func_800A0D00(void *ptr, f32 x, f32 y, f32 z);
