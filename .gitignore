@@ -3,6 +3,9 @@ build/*
 *.dump
 *.z64
 
+# Auto-extracted assets
+*.u.bin
+
 # Tools
 tools/n64cksum
 

@@ -180,8 +180,8 @@ glabel func_8005C384
 /* 05D004 8005C404 AFB10014 */  sw    $s1, 0x14($sp)
 /* 05D008 8005C408 AFB00010 */  sw    $s0, 0x10($sp)
 /* 05D00C 8005C40C 00808021 */  addu  $s0, $a0, $zero
-/* 05D010 8005C410 3C0400FE */  lui   $a0, %hi(D_00FE2310) # $a0, 0xfe
-/* 05D014 8005C414 24842310 */  addiu $a0, %lo(D_00FE2310) # addiu $a0, $a0, 0x2310
+/* 05D010 8005C410 3C0400FE */  lui   $a0, %hi(ROM_HVQ) # $a0, 0xfe
+/* 05D014 8005C414 24842310 */  addiu $a0, %lo(ROM_HVQ) # addiu $a0, $a0, 0x2310
 /* 05D018 8005C418 0C01279C */  jal   func_80049E70
 /* 05D01C 8005C41C 00A08821 */   addu  $s1, $a1, $zero
 /* 05D020 8005C420 06000003 */  bltz  $s0, .L8005C430
@@ -5250,32 +5250,32 @@ glabel func_80060AF0
 /* 061720 80060B20 2402002D */   li    $v0, 45
 /* 061724 80060B24 24020020 */  li    $v0, 32
 /* 061728 80060B28 AC62004C */  sw    $v0, 0x4c($v1)
-/* 06172C 80060B2C 3C040183 */  lui   $a0, %hi(D_01832AE0) # $a0, 0x183
-/* 061730 80060B30 24842AE0 */  addiu $a0, %lo(D_01832AE0) # addiu $a0, $a0, 0x2ae0
+/* 06172C 80060B2C 3C040183 */  lui   $a0, %hi(ROM_SFX_1) # $a0, 0x183
+/* 061730 80060B30 24842AE0 */  addiu $a0, %lo(ROM_SFX_1) # addiu $a0, $a0, 0x2ae0
 /* 061734 80060B34 00002821 */  addu  $a1, $zero, $zero
 /* 061738 80060B38 00003021 */  addu  $a2, $zero, $zero
 /* 06173C 80060B3C 0C00430C */  jal   func_80010C30
 /* 061740 80060B40 00003821 */   addu  $a3, $zero, $zero
-/* 061744 80060B44 3C040154 */  lui   $a0, %hi(D_015396A0) # $a0, 0x154
-/* 061748 80060B48 248496A0 */  addiu $a0, %lo(D_015396A0) # addiu $a0, $a0, -0x6960
-/* 06174C 80060B4C 3C050178 */  lui   $a1, %hi(D_01778BC0) # $a1, 0x178
-/* 061750 80060B50 24A58BC0 */  addiu $a1, %lo(D_01778BC0) # addiu $a1, $a1, -0x7440
+/* 061744 80060B44 3C040154 */  lui   $a0, %hi(ROM_SOUNDBANK_1) # $a0, 0x154
+/* 061748 80060B48 248496A0 */  addiu $a0, %lo(ROM_SOUNDBANK_1) # addiu $a0, $a0, -0x6960
+/* 06174C 80060B4C 3C050178 */  lui   $a1, %hi(ROM_SOUNDBANK_2) # $a1, 0x178
+/* 061750 80060B50 24A58BC0 */  addiu $a1, %lo(ROM_SOUNDBANK_2) # addiu $a1, $a1, -0x7440
 /* 061754 80060B54 080182E3 */  j     func_80060B8C
 /* 061758 80060B58 AFA00010 */   sw    $zero, 0x10($sp)
 
 .L80060B5C:
 /* 06175C 80060B5C AC62004C */  sw    $v0, 0x4c($v1)
-/* 061760 80060B60 3C0401BC */  lui   $a0, %hi(D_01BB8460) # $a0, 0x1bc
-/* 061764 80060B64 24848460 */  addiu $a0, %lo(D_01BB8460) # addiu $a0, $a0, -0x7ba0
+/* 061760 80060B60 3C0401BC */  lui   $a0, %hi(ROM_SFX_2) # $a0, 0x1bc
+/* 061764 80060B64 24848460 */  addiu $a0, %lo(ROM_SFX_2) # addiu $a0, $a0, -0x7ba0
 /* 061768 80060B68 00002821 */  addu  $a1, $zero, $zero
 /* 06176C 80060B6C 00003021 */  addu  $a2, $zero, $zero
 /* 061770 80060B70 0C00430C */  jal   func_80010C30
 /* 061774 80060B74 00003821 */   addu  $a3, $zero, $zero
 /* 061778 80060B78 AFA00010 */  sw    $zero, 0x10($sp)
-/* 06177C 80060B7C 3C040178 */  lui   $a0, %hi(D_01778BC0) # $a0, 0x178
-/* 061780 80060B80 24848BC0 */  addiu $a0, %lo(D_01778BC0) # addiu $a0, $a0, -0x7440
-/* 061784 80060B84 3C050183 */  lui   $a1, %hi(D_01832AE0) # $a1, 0x183
-/* 061788 80060B88 24A52AE0 */  addiu $a1, %lo(D_01832AE0) # addiu $a1, $a1, 0x2ae0
+/* 06177C 80060B7C 3C040178 */  lui   $a0, %hi(ROM_SOUNDBANK_2) # $a0, 0x178
+/* 061780 80060B80 24848BC0 */  addiu $a0, %lo(ROM_SOUNDBANK_2) # addiu $a0, $a0, -0x7440
+/* 061784 80060B84 3C050183 */  lui   $a1, %hi(ROM_SFX_1) # $a1, 0x183
+/* 061788 80060B88 24A52AE0 */  addiu $a1, %lo(ROM_SFX_1) # addiu $a1, $a1, 0x2ae0
 glabel func_80060B8C
 /* 06178C 80060B8C 00003021 */  addu  $a2, $zero, $zero
 /* 061790 80060B90 0C002FA6 */  jal   func_8000BE98

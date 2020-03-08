@@ -16,7 +16,7 @@ BUILD_DIR = build
 
 # Directories containing source files
 SRC_DIRS := src src/overlays src/overlays/ov054
-ASM_DIRS := asm asm/libs asm/overlays
+ASM_DIRS := asm asm/data asm/libs asm/overlays
 
 # Source code files
 C_FILES := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)/*.c))
@@ -25,6 +25,8 @@ S_FILES := $(foreach dir,$(ASM_DIRS),$(wildcard $(dir)/*.s))
 # Object files
 O_FILES := $(foreach file,$(C_FILES),$(BUILD_DIR)/$(file:.c=.o)) \
            $(foreach file,$(S_FILES),$(BUILD_DIR)/$(file:.s=.o))
+
+include baserom_files.mk
 
 ##################### Compiler Options #######################
 CROSS = mips-linux-gnu-
@@ -78,6 +80,7 @@ endif
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+	$(RM) bin/*.u.bin
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR) $(addprefix $(BUILD_DIR)/,$(SRC_DIRS) $(ASM_DIRS))
@@ -103,7 +106,7 @@ $(BUILD_DIR)/src/%.o: $(BUILD_DIR)/src/%.s
 	$(OLD_AS) $(OLD_ASFLAGS) -o $@ $<
 
 # Continue the rest of the build...
-$(BUILD_DIR)/$(TARGET).elf: $(O_FILES) $(LD_SCRIPT)
+$(BUILD_DIR)/$(TARGET).elf: assets $(O_FILES) $(LD_SCRIPT)
 	$(LD) $(LDFLAGS) -o $@ $(O_FILES) $(LIBS)
 
 $(BUILD_DIR)/$(TARGET).bin: $(BUILD_DIR)/$(TARGET).elf
@@ -125,4 +128,23 @@ test: $(TARGET).z64
 load: $(TARGET).z64
 	$(LOADER) $(LOADER_FLAGS) $<
 
-.PHONY: all clean default diff test load
+assets: $(MYSTERY_FILE) $(MAINFS_FILE) $(STRINGS_FILE) $(HVQ_FILE) $(AUDIO_FILES)
+
+EXTRACT_ASSETS := python extract_baserom.py
+
+$(MYSTERY_FILE):
+	$(EXTRACT_ASSETS)
+
+$(MAINFS_FILE):
+	$(EXTRACT_ASSETS)
+
+$(STRINGS_FILE):
+	$(EXTRACT_ASSETS)
+
+$(HVQ_FILE):
+	$(EXTRACT_ASSETS)
+
+$(AUDIO_FILES):
+	$(EXTRACT_ASSETS)
+
+.PHONY: all clean default test load assets
