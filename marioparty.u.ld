@@ -61,7 +61,7 @@ SECTIONS
       build/src/spaces.o(.text);
       build/src/spaces.o(.rodata);
       build/asm/code_8004CB70.o(.text);
-      build/asm/code_8004D930.o(.text);
+      build/src/textwindow.o(.text);
       build/asm/code_80050600.o(.text);
       build/src/player.o(.text);
       build/asm/code_80053080.o(.text);

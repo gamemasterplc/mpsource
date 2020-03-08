@@ -3,9 +3,12 @@
 #include "../../process.h"
 #include "../../player.h"
 #include "../../spaces.h"
+#include "../../textwindow.h"
 #include "../../../asm/code_800174C0.h"
+#include "../../../asm/code_80023B40.h"
 #include "../../../asm/code_8003D960.h"
 #include "../../../asm/code_80059280.h"
+#include "../../../asm/code_8005C1B0.h"
 #include "../../../asm/libs/libs.h"
 
 void ov054_DrawBowserOuter();
@@ -58,15 +61,6 @@ extern struct ed5c0struct D_800ED5C0;
 
 extern s16 D_800ED5D8;
 extern s16 D_800EE320;
-
-// sizeof == 192
-struct f2b7cstruct {
-    s8 pad[124];
-    void *unk124;
-    s8 pad2[64];
-};
-
-extern struct f2b7cstruct *D_800F2B7C;
 
 struct ov054_dimens {
     f32 x_upper;
@@ -133,7 +127,6 @@ extern struct process *func_8004D1EC(void *a, struct ov054_16byte_struct *b, voi
 extern void func_8004D2A4(s32 a, s32 b, s32 c);
 extern struct process *func_8004D3F4(void *a, void *b, void *c, s32 d);
 extern struct process *func_8004D648(void *a, void *b, void *c, f32 d);
-extern void func_8004DBD4(s16 win_id, s32 player);
 extern void func_80052E84(s16 unk);
 extern void func_80056AF4();
 extern void func_80056E30(s16 unk);
@@ -166,10 +159,7 @@ extern s16 GetCurrentSpaceIndex();
 extern void SetNextChainAndSpace(s16 player, s16 chain, s16 space);
 extern void AdjustPlayerCoinsGradual(s16 player_index, s16 coins);
 extern void ShowPlayerCoinChange(s16 player_index, s16 coins);
-extern s32 CreateTextWindow(s16 x, s16 y, s16 w, s16 h);
 extern void SetTextCharsPerFrame(s16 win_id, s16 chars);
-extern void ShowTextWindow(s16 win_id);
-extern void HideTextWindow(s16 win_id);
 extern void WaitForTextConfirmation(s16 win_id);
 extern void LoadStringIntoWindow(s16 win_id, s32 string_id, s32 a, s32 b);
 extern s32 DirectionPrompt(void *arrow_obj);
@@ -177,7 +167,6 @@ extern void *SpawnDirArrows(s32 player, s16 *dir);
 extern void InitDirArrows(void *arrow_obj, s32 player, s16 new_flags);
 extern s16 RunDecisionTree(void *tree);
 extern void FreeObject(void *obj);
-extern s32 PlaySound(s32 sound_index);
 extern void InitCameras(s32 count);
 extern void SetupBoard(s32 bg_index, s32 board_def_file, s32 board_bg_index, s32 d);
 extern void SetPlayerOntoChain(u16 player, s16 chain_index, s16 space_index);

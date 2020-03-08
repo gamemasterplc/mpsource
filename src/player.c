@@ -18,8 +18,6 @@ extern u8 D_800C54B0[]; // { 0x5E, 0x5F, 0x60, 0x61, 0x62, 0x63 }
 extern s16 D_800D8380;
 extern s16 D_800ED5DC; // current player index
 
-extern struct player gPlayers[4];
-
 u8 func_80052F6C(s16 index);
 
 /**
