@@ -106,9 +106,9 @@ glabel func_8001A0F0
 /* 01AE60 8001A260 24040001 */   li    $a0, 1
 /* 01AE64 8001A264 0C018850 */  jal   func_80062140
 /* 01AE68 8001A268 00000000 */   nop   
-/* 01AE6C 8001A26C 3C0400FD */  lui   $a0, %hi(D_00FCB860) # $a0, 0xfd
+/* 01AE6C 8001A26C 3C0400FD */  lui   $a0, %hi(ROM_STRINGS) # $a0, 0xfd
 /* 01AE70 8001A270 0C016DB4 */  jal   func_8005B6D0
-/* 01AE74 8001A274 2484B860 */   addiu $a0, %lo(D_00FCB860) # addiu $a0, $a0, -0x47a0
+/* 01AE74 8001A274 2484B860 */   addiu $a0, %lo(ROM_STRINGS) # addiu $a0, $a0, -0x47a0
 /* 01AE78 8001A278 0C00EDC4 */  jal   GetAllocatedPermHeapSize
 /* 01AE7C 8001A27C 00000000 */   nop   
 /* 01AE80 8001A280 3C048002 */  lui   $a0, %hi(D_8001A3DC) # $a0, 0x8002
@@ -147,17 +147,17 @@ glabel func_8001A0F0
 /* 01AF00 8001A300 00002821 */  addu  $a1, $zero, $zero
 /* 01AF04 8001A304 0C0177D1 */  jal   func_8005DF44
 /* 01AF08 8001A308 24060081 */   li    $a2, 129
-/* 01AF0C 8001A30C 3C0401BC */  lui   $a0, %hi(D_01BB8460) # $a0, 0x1bc
-/* 01AF10 8001A310 24848460 */  addiu $a0, %lo(D_01BB8460) # addiu $a0, $a0, -0x7ba0
+/* 01AF0C 8001A30C 3C0401BC */  lui   $a0, %hi(ROM_SFX_2) # $a0, 0x1bc
+/* 01AF10 8001A310 24848460 */  addiu $a0, %lo(ROM_SFX_2) # addiu $a0, $a0, -0x7ba0
 /* 01AF14 8001A314 00002821 */  addu  $a1, $zero, $zero
 /* 01AF18 8001A318 00003021 */  addu  $a2, $zero, $zero
 /* 01AF1C 8001A31C 0C00430C */  jal   func_80010C30
 /* 01AF20 8001A320 00003821 */   addu  $a3, $zero, $zero
 /* 01AF24 8001A324 AFA00010 */  sw    $zero, 0x10($sp)
-/* 01AF28 8001A328 3C040178 */  lui   $a0, %hi(D_01778BC0) # $a0, 0x178
-/* 01AF2C 8001A32C 24848BC0 */  addiu $a0, %lo(D_01778BC0) # addiu $a0, $a0, -0x7440
-/* 01AF30 8001A330 3C050183 */  lui   $a1, %hi(D_01832AE0) # $a1, 0x183
-/* 01AF34 8001A334 24A52AE0 */  addiu $a1, %lo(D_01832AE0) # addiu $a1, $a1, 0x2ae0
+/* 01AF28 8001A328 3C040178 */  lui   $a0, %hi(ROM_SOUNDBANK_2) # $a0, 0x178
+/* 01AF2C 8001A32C 24848BC0 */  addiu $a0, %lo(ROM_SOUNDBANK_2) # addiu $a0, $a0, -0x7440
+/* 01AF30 8001A330 3C050183 */  lui   $a1, %hi(ROM_SFX_1) # $a1, 0x183
+/* 01AF34 8001A334 24A52AE0 */  addiu $a1, %lo(ROM_SFX_1) # addiu $a1, $a1, 0x2ae0
 /* 01AF38 8001A338 00003021 */  addu  $a2, $zero, $zero
 /* 01AF3C 8001A33C 0C002FA6 */  jal   func_8000BE98
 /* 01AF40 8001A340 00003821 */   addu  $a3, $zero, $zero
@@ -166,11 +166,11 @@ glabel func_8001A0F0
 /* 01AF4C 8001A34C A42259A0 */  sh    $v0, %lo(D_800C59A0)($at)
 /* 01AF50 8001A350 3C01800C */  lui   $at, %hi(D_800C599E) # $at, 0x800c
 /* 01AF54 8001A354 A422599E */  sh    $v0, %lo(D_800C599E)($at)
-/* 01AF58 8001A358 3C0201CF */  lui   $v0, %hi(D_01CECC60) # $v0, 0x1cf
-/* 01AF5C 8001A35C 2442CC60 */  addiu $v0, %lo(D_01CECC60) # addiu $v0, $v0, -0x33a0
+/* 01AF58 8001A358 3C0201CF */  lui   $v0, %hi(ROM_FXD0) # $v0, 0x1cf
+/* 01AF5C 8001A35C 2442CC60 */  addiu $v0, %lo(ROM_FXD0) # addiu $v0, $v0, -0x33a0
 /* 01AF60 8001A360 AE220024 */  sw    $v0, 0x24($s1)
-/* 01AF64 8001A364 3C0201CF */  lui   $v0, %hi(D_01CED490) # $v0, 0x1cf
-/* 01AF68 8001A368 2442D490 */  addiu $v0, %lo(D_01CED490) # addiu $v0, $v0, -0x2b70
+/* 01AF64 8001A364 3C0201CF */  lui   $v0, %hi(ROM_EOF) # $v0, 0x1cf
+/* 01AF68 8001A368 2442D490 */  addiu $v0, %lo(ROM_EOF) # addiu $v0, $v0, -0x2b70
 /* 01AF6C 8001A36C AE220028 */  sw    $v0, 0x28($s1)
 /* 01AF70 8001A370 24020014 */  li    $v0, 20
 /* 01AF74 8001A374 AE220040 */  sw    $v0, 0x40($s1)

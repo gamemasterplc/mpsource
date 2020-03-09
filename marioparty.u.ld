@@ -778,10 +778,72 @@ SECTIONS
       __ov054_bss_end = .;
    }
 
-   .romdata 0x0 : AT(rom_pos)
+   /* Data */
+
+   .SEC_ROM_MYSTERY_FILE 0x0 : AT(rom_pos)
    {
-      build/asm/data.o(.text);
+      build/asm/data/mysteryfile.o(.text);
    }
+   ROM_MYSTERY_FILE = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_MYSTERY_FILE);
+
+   .SEC_ROM_MAINFS 0x0 : AT(rom_pos)
+   {
+      build/asm/data/mainfs.o(.text);
+   }
+   ROM_MAINFS = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_MAINFS);
+
+   .SEC_ROM_STRINGS 0x0 : AT(rom_pos)
+   {
+      build/asm/data/strings.o(.text);
+   }
+   ROM_STRINGS = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_STRINGS);
+
+   .SEC_ROM_HVQ 0x0 : AT(rom_pos)
+   {
+      build/asm/data/hvq.o(.text);
+   }
+   ROM_HVQ = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_HVQ);
+
+   .SEC_ROM_SOUNDBANK_1 0x0 : AT(rom_pos)
+   {
+      build/asm/data/audio_soundbank1.o(.text);
+   }
+   ROM_SOUNDBANK_1 = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_SOUNDBANK_1);
+
+   .SEC_ROM_SOUNDBANK_2 0x0 : AT(rom_pos)
+   {
+      build/asm/data/audio_soundbank2.o(.text);
+   }
+   ROM_SOUNDBANK_2 = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_SOUNDBANK_2);
+
+   .SEC_ROM_SFX_1 0x0 : AT(rom_pos)
+   {
+      build/asm/data/audio_sfx1.o(.text);
+   }
+   ROM_SFX_1 = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_SFX_1);
+
+   .SEC_ROM_SFX_2 0x0 : AT(rom_pos)
+   {
+      build/asm/data/audio_sfx2.o(.text);
+   }
+   ROM_SFX_2 = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_SFX_2);
+
+   .SEC_ROM_FXD0 0x0 : AT(rom_pos)
+   {
+      build/asm/data/audio_fxd0.o(.text);
+   }
+   ROM_FXD0 = rom_pos;
+   rom_pos += SIZEOF(.SEC_ROM_FXD0);
+
+   ROM_EOF = rom_pos;
 
    /* Discard everything not specifically mentioned above. */
    /DISCARD/ :

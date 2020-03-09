@@ -5,7 +5,6 @@
 .include "globals.inc"
 .include "macros.inc"
 
-
 glabel func_800503B0
 /* 050FB0 800503B0 27BDFFE8 */  addiu $29, $29, -0x18
 /* 050FB4 800503B4 AFBF0010 */  sw    $31, 0x10($29)
