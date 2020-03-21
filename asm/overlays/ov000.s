@@ -181,7 +181,7 @@
 /* 0002BC 800F689C 00000000 */   nop   
 /* 0002C0 800F68A0 0C03ECD8 */  jal   ov000_func_800FB360
 /* 0002C4 800F68A4 00000000 */   nop   
-/* 0002C8 800F68A8 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0002C8 800F68A8 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0002CC 800F68AC 2404002B */   addiu $a0, $zero, 0x2b
 /* 0002D0 800F68B0 10400003 */  beqz  $v0, .ov000_L800F68C0
 /* 0002D4 800F68B4 24020001 */   addiu $v0, $zero, 1

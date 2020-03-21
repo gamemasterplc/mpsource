@@ -938,11 +938,11 @@ SetNextChainAndSpace:
 /* 04E4B4 8004D8B4 3C11800F */  lui   $s1, %hi(D_800ED5C0) # $s1, 0x800f
 /* 04E4B8 8004D8B8 2631D5C0 */  addiu $s1, %lo(D_800ED5C0) # addiu $s1, $s1, -0x2a40
 /* 04E4BC 8004D8BC 8624001A */  lh    $a0, 0x1a($s1)
-/* 04E4C0 8004D8C0 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 04E4C0 8004D8C0 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 04E4C4 8004D8C4 00008021 */   addu  $s0, $zero, $zero
-/* 04E4C8 8004D8C8 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 04E4C8 8004D8C8 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 04E4CC 8004D8CC 2404004E */   li    $a0, 78
-/* 04E4D0 8004D8D0 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 04E4D0 8004D8D0 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 04E4D4 8004D8D4 24040043 */   li    $a0, 67
 /* 04E4D8 8004D8D8 1040000E */  beqz  $v0, .L8004D914
 /* 04E4DC 8004D8DC 24020007 */   li    $v0, 7

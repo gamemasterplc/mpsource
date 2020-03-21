@@ -14,7 +14,7 @@ glabel func_8005049C
 /* 0510B0 800504B0 2442D5C2 */  addiu $2, %lo(D_800ED5C2) # addiu $2, $2, -0x2a3e
 /* 0510B4 800504B4 84500000 */  lh    $16, ($2)
 /* 0510B8 800504B8 8451001A */  lh    $17, 0x1a($2)
-/* 0510BC 800504BC 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0510BC 800504BC 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0510C0 800504C0 24040030 */   li    $4, 48
 /* 0510C4 800504C4 54400001 */  bnezl $2, .L800504CC
 /* 0510C8 800504C8 24100009 */   li    $16, 9

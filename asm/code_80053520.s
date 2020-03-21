@@ -331,7 +331,7 @@ glabel func_800539A4
 /* 0545B0 800539B0 2405000A */  li    $a1, 10
 /* 0545B4 800539B4 0C019CAC */  jal   func_800672B0
 /* 0545B8 800539B8 24060001 */   li    $a2, 1
-/* 0545BC 800539BC 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0545BC 800539BC 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0545C0 800539C0 2404002C */   li    $a0, 44
 /* 0545C4 800539C4 1040000C */  beqz  $v0, .L800539F8
 /* 0545C8 800539C8 24050007 */   li    $a1, 7
@@ -3557,7 +3557,7 @@ glabel func_800567A8
 /* 0573E8 800567E8 A42286B0 */  sh    $v0, %lo(D_800D86B0)($at)
 /* 0573EC 800567EC 3C01800E */  lui   $at, %hi(D_800D86B2) # $at, 0x800e
 /* 0573F0 800567F0 A42086B2 */  sh    $zero, %lo(D_800D86B2)($at)
-/* 0573F4 800567F4 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0573F4 800567F4 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0573F8 800567F8 24040041 */   li    $a0, 65
 /* 0573FC 800567FC 14400019 */  bnez  $v0, .L80056864
 /* 057400 80056800 00000000 */   nop   
@@ -3597,7 +3597,7 @@ glabel func_800567A8
 /* 057478 80056878 82040024 */  lb    $a0, 0x24($s0)
 /* 05747C 8005687C 0C01342C */  jal   func_8004D0B0
 /* 057480 80056880 00000000 */   nop   
-/* 057484 80056884 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057484 80056884 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057488 80056888 24040036 */   li    $a0, 54
 /* 05748C 8005688C 3C01800E */  lui   $at, %hi(D_800D86E2) # $at, 0x800e
 /* 057490 80056890 A42086E2 */  sh    $zero, %lo(D_800D86E2)($at)
@@ -3649,19 +3649,19 @@ glabel func_800567A8
 /* 05753C 8005693C 00000000 */   nop   
 
 .L80056940:
-/* 057540 80056940 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057540 80056940 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057544 80056944 2404002C */   li    $a0, 44
 /* 057548 80056948 3C02800E */  lui   $v0, %hi(D_800D86E2) # $v0, 0x800e
 /* 05754C 8005694C 844286E2 */  lh    $v0, %lo(D_800D86E2)($v0)
 /* 057550 80056950 10400005 */  beqz  $v0, .L80056968
 /* 057554 80056954 00000000 */   nop   
-/* 057558 80056958 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 057558 80056958 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 05755C 8005695C 24040036 */   li    $a0, 54
 /* 057560 80056960 08015A5C */  j     func_80056970
 /* 057564 80056964 00000000 */   nop   
 
 .L80056968:
-/* 057568 80056968 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057568 80056968 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05756C 8005696C 24040036 */   li    $a0, 54
 glabel func_80056970
 /* 057570 80056970 0C0177EE */  jal   func_8005DFB8
@@ -3845,7 +3845,7 @@ glabel func_80056B78
 /* 0577F8 80056BF8 A4222CDC */   sh    $v0, %lo(D_800F2CDC)($at)
 /* 0577FC 80056BFC 0C0117B8 */  jal   func_80045EE0
 /* 057800 80056C00 00000000 */   nop   
-/* 057804 80056C04 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057804 80056C04 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057808 80056C08 24040041 */   li    $a0, 65
 /* 05780C 80056C0C 14400084 */  bnez  $v0, .L80056E20
 /* 057810 80056C10 24020001 */   li    $v0, 1
@@ -3857,7 +3857,7 @@ glabel func_80056B78
 /* 057828 80056C28 A420D5DC */  sh    $zero, %lo(D_800ED5DC)($at)
 /* 05782C 80056C2C 3C01800F */  lui   $at, %hi(D_800ED5DE) # $at, 0x800f
 /* 057830 80056C30 A420D5DE */  sh    $zero, %lo(D_800ED5DE)($at)
-/* 057834 80056C34 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057834 80056C34 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057838 80056C38 2404002C */   li    $a0, 44
 /* 05783C 80056C3C 14400011 */  bnez  $v0, .L80056C84
 /* 057840 80056C40 24020001 */   li    $v0, 1
@@ -3939,61 +3939,61 @@ glabel func_80056CC4
 /* 057934 80056D34 2A020020 */  slti  $v0, $s0, 0x20
 /* 057938 80056D38 1440FFFB */  bnez  $v0, .L80056D28
 /* 05793C 80056D3C 00101040 */   sll   $v0, $s0, 1
-/* 057940 80056D40 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057940 80056D40 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057944 80056D44 24040046 */   li    $a0, 70
-/* 057948 80056D48 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057948 80056D48 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05794C 80056D4C 24040047 */   li    $a0, 71
-/* 057950 80056D50 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057950 80056D50 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057954 80056D54 24040048 */   li    $a0, 72
-/* 057958 80056D58 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057958 80056D58 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05795C 80056D5C 24040049 */   li    $a0, 73
-/* 057960 80056D60 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057960 80056D60 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057964 80056D64 2404004A */   li    $a0, 74
-/* 057968 80056D68 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057968 80056D68 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05796C 80056D6C 2404004B */   li    $a0, 75
-/* 057970 80056D70 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057970 80056D70 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057974 80056D74 2404004C */   li    $a0, 76
-/* 057978 80056D78 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057978 80056D78 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05797C 80056D7C 2404004F */   li    $a0, 79
-/* 057980 80056D80 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057980 80056D80 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057984 80056D84 24040050 */   li    $a0, 80
-/* 057988 80056D88 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057988 80056D88 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05798C 80056D8C 24040051 */   li    $a0, 81
-/* 057990 80056D90 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057990 80056D90 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057994 80056D94 24040052 */   li    $a0, 82
-/* 057998 80056D98 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057998 80056D98 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05799C 80056D9C 24040053 */   li    $a0, 83
-/* 0579A0 80056DA0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579A0 80056DA0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579A4 80056DA4 24040054 */   li    $a0, 84
-/* 0579A8 80056DA8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579A8 80056DA8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579AC 80056DAC 24040055 */   li    $a0, 85
-/* 0579B0 80056DB0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579B0 80056DB0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579B4 80056DB4 24040056 */   li    $a0, 86
-/* 0579B8 80056DB8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579B8 80056DB8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579BC 80056DBC 24040057 */   li    $a0, 87
-/* 0579C0 80056DC0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579C0 80056DC0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579C4 80056DC4 24040058 */   li    $a0, 88
-/* 0579C8 80056DC8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579C8 80056DC8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579CC 80056DCC 24040059 */   li    $a0, 89
-/* 0579D0 80056DD0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579D0 80056DD0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579D4 80056DD4 2404005A */   li    $a0, 90
-/* 0579D8 80056DD8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579D8 80056DD8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579DC 80056DDC 2404005B */   li    $a0, 91
-/* 0579E0 80056DE0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579E0 80056DE0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579E4 80056DE4 2404005C */   li    $a0, 92
-/* 0579E8 80056DE8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579E8 80056DE8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579EC 80056DEC 2404005D */   li    $a0, 93
-/* 0579F0 80056DF0 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579F0 80056DF0 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579F4 80056DF4 24040042 */   li    $a0, 66
-/* 0579F8 80056DF8 0C01660B */  jal   SetBoardFeatureDisabled
+/* 0579F8 80056DF8 0C01660B */  jal   ClearBoardFeatureFlag
 /* 0579FC 80056DFC 24040043 */   li    $a0, 67
-/* 057A00 80056E00 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057A00 80056E00 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057A04 80056E04 2404004D */   li    $a0, 77
-/* 057A08 80056E08 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057A08 80056E08 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057A0C 80056E0C 24040044 */   li    $a0, 68
-/* 057A10 80056E10 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057A10 80056E10 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057A14 80056E14 2404004E */   li    $a0, 78
-/* 057A18 80056E18 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057A18 80056E18 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057A1C 80056E1C 24040041 */   li    $a0, 65
 .L80056E20:
 /* 057A20 80056E20 8FBF0014 */  lw    $ra, 0x14($sp)
@@ -4122,7 +4122,7 @@ glabel func_80056FA8
 /* 057BB0 80056FB0 AFB00010 */  sw    $s0, 0x10($sp)
 /* 057BB4 80056FB4 3C10800F */  lui   $s0, %hi(D_800ED5C0) # $s0, 0x800f
 /* 057BB8 80056FB8 2610D5C0 */  addiu $s0, %lo(D_800ED5C0) # addiu $s0, $s0, -0x2a40
-/* 057BBC 80056FBC 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057BBC 80056FBC 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057BC0 80056FC0 2404002C */   li    $a0, 44
 /* 057BC4 80056FC4 10400003 */  beqz  $v0, .L80056FD4
 /* 057BC8 80056FC8 24030003 */   li    $v1, 3
@@ -4217,7 +4217,7 @@ glabel func_80057054
 /* 057CF4 800570F4 24020007 */  li    $v0, 7
 /* 057CF8 800570F8 1462000A */  bne   $v1, $v0, .L80057124
 /* 057CFC 800570FC 24040041 */   li    $a0, 65
-/* 057D00 80057100 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057D00 80057100 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057D04 80057104 2404002A */   li    $a0, 42
 /* 057D08 80057108 54400006 */  bnezl $v0, .L80057124
 /* 057D0C 8005710C 24040041 */   li    $a0, 65
@@ -4280,7 +4280,7 @@ glabel func_8005713C
 /* 057DCC 800571CC 0C0159CC */  jal   func_80056730
 /* 057DD0 800571D0 24060092 */   li    $a2, 146
 .L800571D4:
-/* 057DD4 800571D4 0C01660B */  jal   SetBoardFeatureDisabled
+/* 057DD4 800571D4 0C01660B */  jal   ClearBoardFeatureFlag
 /* 057DD8 800571D8 24040045 */   li    $a0, 69
 /* 057DDC 800571DC 0C0177EE */  jal   func_8005DFB8
 /* 057DE0 800571E0 24040001 */   li    $a0, 1
@@ -4383,14 +4383,14 @@ glabel func_800572B8
 /* 057F2C 8005732C 00000000 */   nop   
 /* 057F30 80057330 18600007 */  blez  $v1, .L80057350
 /* 057F34 80057334 00000000 */   nop   
-/* 057F38 80057338 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057F38 80057338 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057F3C 8005733C 2404002C */   li    $a0, 44
 /* 057F40 80057340 14400003 */  bnez  $v0, .L80057350
 /* 057F44 80057344 00000000 */   nop   
-/* 057F48 80057348 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 057F48 80057348 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 057F4C 8005734C 24040042 */   li    $a0, 66
 .L80057350:
-/* 057F50 80057350 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 057F50 80057350 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 057F54 80057354 24040041 */   li    $a0, 65
 /* 057F58 80057358 1440003C */  bnez  $v0, .L8005744C
 /* 057F5C 8005735C 00000000 */   nop   
@@ -4405,9 +4405,9 @@ glabel func_800572B8
 .L8005737C:
 /* 057F7C 8005737C A2A00022 */  sb    $zero, 0x22($s5)
 .L80057380:
-/* 057F80 80057380 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 057F80 80057380 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 057F84 80057384 00002021 */   addu  $a0, $zero, $zero
-/* 057F88 80057388 0C0165F7 */  jal   SetBoardFeatureEnabled
+/* 057F88 80057388 0C0165F7 */  jal   SetBoardFeatureFlag
 /* 057F8C 8005738C 24040040 */   li    $a0, 64
 /* 057F90 80057390 24040058 */  li    $a0, 88
 /* 057F94 80057394 2405006C */  li    $a1, 108
@@ -4461,7 +4461,7 @@ glabel func_800573E4
 /* 058048 80057448 02002021 */   addu  $a0, $s0, $zero
 glabel func_8005744C
 .L8005744C:
-/* 05804C 8005744C 0C01660B */  jal   SetBoardFeatureDisabled
+/* 05804C 8005744C 0C01660B */  jal   ClearBoardFeatureFlag
 /* 058050 80057450 24040041 */   li    $a0, 65
 /* 058054 80057454 2404FFFE */  li    $a0, -2
 /* 058058 80057458 0C01325A */  jal   ExecuteEventForSpace
@@ -4487,11 +4487,11 @@ glabel func_8005744C
 /* 0580A0 800574A0 2A220004 */  slti  $v0, $s1, 4
 /* 0580A4 800574A4 1440FFF1 */  bnez  $v0, .L8005746C
 /* 0580A8 800574A8 00000000 */   nop   
-/* 0580AC 800574AC 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0580AC 800574AC 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0580B0 800574B0 2404002C */   li    $a0, 44
 /* 0580B4 800574B4 1440000D */  bnez  $v0, .L800574EC
 /* 0580B8 800574B8 00000000 */   nop   
-/* 0580BC 800574BC 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0580BC 800574BC 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0580C0 800574C0 2404000C */   li    $a0, 12
 /* 0580C4 800574C4 10400009 */  beqz  $v0, .L800574EC
 /* 0580C8 800574C8 2402FFFF */   li    $v0, -1
@@ -5095,11 +5095,11 @@ glabel func_80057D0C
 /* 05895C 80057D5C 8C22B370 */  lw    $v0, -0x4c90($at)
 /* 058960 80057D60 00400008 */  jr    $v0
 /* 058964 80057D64 00000000 */   nop   
-/* 058968 80057D68 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 058968 80057D68 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 05896C 80057D6C 2404002C */   li    $a0, 44
 /* 058970 80057D70 144000A6 */  bnez  $v0, .L8005800C
 /* 058974 80057D74 24040014 */   li    $a0, 20
-/* 058978 80057D78 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 058978 80057D78 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 05897C 80057D7C 24040042 */   li    $a0, 66
 /* 058980 80057D80 10400002 */  beqz  $v0, .L80057D8C
 /* 058984 80057D84 24030001 */   li    $v1, 1
@@ -5116,14 +5116,14 @@ glabel func_80057D0C
 /* 0589AC 80057DAC 08016003 */  j     func_8005800C
 /* 0589B0 80057DB0 2404001E */   li    $a0, 30
 
-/* 0589B4 80057DB4 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0589B4 80057DB4 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0589B8 80057DB8 2404002C */   li    $a0, 44
 /* 0589BC 80057DBC 54400093 */  bnezl $v0, .L8005800C
 /* 0589C0 80057DC0 24040014 */   li    $a0, 20
 /* 0589C4 80057DC4 2404FFFF */  li    $a0, -1
 /* 0589C8 80057DC8 0C016244 */  jal   func_80058910
 /* 0589CC 80057DCC 24050002 */   li    $a1, 2
-/* 0589D0 80057DD0 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 0589D0 80057DD0 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0589D4 80057DD4 24040042 */   li    $a0, 66
 /* 0589D8 80057DD8 10400002 */  beqz  $v0, .L80057DE4
 /* 0589DC 80057DDC 24030001 */   li    $v1, 1

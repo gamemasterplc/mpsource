@@ -63,7 +63,7 @@ glabel func_80048224
 /* 048E40 80048240 00408021 */  addu  $s0, $v0, $zero
 /* 048E44 80048244 12000088 */  beqz  $s0, .L80048468
 /* 048E48 80048248 02001021 */   addu  $v0, $s0, $zero
-/* 048E4C 8004824C 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 048E4C 8004824C 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 048E50 80048250 2404002C */   li    $a0, 44
 /* 048E54 80048254 1440000F */  bnez  $v0, .L80048294
 /* 048E58 80048258 24040088 */   li    $a0, 136

@@ -571,7 +571,7 @@ void ov054_func_800F67A4() {
     temp = D_800ED5D8;
     ed5c0->unka = 0;
 
-    SetBoardFeatureEnabled(0x44);
+    SetBoardFeatureFlag(0x44);
     ov054_func_800F663C();
 
     if (temp != ed5c0->unkc[0]) {
@@ -591,10 +591,10 @@ void ov054_func_800F6830() {
     ed5c0 = &D_800ED5C0;
     for (s1 = 0; s1 < DK_STAR_COUNT; s1++) {
         SetSpaceType(ov054_star_space_indices[s1], 1);
-        SetBoardFeatureEnabled(ov054_data_mystery_40s[s1]);
+        SetBoardFeatureFlag(ov054_data_mystery_40s[s1]);
     }
 
-    if (IsBoardFeatureDisabled(0x44)) {
+    if (IsBoardFeatureFlagSet(0x44)) {
         s0 = DK_STAR_COUNT;
     }
     else {
@@ -607,7 +607,7 @@ void ov054_func_800F6830() {
 
     SetSpaceType(ov054_star_space_indices[ed5c0->unkc[ed5c0->unka]], 5);
 
-    SetBoardFeatureDisabled(ov054_data_mystery_40s[ed5c0->unkc[ed5c0->unka]]);
+    ClearBoardFeatureFlag(ov054_data_mystery_40s[ed5c0->unkc[ed5c0->unka]]);
 }
 
 // 0x800F6958
@@ -634,7 +634,7 @@ s32 ov054_StarSpaceEventInner(s32 current_space_index) {
                 return 1;
             }
 
-            if (IsBoardFeatureDisabled(68)) {
+            if (IsBoardFeatureFlagSet(68)) {
                 current_space_index = DK_STAR_COUNT;
             }
             else {
@@ -755,7 +755,7 @@ void ov054_ShowNextStarSpot() {
     func_8004B5C4(3.0f);
     ov054_ShowNextStarSpotInner(str);
 
-    if (ed5c0->unka == 0 && !IsBoardFeatureDisabled(68)) {
+    if (ed5c0->unka == 0 && !IsBoardFeatureFlagSet(68)) {
         string_id = 1256;
     }
     else {
@@ -783,7 +783,7 @@ void ov054_ShowNextStarSpot() {
 
     SleepProcess(30);
 
-    if (ed5c0->unka == 0 && !IsBoardFeatureDisabled(68)) {
+    if (ed5c0->unka == 0 && !IsBoardFeatureFlagSet(68)) {
         string_id = 1257;
     }
     else {
@@ -826,19 +826,19 @@ void ov054_Entrypoint1() {
 
     switch (ed5c0->unk0) {
         case 0:
-            SetBoardFeatureEnabled(0x46);
-            SetBoardFeatureEnabled(0x47);
-            SetBoardFeatureEnabled(0x49);
-            SetBoardFeatureEnabled(0x4B);
+            SetBoardFeatureFlag(0x46);
+            SetBoardFeatureFlag(0x47);
+            SetBoardFeatureFlag(0x49);
+            SetBoardFeatureFlag(0x4B);
             break;
 
         case 1:
-            SetBoardFeatureEnabled(0x47);
-            SetBoardFeatureEnabled(0x49);
+            SetBoardFeatureFlag(0x47);
+            SetBoardFeatureFlag(0x49);
             break;
     }
 
-    SetBoardFeatureEnabled(0x43);
+    SetBoardFeatureFlag(0x43);
 
     ov054_func_800F663C();
 
@@ -874,8 +874,8 @@ void ov054_SetupRoutine() {
         player_struct->obj->unka |= 2;
     }
 
-    if (IsBoardFeatureDisabled(0x4e)) {
-        SetBoardFeatureDisabled(0x4e);
+    if (IsBoardFeatureFlagSet(0x4e)) {
+        ClearBoardFeatureFlag(0x4e);
         ov054_func_800F67A4();
     }
 
@@ -884,15 +884,15 @@ void ov054_SetupRoutine() {
     ov054_DrawThwompsOuter();
     ov054_Draw20CoinGateOuter();
 
-    if (!IsBoardFeatureDisabled(0xe)) {
+    if (!IsBoardFeatureFlagSet(0xe)) {
         ov054_DrawKoopaOuter();
     }
 
-    if (!IsBoardFeatureDisabled(0xf)) {
+    if (!IsBoardFeatureFlagSet(0xf)) {
         ov054_DrawBooOuter();
     }
 
-    if (!IsBoardFeatureDisabled(0xd)) {
+    if (!IsBoardFeatureFlagSet(0xd)) {
         ov054_DrawBowserOuter();
     }
 }
@@ -904,15 +904,15 @@ void ov054_Entrypoint2() {
 
     EventTableHydrate(main_event_table);
 
-    if (!IsBoardFeatureDisabled(0xe)) {
+    if (!IsBoardFeatureFlagSet(0xe)) {
         EventTableHydrate(koopa_event_table);
     }
 
-    if (!IsBoardFeatureDisabled(0xf)) {
+    if (!IsBoardFeatureFlagSet(0xf)) {
         EventTableHydrate(boo_event_table);
     }
 
-    if (!IsBoardFeatureDisabled(0xd)) {
+    if (!IsBoardFeatureFlagSet(0xd)) {
         EventTableHydrate(bowser_event_table);
     }
 
@@ -999,7 +999,7 @@ void ov054_DrawToadsOuter() {
     bss_toad_model = NULL;
     for (i = 0; i < DK_STAR_COUNT; i++) {
         bss_toad_instances[i] = 0;
-        if (!IsBoardFeatureDisabled(ov054_data_mystery_40s_2[i])) {
+        if (!IsBoardFeatureFlagSet(ov054_data_mystery_40s_2[i])) {
             ov054_DrawToadsInner(i);
         }
     }
@@ -1468,17 +1468,17 @@ void ov054_PostThwompIntersectionEvent() {
 void ov054_MoveModelsForBoulder() {
     struct space_data *spacedata;
 
-    if (!IsBoardFeatureDisabled(13)) {
+    if (!IsBoardFeatureFlagSet(13)) {
         spacedata = GetSpaceData(106); // Bowser's alternate location space
         func_800A0D50(&bss_bowser_model->coords, &spacedata->coords);
     }
 
-    if (!IsBoardFeatureDisabled(72)) {
+    if (!IsBoardFeatureFlagSet(72)) {
         spacedata = GetSpaceData(105);
         func_800A0D50(&bss_toad_instances[2]->coords, &spacedata->coords);
     }
 
-    if (!IsBoardFeatureDisabled(74)) {
+    if (!IsBoardFeatureFlagSet(74)) {
         spacedata = GetSpaceData(107);
         func_800A0D50(&bss_toad_instances[4]->coords, &spacedata->coords);
     }
@@ -1487,17 +1487,17 @@ void ov054_MoveModelsForBoulder() {
 void ov054_RestoreModelsAfterBoulder() {
     struct space_data *spacedata;
 
-    if (!IsBoardFeatureDisabled(13)) {
+    if (!IsBoardFeatureFlagSet(13)) {
         spacedata = GetSpaceData(112); // Bowser's regular space
         func_800A0D50(&bss_bowser_model->coords, &spacedata->coords);
     }
 
-    if (!IsBoardFeatureDisabled(72)) {
+    if (!IsBoardFeatureFlagSet(72)) {
         spacedata = GetSpaceData(109);
         func_800A0D50(&bss_toad_instances[2]->coords, &spacedata->coords);
     }
 
-    if (!IsBoardFeatureDisabled(74)) {
+    if (!IsBoardFeatureFlagSet(74)) {
         spacedata = GetSpaceData(113);
         func_800A0D50(&bss_toad_instances[4]->coords, &spacedata->coords);
     }
@@ -2022,7 +2022,7 @@ void ov054_ReceiveKoopaBonus() {
     func_800405DC(current_player_index);
     SetPlayerAnimation(-1, -1, 2);
 
-    if (!IsBoardFeatureDisabled(0x42)) {
+    if (!IsBoardFeatureFlagSet(0x42)) {
         win_id = CreateTextWindow(72, 60, 16, 3);
         LoadStringIntoWindow(win_id, 569, -1, -1);
         coins_received = 10;
@@ -2056,20 +2056,20 @@ void ov054_KoopaStartSpaceEventInner() {
     val++;
     ed192->times_passed_start = val;
 
-    if (IsBoardFeatureDisabled(66) != 0) {
+    if (IsBoardFeatureFlagSet(66) != 0) {
         goto ov054_KoopaStartSpaceEventInner_doreceive;
     }
 
     // Every 10th person to pass start receives a special bonus.
-    if (((s16)ed192->times_passed_start % (s16)10) != 0 && IsBoardFeatureDisabled(77) != 0) {
+    if (((s16)ed192->times_passed_start % (s16)10) != 0 && IsBoardFeatureFlagSet(77) != 0) {
         goto ov054_KoopaStartSpaceEventInner_doreceive;
     }
 
-    if (IsBoardFeatureDisabled(77) != 0) {
+    if (IsBoardFeatureFlagSet(0x4D) != 0) {
         func_80058910(-1, 1);
     }
 
-    SetBoardFeatureEnabled(77);
+    SetBoardFeatureFlag(0x4D);
     func_800587EC(95, 0, 1);
     return;
 

@@ -68,7 +68,7 @@ SECTIONS
       build/asm/code_80053520.o(.text);
       build/asm/code_80058910.o(.text);
       build/asm/code_80058B10.o(.text);
-      build/asm/code_80059280.o(.text);
+      build/src/eeprom.o(.text);
       build/src/heap.o(.text);
       build/asm/code_80059B10.o(.text);
       build/asm/code_8005B6D0.o(.text);

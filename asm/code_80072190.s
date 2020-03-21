@@ -4553,7 +4553,7 @@ glabel func_80076174
 /* 076DAC 800761AC 10400021 */  beqz  $v0, .L80076234
 /* 076DB0 800761B0 24020001 */   li    $v0, 1
 .L800761B4:
-/* 076DB4 800761B4 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 076DB4 800761B4 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 076DB8 800761B8 2404002B */   li    $a0, 43
 /* 076DBC 800761BC 1440001D */  bnez  $v0, .L80076234
 /* 076DC0 800761C0 00001021 */   addu  $v0, $zero, $zero

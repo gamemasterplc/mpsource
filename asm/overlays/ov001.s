@@ -119,7 +119,7 @@ ov001_func_800F66A8:
 /* 000190 800F6770 24020001 */  addiu $v0, $zero, 1
 /* 000194 800F6774 3C01800F */  lui   $at, 0x800f
 /* 000198 800F6778 A02264F2 */  sb    $v0, 0x64f2($at)
-/* 00019C 800F677C 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 00019C 800F677C 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 0001A0 800F6780 24040045 */   addiu $a0, $zero, 0x45
 /* 0001A4 800F6784 3C018010 */  lui   $at, 0x8010
 /* 0001A8 800F6788 A02211F0 */  sb    $v0, 0x11f0($at)
