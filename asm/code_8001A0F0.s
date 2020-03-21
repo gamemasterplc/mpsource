@@ -179,7 +179,7 @@ glabel func_8001A0F0
 /* 01AF80 8001A380 3C06802E */  lui   $a2, 0x802e
 /* 01AF84 8001A384 0C002C03 */  jal   func_8000B00C
 /* 01AF88 8001A388 3C070008 */   lui   $a3, 8
-/* 01AF8C 8001A38C 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 01AF8C 8001A38C 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 01AF90 8001A390 24040010 */   li    $a0, 16
 /* 01AF94 8001A394 10400002 */  beqz  $v0, .L8001A3A0
 /* 01AF98 8001A398 24040001 */   li    $a0, 1

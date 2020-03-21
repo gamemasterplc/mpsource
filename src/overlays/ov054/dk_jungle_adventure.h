@@ -4,10 +4,10 @@
 #include "../../player.h"
 #include "../../spaces.h"
 #include "../../textwindow.h"
+#include "../../eeprom.h"
 #include "../../../asm/code_800174C0.h"
 #include "../../../asm/code_80023B40.h"
 #include "../../../asm/code_8003D960.h"
-#include "../../../asm/code_80059280.h"
 #include "../../../asm/code_8005C1B0.h"
 #include "../../../asm/libs/libs.h"
 

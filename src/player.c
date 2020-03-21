@@ -1,8 +1,8 @@
 #include <ultra64.h>
 #include "object.h"
 #include "process.h"
+#include "eeprom.h"
 #include "../asm/code_8003D960.h"
-#include "../asm/code_80059280.h"
 #include "../asm/code_8005C1B0.h"
 #include "../asm/libs/libs.h"
 #include "player.h"
@@ -113,7 +113,7 @@ void func_80052C44(s32 index, s32 a, s32 b, s32 c, u16 d) {
 void func_80052CCC(s32 index, u8 b) {
     struct player *player = GetPlayerStruct(index);
     player->cpu_difficulty_2 = b;
-    if (!IsBoardFeatureDisabled(44)) {
+    if (!IsBoardFeatureFlagSet(44)) {
         player->cpu_difficulty_1 = D_800C53E0[b];
     }
     else {

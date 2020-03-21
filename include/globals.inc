@@ -51,9 +51,9 @@
 .global PlayerHasCoins
 .global SetupBoard
 .global ExecBoardScene
-.global IsBoardFeatureDisabled
-.global SetBoardFeatureEnabled
-.global SetBoardFeatureDisabled
+.global IsBoardFeatureFlagSet
+.global SetBoardFeatureFlag
+.global ClearBoardFeatureFlag
 .global MakeHeap
 .global Malloc
 .global Free

@@ -60,14 +60,14 @@ glabel func_8005B900
 /* 05C508 8005B908 AFB00010 */  sw    $s0, 0x10($sp)
 /* 05C50C 8005B90C 3C10800E */  lui   $s0, %hi(D_800D8920) # $s0, 0x800e
 /* 05C510 8005B910 96108920 */  lhu   $s0, %lo(D_800D8920)($s0)
-/* 05C514 8005B914 0C0165E6 */  jal   IsBoardFeatureDisabled
+/* 05C514 8005B914 0C0165E6 */  jal   IsBoardFeatureFlagSet
 /* 05C518 8005B918 2404002F */   li    $a0, 47
 /* 05C51C 8005B91C 10400008 */  beqz  $v0, .L8005B940
 /* 05C520 8005B920 00101400 */   sll   $v0, $s0, 0x10
 /* 05C524 8005B924 00028403 */  sra   $s0, $v0, 0x10
 /* 05C528 8005B928 06000005 */  bltz  $s0, .L8005B940
 /* 05C52C 8005B92C 00000000 */   nop   
-/* 05C530 8005B930 0C01660B */  jal   SetBoardFeatureDisabled
+/* 05C530 8005B930 0C01660B */  jal   ClearBoardFeatureFlag
 /* 05C534 8005B934 2404002F */   li    $a0, 47
 /* 05C538 8005B938 0C0173A3 */  jal   func_8005CE8C
 /* 05C53C 8005B93C 26040007 */   addiu $a0, $s0, 7
