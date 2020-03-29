@@ -1,4 +1,5 @@
 #include <ultra64.h>
+#include "../asm/code_80061F60.h"
 
 struct decode_struct
 {
@@ -14,8 +15,6 @@ extern u8 *D_800D1720;
 
 void DecodeNone(struct decode_struct *decode);
 void DecodeLZ(struct decode_struct *decode);
-void DecodeFile(void *src, void *dest, s32 len, s32 decode_type);
-void func_80061FE8(void *src, void *dest, s32 len); // ExecRomCopy
 
 void DecodeNone(struct decode_struct *decode)
 {

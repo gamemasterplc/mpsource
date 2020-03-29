@@ -1,9 +1,9 @@
 #include <ultra64.h>
 #include "../src/process.h"
 #include "../src/player.h"
+#include "../src/mainfs.h"
 #include "../asm/libs/libs.h"
 #include "../asm/code_8000AD80.h"
-#include "../asm/code_80014220.h"
 #include "../asm/code_800174C0.h"
 #include "../asm/code_8001DE70.h"
 #include "../asm/code_80023B40.h"

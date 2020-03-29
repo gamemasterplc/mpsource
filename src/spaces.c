@@ -1,10 +1,10 @@
 #include <ultra64.h>
-#include "../asm/code_80014220.h"
 #include "../asm/code_800174C0.h"
 #include "../asm/code_80023B40.h"
 #include "../asm/code_8005C1B0.h"
 #include "spaces.h"
 #include "process.h"
+#include "mainfs.h"
 #include "heap_temporary.h"
 
 // ROM 0x4C460 - 0x4D76C (len 4876)
