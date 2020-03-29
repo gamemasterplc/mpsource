@@ -22,7 +22,7 @@ SECTIONS
       build/asm/code_8000AD80.o(.text);
       build/asm/code_80012CF0.o(.text);
       build/asm/code_80013770.o(.text);
-      build/asm/code_80014220.o(.text);
+      build/src/mainfs.o(.text);
       build/asm/code_80014AF0.o(.text);
       build/src/decode.o(.text);
       build/asm/code_800174C0.o(.text);
