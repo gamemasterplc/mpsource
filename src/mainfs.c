@@ -159,36 +159,25 @@ void func_80014460(void *fs_rom_loc) {
     D_800D1304 = D_800D12F8;
 }
 
-#ifdef MAINFS_NONMATCHING
 void func_80014504(s32 type, s32 index, struct mainfs_entry_info *info) {
-    s32 dir_table_offset;
-    u8 *fs_loc;
     struct mainfs_table_header *mainfs_table_header;
 
     mainfs_table_header = &D_800D1310;
 
     switch (type) {
-        case 0x2E:
-            dir_table_offset = D_800D1304[index];
-            fs_loc = (u8 *)D_800D12FC;
-            break;
-
         case 0x2F:
-            dir_table_offset = D_800D12F8[index];
-            fs_loc =  (u8 *)D_800D12F0;
+            info->file_bytes = (u8 *)D_800D12F0 + D_800D12F8[index];
+            break;
+        case 0x2E:
+            info->file_bytes = (u8 *)D_800D12FC + D_800D1304[index];
             break;
     }
-
-    info->file_bytes = fs_loc + dir_table_offset;
 
     func_80061FE8(info->file_bytes, mainfs_table_header, 16); // ExecRomCopy
     info->file_bytes += 8;
     info->size = mainfs_table_header->count;
     info->compression_type = mainfs_table_header->offsets[0];
 }
-#else
-asm(".include \"asm/non_matchings/mainfs/func_80014504.s\"");
-#endif
 
 /**
  * Reads a file from the main filesystem and decodes it.
