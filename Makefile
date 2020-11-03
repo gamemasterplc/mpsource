@@ -52,12 +52,11 @@ CC_CHECK := gcc -fsyntax-only -fsigned-char -nostdinc -fno-builtin -I include -I
 
 # N64 tools
 TOOLS_DIR = tools
-OLD_AS = $(TOOLS_DIR)/mips-binutils-2.7-as
+OLD_AS = $(TOOLS_DIR)/marioparty-binutils-2.7-as
 NEW_AS = $(CROSS)as
 CC1 = $(TOOLS_DIR)/mips-cc1
 N64CKSUM = $(TOOLS_DIR)/n64cksum
 N64GRAPHICS = $(TOOLS_DIR)/n64graphics
-REPLACE_REGS = $(TOOLS_DIR)/replaceregs.sh
 EMULATOR = mupen64plus
 EMU_FLAGS = --noosd
 LOADER = loader64
@@ -90,13 +89,9 @@ $(BUILD_DIR)/%.i: %.c $(BUILD_DIR)
 	@$(CC_CHECK) -MMD -MP -MT $@ -MF $@.d $<
 	$(CPP) -MMD -MP -MT $@ -MF $@.d -I include/ -o $@ $<
 
-# Go from .i to .reg...
-$(BUILD_DIR)/src/%.reg: $(BUILD_DIR)/src/%.i
+# Go from .i to .s...
+$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.i
 	$(CC1) $(CFLAGS) -o $@ $<
-
-# ...which we "preprocess" again to remove register names.
-$(BUILD_DIR)/src/%.s: $(BUILD_DIR)/src/%.reg
-	$(REPLACE_REGS) $< $@
 
 # Run a separate assembler for src and asm .s files.
 $(BUILD_DIR)/asm/%.o: asm/%.s
