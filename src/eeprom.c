@@ -115,7 +115,7 @@ s16 func_8005949C(s16 arg0) {
     s16 var1;
 
     func_80059354(arg0, &var0, &var1);
-    return (&D_800ED119)[var0] & (var1 << 1);
+    return (&D_800ED119)[var0] & (1 << var1);
 }
 
 void func_800594E4(s16 index, u16 value) {
