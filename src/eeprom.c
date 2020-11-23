@@ -109,7 +109,6 @@ s8 func_80059448(s16 arg0) {
     (&D_800ED119)[var0] = ((&D_800ED119)[var0] | (1 << var1));
 }
 
-//asm(".include \"asm/non_matchings/eeprom/func_8005949C.s\"");
 s16 func_8005949C(s16 arg0) {
     s16 var0;
     s16 var1;
