@@ -7,6 +7,7 @@ extern s16 D_800ED5DE;
 extern s8 D_800ED100;
 extern s16 D_800ED102;
 extern u8 D_800ED112;
+extern u8 D_800ED119;
 extern u32 D_800ED120;
 extern s32 D_800ED140;
 extern s16 D_800ED144;
@@ -17,6 +18,8 @@ extern u8 D_800ED148;
 extern u16 D_800ED5C2[];
 
 extern void *D_800F37B8;
+
+s32 func_80059400 (s16 arg0);
 
 void func_8005963C(s16 index, u16 param_2);
 void func_80059768(s16 index, s16 param_2);
@@ -90,11 +93,30 @@ void func_800593AC(s16 param_1) {
 asm(".include \"asm/non_matchings/eeprom/func_800593AC.s\"");
 #endif
 
-asm(".include \"asm/non_matchings/eeprom/func_80059400.s\"");
+s32 func_80059400 (s16 arg0) {
+    s16 var0;
+    s16 var1;
 
-asm(".include \"asm/non_matchings/eeprom/func_80059448.s\"");
+    func_80059354(arg0, &var0, &var1);
+    return ((&D_800ED112)[var0] & (1 << var1));
+}
 
-asm(".include \"asm/non_matchings/eeprom/func_8005949C.s\"");
+s8 func_80059448(s16 arg0) {
+    s16 var0;
+    s16 var1;
+
+    func_80059354(arg0, &var0, &var1);
+    (&D_800ED119)[var0] = ((&D_800ED119)[var0] | (1 << var1));
+}
+
+//asm(".include \"asm/non_matchings/eeprom/func_8005949C.s\"");
+s16 func_8005949C(s16 arg0) {
+    s16 var0;
+    s16 var1;
+
+    func_80059354(arg0, &var0, &var1);
+    return (&D_800ED119)[var0] & (var1 << 1);
+}
 
 void func_800594E4(s16 index, u16 value) {
     (&D_800ED102)[index] = value;
